@@ -29,6 +29,10 @@ d-build: ## Build the application in a Docker container
 d-clean: ## Clean the application running in a Docker container
 	@docker compose down --rmi all --volumes --remove-orphans
 
+format: ## Format the code
+	@echo "Formatting..."
+	@go fmt ./...
+
 test: ## Run the tests
 	@echo "Testing..."
 	@go test ./... -v
