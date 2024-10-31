@@ -1,11 +1,11 @@
 
 # Budget Tracking API - Development Plan
 
-## Overview
+## Introduction
 
 This development plan is designed to help you build the **Budget Tracking API** systematically. It breaks the project into manageable phases, each with specific tasks and milestones, allowing you to track progress effectively.
 
-### Phase 1: Project Setup and Core Infrastructure
+## Phase 1: Project Setup and Core Infrastructure
 
 **Goal**: Set up the basic infrastructure for the API, create the foundation for development, and secure the application.
 
@@ -92,7 +92,7 @@ This development plan is designed to help you build the **Budget Tracking API** 
 
 **Milestone**: User registration and login features are implemented and tested successfully.
 
-### Phase 2: Income, Expense, and Budget Management
+## Phase 2: Income, Expense, and Budget Management
 
 **Goal**: Implement core features, including CRUD operations for income, expenses, and budget categories.
 
@@ -115,7 +115,7 @@ This development plan is designed to help you build the **Budget Tracking API** 
 
 **Milestone**: All core financial management features are functional, with basic validations in place.
 
-### Phase 3: Budget Tracking and Summaries
+## Phase 3: Budget Tracking and Summaries
 
 **Goal**: Allow users to manage budgets and access monthly and yearly summaries.
 
@@ -134,7 +134,7 @@ This development plan is designed to help you build the **Budget Tracking API** 
 
 **Milestone**: Users can manage budgets, view financial summaries, and receive basic spending insights.
 
-### Phase 4: Documentation, Testing, and Security Enhancements
+## Phase 4: Documentation, Testing, and Security Enhancements
 
 **Goal**: Ensure the application is well-documented, thoroughly tested, and secure.
 
@@ -154,7 +154,7 @@ This development plan is designed to help you build the **Budget Tracking API** 
 
 **Milestone**: API documentation is complete, and all major features are covered by tests, with security best practices implemented.
 
-### Phase 5: Deployment and Monitoring
+## Phase 5: Deployment and Monitoring
 
 **Goal**: Deploy the application to the cloud and set up monitoring for production use.
 
@@ -174,7 +174,7 @@ This development plan is designed to help you build the **Budget Tracking API** 
 
 **Milestone**: The application is live, with monitoring and logging set up for production use.
 
-### Phase 6: Future Enhancements
+## Phase 6: Future Enhancements
 
 **Goal**: Continue to add features and improvements to provide more value to users.
 
