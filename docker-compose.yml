@@ -1,0 +1,51 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    restart: unless-stopped
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      APP_ENV: ${APP_ENV}
+      PORT: ${PORT}
+      CENTSIBLE_DB_HOST: ${CENTSIBLE_DB_HOST}
+      CENTSIBLE_DB_PORT: ${CENTSIBLE_DB_PORT}
+      CENTSIBLE_DB_DATABASE: ${CENTSIBLE_DB_DATABASE}
+      CENTSIBLE_DB_USERNAME: ${CENTSIBLE_DB_USERNAME}
+      CENTSIBLE_DB_PASSWORD: ${CENTSIBLE_DB_PASSWORD}
+      CENTSIBLE_DB_SCHEMA: ${CENTSIBLE_DB_SCHEMA}
+    depends_on:
+      psql_centsible:
+        condition: service_healthy
+    networks:
+      - centsible
+  psql_centsible:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${CENTSIBLE_DB_DATABASE}
+      POSTGRES_USER: ${CENTSIBLE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${CENTSIBLE_DB_PASSWORD}
+    ports:
+      - "${CENTSIBLE_DB_PORT}:5432"
+    volumes:
+      - psql_volume_bp:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U ${CENTSIBLE_DB_USERNAME} -d ${CENTSIBLE_DB_DATABASE}'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - centsible
+
+volumes:
+  psql_volume_bp:
+networks:
+  centsible:
