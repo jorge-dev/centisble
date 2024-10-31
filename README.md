@@ -189,6 +189,102 @@ For more details, refer to the `openApi.yaml` file.
 
 For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
 
+## Development Progress Checklist
+
+### Phase 1: Project Setup and Core Infrastructure
+
+- [x] Project Initialization
+  - [x] Set up Go module
+  - [x] Create project structure
+  - [x] Initialize Git
+- [x] Docker Environment
+  - [x] Create Dockerfile
+  - [x] Create docker-compose.yml
+  - [x] Test containerized setup
+- [ ] Database Setup
+  - [x] PostgreSQL setup
+  - [ ] Create database schema
+  - [ ] Implement migrations
+  - [ ] Create tables:
+    - [ ] users
+    - [ ] income
+    - [ ] expenses
+    - [ ] categories
+    - [ ] budgets
+- [ ] User Authentication
+  - [ ] Implement user registration
+  - [ ] Implement user login
+  - [ ] Setup JWT authentication
+  - [ ] Create auth middleware
+
+### Phase 2: Income, Expense, and Budget Management
+
+- [ ] Income Management
+  - [ ] CRUD endpoints for income
+  - [ ] User-income association
+- [ ] Expense Management
+  - [ ] CRUD endpoints for expenses
+  - [ ] Expense categorization
+- [ ] Budget Management
+  - [ ] CRUD endpoints for budgets
+  - [ ] Budget limits and tracking
+  - [ ] Budget alerts
+  - [ ] Recurring/one-time budgets
+- [ ] Input Validation
+  - [ ] Implement request validation
+  - [ ] Data sanitation
+
+### Phase 3: Budget Tracking and Summaries
+
+- [ ] Budget Tracking
+  - [ ] Compare expenses vs limits
+  - [ ] Budget adjustment endpoints
+- [ ] Financial Summaries
+  - [ ] Monthly summary endpoint
+  - [ ] Yearly summary endpoint
+  - [ ] Currency handling
+- [ ] Reports and Insights
+  - [ ] Spending trends
+  - [ ] Budget progress tracking
+
+### Phase 4: Documentation, Testing, and Security
+
+- [ ] API Documentation
+  - [ ] Swagger UI integration
+  - [ ] OpenAPI specifications
+- [ ] Testing
+  - [ ] Unit tests
+  - [ ] Integration tests
+  - [ ] Mock implementations
+- [ ] Security
+  - [ ] Rate limiting
+  - [ ] Security headers
+  - [ ] Input validation security
+
+### Phase 5: Deployment and Monitoring
+
+- [ ] CI/CD Pipeline
+  - [ ] GitHub Actions setup
+  - [ ] Docker registry integration
+- [ ] Cloud Deployment
+  - [ ] Cloud provider setup
+  - [ ] Database deployment
+  - [ ] Container orchestration
+- [ ] Monitoring
+  - [ ] Logging setup
+  - [ ] Metrics collection
+  - [ ] Alerting system
+
+### Phase 6: Future Enhancements
+
+- [ ] Recurring Transactions
+  - [ ] Automated recurring expenses
+  - [ ] Automated recurring income
+- [ ] Advanced Features
+  - [ ] ML-based insights
+  - [ ] Multi-currency support
+  - [ ] Banking API integration
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
