@@ -53,53 +53,25 @@ ORDER BY start_date DESC;
 
 -- name: GetBudgetUsage :one
 WITH budget_expenses AS (
-    SELECT COALESCE(SUM(amount), 0) as total_spent
+    SELECT COALESCE(SUM(amount), 0) AS total_spent
     FROM expenses
-    WHERE user_id = $2 
-        AND category = (SELECT category FROM budgets WHERE id = $1)
-        AND date >= (SELECT start_date FROM budgets WHERE id = $1)
-        AND date <= COALESCE((SELECT end_date FROM budgets WHERE id = $1), CURRENT_DATE)
-        AND deleted_at IS NULL
+    WHERE user_id = $2
+      AND category = (SELECT category FROM budgets WHERE id = $1)
+      AND date >= (SELECT start_date FROM budgets WHERE id = $1)
+      AND date <= COALESCE((SELECT end_date FROM budgets WHERE id = $1), CURRENT_DATE)
+      AND deleted_at IS NULL
 )
 SELECT 
-    b.*,
-    e.total_spent,
+    sqlc.embed(b), -- Embed the entire budget row
     CASE 
         WHEN b.amount > 0 THEN (e.total_spent / b.amount * 100)
         ELSE 0 
-    END as usage_percentage
+    END AS usage_percentage
 FROM budgets b
 CROSS JOIN budget_expenses e
-WHERE b.id = $1 AND b.user_id = $2 AND b.deleted_at IS NULL;
-
--- name: GetBudgetsNearLimit :many
-WITH budget_usage AS (
-    SELECT 
-        b.id,
-        b.amount as budget_amount,
-        COALESCE(SUM(e.amount), 0) as spent_amount,
-        CASE 
-            WHEN b.amount > 0 THEN (COALESCE(SUM(e.amount), 0) / b.amount * 100)
-            ELSE 0 
-        END as usage_percentage
-    FROM budgets b
-    LEFT JOIN expenses e ON 
-        e.category = b.category 
-        AND e.user_id = b.user_id
-        AND e.date >= b.start_date
-        AND e.date <= COALESCE(b.end_date, CURRENT_DATE)
-        AND e.deleted_at IS NULL
-    WHERE b.user_id = $1 
-        AND b.deleted_at IS NULL
-        AND b.start_date <= CURRENT_DATE
-        AND (b.end_date >= CURRENT_DATE OR b.end_date IS NULL)
-    GROUP BY b.id, b.amount
-)
-SELECT b.*, bu.spent_amount, bu.usage_percentage
-FROM budgets b
-JOIN budget_usage bu ON b.id = bu.id
-WHERE bu.usage_percentage >= $2
-ORDER BY bu.usage_percentage DESC;
+WHERE b.id = $1 
+  AND b.user_id = $2 
+  AND b.deleted_at IS NULL;
 
 -- name: GetRecurringBudgets :many
 SELECT * FROM budgets
@@ -107,3 +79,34 @@ WHERE user_id = $1
     AND type = 'recurring'
     AND deleted_at IS NULL
 ORDER BY start_date ASC;
+
+-- name: GetBudgetsNearLimit :many
+SELECT 
+    sqlc.embed(b), -- Embed the entire budget row
+    COALESCE(spent_data.spent_amount, 0) AS spent_amount,
+    CASE 
+        WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)
+        ELSE 0 
+    END AS usage_percentage
+FROM budgets b
+LEFT JOIN (
+    SELECT 
+        e.category,
+        e.user_id,
+        SUM(e.amount) AS spent_amount
+    FROM expenses e
+    WHERE e.deleted_at IS NULL
+    GROUP BY e.category, e.user_id
+) AS spent_data 
+ON b.category = spent_data.category 
+   AND b.user_id = spent_data.user_id
+WHERE b.user_id = $1 
+  AND b.deleted_at IS NULL
+  AND b.start_date <= CURRENT_DATE
+  AND (b.end_date >= CURRENT_DATE OR b.end_date IS NULL)
+  AND CASE 
+        WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)
+        ELSE 0 
+      END >= $2
+ORDER BY usage_percentage DESC;
+

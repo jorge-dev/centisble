@@ -37,10 +37,10 @@ WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL;
 
 -- name: GetIncomeByDateRange :many
 SELECT * FROM income
-WHERE user_id = $1 
+WHERE user_id = sqlc.arg(user_id) 
     AND deleted_at IS NULL
-    AND date >= $2 
-    AND date <= $3
+    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
+    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 ORDER BY date DESC;
 
 -- name: GetIncomeBySource :many
@@ -57,7 +57,7 @@ SELECT
 FROM income
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND DATE_TRUNC('month', date) = DATE_TRUNC('month', $2::date)
+    AND DATE_TRUNC('month', date) = DATE_TRUNC('month',  sqlc.arg(date)::TIMESTAMPTZ)
 GROUP BY currency;
 
 -- name: GetIncomeSummaryBySource :many
@@ -70,8 +70,8 @@ SELECT
 FROM income
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND date >= $2 
-    AND date <= $3
+    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
+    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 GROUP BY source, currency
 ORDER BY total_amount DESC;
 

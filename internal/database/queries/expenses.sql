@@ -40,16 +40,16 @@ SELECT * FROM expenses
 WHERE user_id = $1 
     AND category = $2 
     AND deleted_at IS NULL
-    AND date >= $3 
-    AND date <= $4
+    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
+    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 ORDER BY date DESC;
 
 -- name: GetExpensesByDateRange :many
 SELECT * FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND date >= $2 
-    AND date <= $3
+    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
+    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 ORDER BY date DESC;
 
 -- name: GetExpenseTotalsByCategory :many
@@ -61,8 +61,8 @@ SELECT
 FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND date >= $2 
-    AND date <= $3
+    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
+    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 GROUP BY category, currency
 ORDER BY total_amount DESC;
 
@@ -80,5 +80,5 @@ SELECT
 FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND DATE_TRUNC('month', date) = DATE_TRUNC('month', $2::date)
+    AND DATE_TRUNC('month', date) = DATE_TRUNC('month', sqlc.arg(date)::TIMESTAMPTZ)
 GROUP BY currency;

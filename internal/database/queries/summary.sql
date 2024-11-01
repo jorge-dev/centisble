@@ -11,9 +11,9 @@ WITH monthly_totals AS (
         AND e.currency = i.currency
         AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month', i.date)
         AND e.deleted_at IS NULL
-    WHERE i.user_id = $1 
+    WHERE i.user_id = sqlc.arg(user_id)
         AND i.deleted_at IS NULL
-        AND DATE_TRUNC('month', i.date) = DATE_TRUNC('month', $2::date)
+        AND DATE_TRUNC('month', i.date) = DATE_TRUNC('month', sqlc.arg(date)::TIMESTAMPTZ)
     GROUP BY i.currency
 ),
 top_categories AS (
@@ -24,9 +24,9 @@ top_categories AS (
         SUM(e.amount) as total_spent,
         ROW_NUMBER() OVER (PARTITION BY e.currency ORDER BY SUM(e.amount) DESC) as rank
     FROM expenses e
-    WHERE e.user_id = $1 
+    WHERE e.user_id = sqlc.arg(user_id)
         AND e.deleted_at IS NULL
-        AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month', $2::date)
+        AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month',  sqlc.arg(date)::TIMESTAMPTZ)
     GROUP BY e.category, e.currency
 )
 SELECT 
@@ -61,9 +61,9 @@ WITH yearly_totals AS (
         AND e.currency = i.currency
         AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', i.date)
         AND e.deleted_at IS NULL
-    WHERE i.user_id = $1 
+    WHERE i.user_id = sqlc.arg(user_id)
         AND i.deleted_at IS NULL
-        AND DATE_TRUNC('year', i.date) = DATE_TRUNC('year', $2::date)
+        AND DATE_TRUNC('year', i.date) = DATE_TRUNC('year', sqlc.arg(date)::TIMESTAMPTZ)
     GROUP BY i.currency
 ),
 top_categories AS (
@@ -74,9 +74,9 @@ top_categories AS (
         SUM(e.amount) as total_spent,
         ROW_NUMBER() OVER (PARTITION BY e.currency ORDER BY SUM(e.amount) DESC) as rank
     FROM expenses e
-    WHERE e.user_id = $1 
+    WHERE e.user_id = sqlc.arg(user_id)
         AND e.deleted_at IS NULL
-        AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', $2::date)
+        AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', sqlc.arg(date)::TIMESTAMPTZ)
     GROUP BY e.category, e.currency
 ),
 monthly_trend AS (
@@ -85,9 +85,9 @@ monthly_trend AS (
         currency,
         SUM(amount) as monthly_expenses
     FROM expenses
-    WHERE user_id = $1 
+    WHERE user_id = sqlc.arg(user_id)
         AND deleted_at IS NULL
-        AND DATE_TRUNC('year', date) = DATE_TRUNC('year', $2::date)
+        AND DATE_TRUNC('year', date) = DATE_TRUNC('year', sqlc.arg(date)::TIMESTAMPTZ)
     GROUP BY DATE_TRUNC('month', date), currency
     ORDER BY month
 )

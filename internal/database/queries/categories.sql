@@ -60,10 +60,10 @@ LEFT JOIN expenses e ON
     e.category = c.name 
     AND e.user_id = c.user_id 
     AND e.deleted_at IS NULL
-WHERE c.user_id = $1 
+WHERE c.user_id = sqlc.arg('id')::UUID
     AND c.deleted_at IS NULL
-    AND e.date >= $2 
-    AND e.date <= $3
+    AND e.date >= sqlc.arg('start_date')::TIMESTAMPTZ 
+    AND e.date <= sqlc.arg('end_date')::TIMESTAMPTZ
 GROUP BY c.name
 ORDER BY usage_count DESC
-LIMIT $4;
+LIMIT sqlc.arg('limit')::int;
