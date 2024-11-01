@@ -37,7 +37,7 @@ services:
       - "${CENTSIBLE_DB_PORT}:5432"
     volumes:
       - psql_volume_bp:/var/lib/postgresql/data
-      - ./internal/database/migrations:/docker-entrypoint-initdb.d
+      - ./internal/database/init:/docker-entrypoint-initdb.d
     healthcheck:
       test:
         [

@@ -20,6 +20,9 @@ run: ## Run the application
 d-run: ## Run the application in a Docker container
 	@docker compose up --build -d
 
+d-run-db: ## Run the database in a Docker container
+	@docker compose up psql_centsible -d
+
 d-down: ## Stop the application running in a Docker container
 	@docker compose down
 
@@ -45,6 +48,7 @@ itest: ## Run the integration tests
 clean: ## Clean the application
 	@echo "Cleaning..."
 	@rm -f main
+	@echo "Cleaned."
 
 watch: ## Watch the application for changes
 	@if command -v air > /dev/null; then \
