@@ -1,4 +1,3 @@
-
 # Budget Tracking API - Development Plan
 
 ## Introduction
@@ -34,48 +33,52 @@ This development plan is designed to help you build the **Budget Tracking API** 
        - `email` (String, Unique)
        - `password_hash` (String)
        - `created_at` (Timestamp)
+       - `deleted_at` (Timestamp, Nullable)
      - **Relationships**: One-to-Many relationship with `income`, `expenses`, `categories`, and `budgets` tables.
 
    - **income**:
      - **Description**: Stores user income records.
      - **Columns**:
        - `id` (UUID, Primary Key)
-       - `user_id` (UUID, Foreign Key to users)
+       - `user_id` (UUID, Foreign Key to users ON DELETE CASCADE)
        - `amount` (Decimal)
        - `currency` (String)
        - `source` (String)
        - `date` (Date)
        - `description` (String)
        - `created_at` (Timestamp)
-     - **Relationships**: Many-to-One relationship with `users`.
+       - `deleted_at` (Timestamp, Nullable)
+     - **Relationships**: Many-to-One relationship with `users`, cascading delete.
 
    - **expenses**:
      - **Description**: Stores user expense records.
      - **Columns**:
        - `id` (UUID, Primary Key)
-       - `user_id` (UUID, Foreign Key to users)
+       - `user_id` (UUID, Foreign Key to users ON DELETE CASCADE)
        - `amount` (Decimal)
        - `currency` (String)
        - `category` (String)
        - `date` (Date)
        - `description` (String)
        - `created_at` (Timestamp)
-     - **Relationships**: Many-to-One relationship with `users`.
+       - `deleted_at` (Timestamp, Nullable)
+     - **Relationships**: Many-to-One relationship with `users`, cascading delete.
 
    - **categories**:
      - **Description**: Stores budget categories created by users.
      - **Columns**:
        - `id` (UUID, Primary Key)
-       - `user_id` (UUID, Foreign Key to users)
+       - `user_id` (UUID, Foreign Key to users ON DELETE CASCADE)
        - `name` (String)
        - `created_at` (Timestamp)
-     - **Relationships**: Many-to-One relationship with `users`. Categories can be linked to `expenses` and `budgets` for classification.
+       - `deleted_at` (Timestamp, Nullable)
+     - **Relationships**: Many-to-One relationship with `users`, cascading delete. Categories can be linked to `expenses` and `budgets` for classification.
 
    - **budgets**:
      - **Description**: Stores user budget information.
      - **Columns**:
        - `id` (UUID, Primary Key)
-       - `user_id` (UUID, Foreign Key to users)
+       - `user_id` (UUID, Foreign Key to users ON DELETE CASCADE)
        - `amount` (Decimal)
        - `currency` (String)
        - `category` (String)
@@ -83,7 +86,8 @@ This development plan is designed to help you build the **Budget Tracking API** 
        - `start_date` (Date)
        - `end_date` (Date)
        - `created_at` (Timestamp)
-     - **Relationships**: Many-to-One relationship with `users`, linked with `categories` for classification.
+       - `deleted_at` (Timestamp, Nullable)
+     - **Relationships**: Many-to-One relationship with `users`, cascading delete.
 
 4. **User Authentication**
    - Implement user registration and login (`/register`, `/login` endpoints).
