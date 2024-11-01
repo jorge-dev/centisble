@@ -9,6 +9,9 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -24,18 +27,19 @@ type Service interface {
 	Close() error
 }
 
-type service struct {
+type dbService struct {
 	db *sql.DB
 }
 
 var (
-	database   = os.Getenv("CENTSIBLE_DB_DATABASE")
-	password   = os.Getenv("CENTSIBLE_DB_PASSWORD")
-	username   = os.Getenv("CENTSIBLE_DB_USERNAME")
-	port       = os.Getenv("CENTSIBLE_DB_PORT")
-	host       = os.Getenv("CENTSIBLE_DB_HOST")
-	schema     = os.Getenv("CENTSIBLE_DB_SCHEMA")
-	dbInstance *service
+	database     = os.Getenv("CENTSIBLE_DB_DATABASE")
+	password     = os.Getenv("CENTSIBLE_DB_PASSWORD")
+	username     = os.Getenv("CENTSIBLE_DB_USERNAME")
+	port         = os.Getenv("CENTSIBLE_DB_PORT")
+	host         = os.Getenv("CENTSIBLE_DB_HOST")
+	schema       = os.Getenv("CENTSIBLE_DB_SCHEMA")
+	dbInstance   *dbService
+	runMigration = os.Getenv("RUN_MIGRATION") == "true" // Add this line
 )
 
 func New() Service {
@@ -44,28 +48,58 @@ func New() Service {
 		return dbInstance
 	}
 
-	// print the database connection details
-	log.Printf("Connecting to database: %s", database)
-	log.Printf("Host: %s", host)
-	log.Printf("Port: %s", port)
-	log.Printf("Schema: %s", schema)
-	log.Printf("Username: %s", username)
-	log.Printf("Schema: %s", schema)
-
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", username, password, host, port, database, schema)
 	db, err := sql.Open("pgx", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	dbInstance = &service{
+
+	// Test the connection
+	if err := db.Ping(); err != nil {
+		log.Fatalf("unable to connect to database: %v", err)
+	}
+
+	dbInstance = &dbService{
 		db: db,
 	}
+
+	// Only run migrations if flag is set
+	if runMigration {
+		if err := runMigrations(db); err != nil {
+			log.Printf("Warning: failed to run migrations: %v", err)
+			// Don't fatal here, just warn
+		}
+	}
+
 	return dbInstance
+}
+
+// Add this helper function
+func runMigrations(db *sql.DB) error {
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		return fmt.Errorf("error creating driver: %v", err)
+	}
+
+	log.Println("Applying migrations...")
+	migration, err := migrate.NewWithDatabaseInstance(
+		"file://internal/database/migrations", // Update this line
+		"pgx", driver)
+	if err != nil {
+		return err
+	}
+
+	if err := migration.Up(); err != nil && err != migrate.ErrNoChange {
+		return err
+	}
+
+	log.Println("Migrations completed successfully")
+	return nil
 }
 
 // Health checks the health of the database connection by pinging the database.
 // It returns a map with keys indicating various health statistics.
-func (s *service) Health() map[string]string {
+func (s *dbService) Health() map[string]string {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
@@ -118,7 +152,7 @@ func (s *service) Health() map[string]string {
 // It logs a message indicating the disconnection from the specific database.
 // If the connection is successfully closed, it returns nil.
 // If an error occurs while closing the connection, it returns the error.
-func (s *service) Close() error {
+func (s *dbService) Close() error {
 	log.Printf("Disconnected from database: %s", database)
 	return s.db.Close()
 }
