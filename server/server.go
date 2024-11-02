@@ -14,6 +14,11 @@ import (
 	"github.com/jorge-dev/centsible/internal/database"
 )
 
+var (
+	env       = os.Getenv("APP_ENV")
+	jwtSecret = os.Getenv("JWT_SECRET")
+)
+
 type Server struct {
 	port int
 	db   database.Service
@@ -26,8 +31,11 @@ func (s *Server) GetDB() database.Service {
 
 func NewServer(ctx context.Context) (*http.Server, *Server) {
 
-	// get the jwt secret from the environment
-	jwtSecret := os.Getenv("JWT_SECRET")
+	//set env to local if not set
+	if env == "" {
+		env = "local"
+	}
+
 	if jwtSecret == "" {
 		log.Fatal("JWT_SECRET is required")
 	}
@@ -51,7 +59,7 @@ func NewServer(ctx context.Context) (*http.Server, *Server) {
 	// Declare Server config
 	httpServer := &http.Server{
 		Addr:         fmt.Sprintf(":%d", serverImpl.port),
-		Handler:      serverImpl.RegisterRoutes(serverImpl.db.GetConnection(), *jwtManager),
+		Handler:      serverImpl.RegisterRoutes(serverImpl.db.GetConnection(), *jwtManager, env),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,

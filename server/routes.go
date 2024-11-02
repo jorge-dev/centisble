@@ -14,7 +14,8 @@ import (
 	customMiddleware "github.com/jorge-dev/centsible/server/middleware"
 )
 
-func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager) http.Handler {
+func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env string) http.Handler {
+
 	queries := repository.New(conn)
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -24,6 +25,13 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager) http
 	r.Group(func(r chi.Router) {
 		r.Get("/live", s.liveCheck)
 		r.Get("/health", s.healthHandler)
+
+		// Add seed routes (only in development)
+		if env == "local" {
+			seedHandler := handlers.NewSeedHandler(queries)
+			r.Post("/api/seed", seedHandler.SeedData)
+			r.Delete("/api/seed", seedHandler.DeleteSeedData)
+		}
 
 	})
 
