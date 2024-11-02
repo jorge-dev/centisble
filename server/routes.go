@@ -38,7 +38,13 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager) http
 	r.Group(func(r chi.Router) {
 		authMiddleware := customMiddleware.NewAuthMiddleware(&jwtManager)
 		r.Use(authMiddleware.AuthRequired)
-		// Add private
+
+		// User routes
+		userHandler := handlers.NewUserHandler(queries)
+		r.Get("/api/user/profile", userHandler.GetProfile)
+		r.Put("/api/user/profile", userHandler.UpdateProfile)
+		r.Put("/api/user/password", userHandler.UpdatePassword)
+		r.Get("/api/user/stats", userHandler.GetStats)
 	})
 
 	return r
