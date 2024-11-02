@@ -15,9 +15,17 @@ sql:
               import: "github.com/google/uuid"
               type: "UUID"
           - db_type: "timestamptz"
+            nullable: true
             go_type:
               import: "time"
               type: "Time"
+              pointer: true
+          - db_type: "timestamptz"
+            nullable: false
+            go_type:
+              import: "time"
+              type: "Time"
+              pointer: false
           - db_type: "text"
             go_type:
               import: "string"
