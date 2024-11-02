@@ -60,7 +60,7 @@ func (q *Queries) CreateExpense(ctx context.Context, arg CreateExpenseParams) (E
 	return i, err
 }
 
-const deleteExpense = `-- name: DeleteExpense :exec
+const deleteExpense = `-- name: DeleteExpense :execrows
 UPDATE expenses 
 SET deleted_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
@@ -71,9 +71,12 @@ type DeleteExpenseParams struct {
 	UserID uuid.UUID `json:"user_id"`
 }
 
-func (q *Queries) DeleteExpense(ctx context.Context, arg DeleteExpenseParams) error {
-	_, err := q.db.Exec(ctx, deleteExpense, arg.ID, arg.UserID)
-	return err
+func (q *Queries) DeleteExpense(ctx context.Context, arg DeleteExpenseParams) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteExpense, arg.ID, arg.UserID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const getExpenseByID = `-- name: GetExpenseByID :one

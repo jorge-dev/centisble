@@ -63,7 +63,7 @@ func (q *Queries) CreateBudget(ctx context.Context, arg CreateBudgetParams) (Bud
 	return i, err
 }
 
-const deleteBudget = `-- name: DeleteBudget :exec
+const deleteBudget = `-- name: DeleteBudget :execrows
 UPDATE budgets 
 SET deleted_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
@@ -74,9 +74,12 @@ type DeleteBudgetParams struct {
 	UserID uuid.UUID `json:"user_id"`
 }
 
-func (q *Queries) DeleteBudget(ctx context.Context, arg DeleteBudgetParams) error {
-	_, err := q.db.Exec(ctx, deleteBudget, arg.ID, arg.UserID)
-	return err
+func (q *Queries) DeleteBudget(ctx context.Context, arg DeleteBudgetParams) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteBudget, arg.ID, arg.UserID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const getActiveBudgets = `-- name: GetActiveBudgets :many

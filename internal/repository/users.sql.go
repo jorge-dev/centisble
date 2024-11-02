@@ -30,7 +30,7 @@ func (q *Queries) CheckEmailExists(ctx context.Context, email string) (bool, err
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (id, name, email, password_hash, created_at, updated_at)
 VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at
+RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role
 `
 
 type CreateUserParams struct {
@@ -56,11 +56,12 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.Role,
 	)
 	return i, err
 }
 
-const deleteUser = `-- name: DeleteUser :exec
+const deleteUser = `-- name: DeleteUser :execrows
 UPDATE users 
 SET 
     deleted_at = CURRENT_TIMESTAMP,
@@ -68,9 +69,12 @@ SET
 WHERE id = $1 AND deleted_at IS NULL
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.Exec(ctx, deleteUser, id)
-	return err
+func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteUser, id)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
@@ -123,6 +127,19 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow
 	return i, err
 }
 
+const getUserRole = `-- name: GetUserRole :one
+SELECT role
+FROM users
+WHERE id = $1 AND deleted_at IS NULL
+`
+
+func (q *Queries) GetUserRole(ctx context.Context, id uuid.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getUserRole, id)
+	var role string
+	err := row.Scan(&role)
+	return role, err
+}
+
 const getUserStats = `-- name: GetUserStats :one
 SELECT 
     u.id,
@@ -159,6 +176,49 @@ func (q *Queries) GetUserStats(ctx context.Context, id uuid.UUID) (GetUserStatsR
 	return i, err
 }
 
+const listUsersByRole = `-- name: ListUsersByRole :many
+SELECT id, name, email, role, created_at, updated_at
+FROM users
+WHERE role = $1 AND deleted_at IS NULL
+ORDER BY created_at DESC
+`
+
+type ListUsersByRoleRow struct {
+	ID        uuid.UUID  `json:"id"`
+	Name      string     `json:"name"`
+	Email     string     `json:"email"`
+	Role      string     `json:"role"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+}
+
+func (q *Queries) ListUsersByRole(ctx context.Context, role string) ([]ListUsersByRoleRow, error) {
+	rows, err := q.db.Query(ctx, listUsersByRole, role)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListUsersByRoleRow
+	for rows.Next() {
+		var i ListUsersByRoleRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Email,
+			&i.Role,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateUser = `-- name: UpdateUser :one
 UPDATE users 
 SET 
@@ -166,7 +226,7 @@ SET
     email = $3,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND deleted_at IS NULL
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at
+RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role
 `
 
 type UpdateUserParams struct {
@@ -186,6 +246,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.Role,
 	)
 	return i, err
 }
@@ -209,4 +270,34 @@ func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPassword
 	var id uuid.UUID
 	err := row.Scan(&id)
 	return id, err
+}
+
+const updateUserRole = `-- name: UpdateUserRole :one
+UPDATE users 
+SET 
+    role = $2,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = $1 AND deleted_at IS NULL
+RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role
+`
+
+type UpdateUserRoleParams struct {
+	ID   uuid.UUID `json:"id"`
+	Role string    `json:"role"`
+}
+
+func (q *Queries) UpdateUserRole(ctx context.Context, arg UpdateUserRoleParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUserRole, arg.ID, arg.Role)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.PasswordHash,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+		&i.Role,
+	)
+	return i, err
 }

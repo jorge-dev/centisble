@@ -60,7 +60,7 @@ func (q *Queries) CreateIncome(ctx context.Context, arg CreateIncomeParams) (Inc
 	return i, err
 }
 
-const deleteIncome = `-- name: DeleteIncome :exec
+const deleteIncome = `-- name: DeleteIncome :execrows
 UPDATE income 
 SET deleted_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
@@ -71,9 +71,12 @@ type DeleteIncomeParams struct {
 	UserID uuid.UUID `json:"user_id"`
 }
 
-func (q *Queries) DeleteIncome(ctx context.Context, arg DeleteIncomeParams) error {
-	_, err := q.db.Exec(ctx, deleteIncome, arg.ID, arg.UserID)
-	return err
+func (q *Queries) DeleteIncome(ctx context.Context, arg DeleteIncomeParams) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteIncome, arg.ID, arg.UserID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const getIncomeByDateRange = `-- name: GetIncomeByDateRange :many
