@@ -3,20 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/jorge-dev/centsible/internal/auth"
+	"github.com/jorge-dev/centsible/internal/config"
 	"github.com/jorge-dev/centsible/internal/database"
-)
-
-var (
-	env       = os.Getenv("APP_ENV")
-	jwtSecret = os.Getenv("JWT_SECRET")
 )
 
 type Server struct {
@@ -30,36 +23,24 @@ func (s *Server) GetDB() database.Service {
 }
 
 func NewServer(ctx context.Context) (*http.Server, *Server) {
+	cfg := config.Get()
 
-	//set env to local if not set
-	if env == "" {
-		env = "local"
-	}
-
-	if jwtSecret == "" {
-		log.Fatal("JWT_SECRET is required")
-	}
-
-	jwtManager := auth.NewJWTManager(jwtSecret)
-	port, err := strconv.Atoi(os.Getenv("PORT"))
-	if err != nil {
-		log.Fatalf("Invalid port: %v", err)
+	if cfg.AppEnv == "local" {
+		fmt.Println("Running in local mode")
 	}
 
 	db := database.New(ctx)
 	serverImpl := &Server{
-		port: port,
+		port: cfg.Port,
 		db:   db,
 	}
 
-	if err != nil {
-		log.Fatalf("Unable to get database connection: %v", err)
-	}
+	jwtManager := auth.NewJWTManager(cfg.JWT.Secret)
 
 	// Declare Server config
 	httpServer := &http.Server{
 		Addr:         fmt.Sprintf(":%d", serverImpl.port),
-		Handler:      serverImpl.RegisterRoutes(serverImpl.db.GetConnection(), *jwtManager, env),
+		Handler:      serverImpl.RegisterRoutes(serverImpl.db.GetConnection(), *jwtManager, cfg.AppEnv),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,

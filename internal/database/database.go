@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -12,6 +11,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgx/v5"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/jorge-dev/centsible/internal/config"
 )
 
 // Service represents a service that interacts with a database.
@@ -32,16 +32,7 @@ type dbService struct {
 	conn *pgx.Conn
 }
 
-var (
-	database     = os.Getenv("CENTSIBLE_DB_DATABASE")
-	password     = os.Getenv("CENTSIBLE_DB_PASSWORD")
-	username     = os.Getenv("CENTSIBLE_DB_USERNAME")
-	port         = os.Getenv("CENTSIBLE_DB_PORT")
-	host         = os.Getenv("CENTSIBLE_DB_HOST")
-	schema       = os.Getenv("CENTSIBLE_DB_SCHEMA")
-	dbInstance   *dbService
-	runMigration = os.Getenv("RUN_MIGRATION") == "true" // Add this line
-)
+var dbInstance *dbService
 
 func New(ctx context.Context) Service {
 	// Reuse Connection
@@ -49,7 +40,16 @@ func New(ctx context.Context) Service {
 		return dbInstance
 	}
 
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", username, password, host, port, database, schema)
+	cfg := config.Get()
+
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s",
+		cfg.Database.Username,
+		cfg.Database.Password,
+		cfg.Database.Host,
+		cfg.Database.Port,
+		cfg.Database.Database,
+		cfg.Database.Schema,
+	)
 
 	connection, err := pgx.Connect(ctx, connStr)
 	if err != nil {
@@ -66,10 +66,9 @@ func New(ctx context.Context) Service {
 	}
 
 	// Only run migrations if flag is set
-	if runMigration {
+	if cfg.Database.RunMigration {
 		if err := runMigrations(connStr); err != nil {
 			log.Printf("Warning: failed to run migrations: %v", err)
-			// Don't fatal here, just warn
 		}
 	}
 
@@ -134,7 +133,8 @@ func (s *dbService) Health() map[string]string {
 // If the connection is successfully closed, it returns nil.
 // If an error occurs while closing the connection, it returns the error.
 func (s *dbService) Close(ctx context.Context) error {
-	log.Printf("Disconnected from database: %s", database)
+	cfg := config.Get()
+	log.Printf("Disconnected from database: %s", cfg.Database.Database)
 	return s.conn.Close(ctx)
 }
 
