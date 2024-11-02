@@ -1,4 +1,3 @@
-
 openapi: 3.1.0
 info:
   title: Budget Tracking API
@@ -23,6 +22,10 @@ tags:
     description: Operations related to budget records
   - name: Summary
     description: Operations related to financial summaries
+  - name: Live
+    description: Operations related to checking API status
+  - name: Health
+    description: Operations related to checking API health
 paths:
   /register:
     post:
@@ -35,11 +38,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterUser'
+              $ref: "#/components/schemas/RegisterUser"
       responses:
-        '201':
+        "201":
           description: User registered successfully
-        '400':
+        "400":
           description: Invalid input
   /login:
     post:
@@ -52,15 +55,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginUser'
+              $ref: "#/components/schemas/LoginUser"
       responses:
-        '200':
+        "200":
           description: Authentication successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '401':
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
           description: Unauthorized - Invalid credentials
   /income:
     post:
@@ -75,11 +78,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IncomeRecord'
+              $ref: "#/components/schemas/IncomeRecord"
       responses:
-        '201':
+        "201":
           description: Income record created successfully
-        '400':
+        "400":
           description: Invalid input
     get:
       description: Get all income records
@@ -89,14 +92,14 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: A list of income records
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IncomeRecordResponse'
+                  $ref: "#/components/schemas/IncomeRecordResponse"
   /expenses:
     post:
       description: Add a new expense record
@@ -110,11 +113,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExpenseRecord'
+              $ref: "#/components/schemas/ExpenseRecord"
       responses:
-        '201':
+        "201":
           description: Expense record created successfully
-        '400':
+        "400":
           description: Invalid input
     get:
       description: Get all expense records
@@ -124,14 +127,14 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: A list of expense records
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ExpenseRecordResponse'
+                  $ref: "#/components/schemas/ExpenseRecordResponse"
   /budgets:
     post:
       description: Create a new budget
@@ -145,11 +148,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BudgetRecord'
+              $ref: "#/components/schemas/BudgetRecord"
       responses:
-        '201':
+        "201":
           description: Budget created successfully
-        '400':
+        "400":
           description: Invalid input
     get:
       description: Get all budgets
@@ -159,14 +162,14 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: A list of budgets
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BudgetRecordResponse'
+                  $ref: "#/components/schemas/BudgetRecordResponse"
     put:
       description: Update an existing budget
       operationId: updateBudgetRecord
@@ -179,11 +182,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BudgetUpdate'
+              $ref: "#/components/schemas/BudgetUpdate"
       responses:
-        '200':
+        "200":
           description: Budget updated successfully
-        '400':
+        "400":
           description: Invalid input
   /summary/monthly:
     get:
@@ -194,12 +197,12 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Monthly summary of income, expenses, and budgets
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MonthlySummary'
+                $ref: "#/components/schemas/MonthlySummary"
   /summary/yearly:
     get:
       description: Get a yearly financial summary
@@ -209,12 +212,55 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Yearly summary of income, expenses, and budgets
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/YearlySummary'
+                $ref: "#/components/schemas/YearlySummary"
+  /live:
+    get:
+      description: Check if the API is live
+      operationId: checkLive
+      tags:
+        - Live
+      responses:
+        "200":
+          description: API is live
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+                  message:
+                    type: string
+                    example: "API is live"
+                  version:
+                    type: string
+                    example: "1.0.0"
+  /health:
+    get:
+      description: Check the health of the API
+      operationId: checkHealth
+      tags:
+        - Health
+      responses:
+        "200":
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "up"
+                  message:
+                    type: string
+                    example: "API is healthy"
 components:
   securitySchemes:
     bearerAuth:
