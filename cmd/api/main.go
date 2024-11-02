@@ -8,12 +8,14 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/jorge-dev/centsible/internal/config"
 	"github.com/jorge-dev/centsible/internal/database"
 	"github.com/jorge-dev/centsible/server"
 )
 
 func gracefulShutdown(ctx context.Context, apiServer *http.Server, dbService database.Service) {
 	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
+
 	defer stop()
 
 	<-ctx.Done() // Listen for the interrupt signal
@@ -40,6 +42,7 @@ func gracefulShutdown(ctx context.Context, apiServer *http.Server, dbService dat
 
 func main() {
 	ctx := context.Background()
+	config.Get().PrintBannerFromFile()
 	httpServer, serverImpl := server.NewServer(ctx)
 
 	// Run graceful shutdown in a separate goroutine
