@@ -12,6 +12,11 @@ type AuthMiddleware struct {
 	jwtManager *auth.JWTManager
 }
 
+const (
+	UserIDKey contextKey = "user_id"
+	EmailKey  contextKey = "email"
+)
+
 type contextKey string
 
 func NewAuthMiddleware(jwtManager *auth.JWTManager) *AuthMiddleware {
@@ -33,11 +38,8 @@ func (m *AuthMiddleware) AuthRequired(next http.Handler) http.Handler {
 			return
 		}
 
-		userIDKey := contextKey("user_id")
-		emailKey := contextKey("email")
-
-		ctx := context.WithValue(r.Context(), userIDKey, claims.UserID)
-		ctx = context.WithValue(ctx, emailKey, claims.Email)
+		ctx := context.WithValue(r.Context(), UserIDKey, claims.UserID)
+		ctx = context.WithValue(ctx, EmailKey, claims.Email)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
