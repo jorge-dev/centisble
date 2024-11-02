@@ -30,7 +30,7 @@ SET
 WHERE id = $1 AND deleted_at IS NULL
 RETURNING id;
 
--- name: DeleteUser :exec
+-- name: DeleteUser :execrows
 UPDATE users 
 SET 
     deleted_at = CURRENT_TIMESTAMP,
@@ -57,3 +57,22 @@ LEFT JOIN expenses e ON u.id = e.user_id AND e.deleted_at IS NULL
 LEFT JOIN budgets b ON u.id = b.user_id AND b.deleted_at IS NULL
 WHERE u.id = $1 AND u.deleted_at IS NULL
 GROUP BY u.id, u.name;
+
+-- name: UpdateUserRole :one
+UPDATE users 
+SET 
+    role = $2,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = $1 AND deleted_at IS NULL
+RETURNING *;
+
+-- name: GetUserRole :one
+SELECT role
+FROM users
+WHERE id = $1 AND deleted_at IS NULL;
+
+-- name: ListUsersByRole :many
+SELECT id, name, email, role, created_at, updated_at
+FROM users
+WHERE role = $1 AND deleted_at IS NULL
+ORDER BY created_at DESC;

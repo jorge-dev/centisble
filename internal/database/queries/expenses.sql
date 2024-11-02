@@ -30,7 +30,7 @@ SET
 WHERE id = $1 AND user_id = $7 AND deleted_at IS NULL
 RETURNING *;
 
--- name: DeleteExpense :exec
+-- name: DeleteExpense :execrows
 UPDATE expenses 
 SET deleted_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL;

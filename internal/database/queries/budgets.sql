@@ -31,7 +31,7 @@ SET
 WHERE id = $1 AND user_id = $8 AND deleted_at IS NULL
 RETURNING *;
 
--- name: DeleteBudget :exec
+-- name: DeleteBudget :execrows
 UPDATE budgets 
 SET deleted_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL;

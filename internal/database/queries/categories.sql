@@ -20,7 +20,7 @@ SET
 WHERE id = $1 AND user_id = $3 AND deleted_at IS NULL
 RETURNING *;
 
--- name: DeleteCategory :exec
+-- name: DeleteCategory :execrows
 UPDATE categories 
 SET deleted_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL;
