@@ -21,7 +21,7 @@ VALUES (
     $1, $2, $3, $4, $5,
     $6, $7, CURRENT_TIMESTAMP
 )
-RETURNING id, user_id, amount, currency, source, date, description, created_at, deleted_at
+RETURNING id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at
 `
 
 type CreateIncomeParams struct {
@@ -54,6 +54,7 @@ func (q *Queries) CreateIncome(ctx context.Context, arg CreateIncomeParams) (Inc
 		&i.Date,
 		&i.Description,
 		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.DeletedAt,
 	)
 	return i, err
@@ -76,7 +77,7 @@ func (q *Queries) DeleteIncome(ctx context.Context, arg DeleteIncomeParams) erro
 }
 
 const getIncomeByDateRange = `-- name: GetIncomeByDateRange :many
-SELECT id, user_id, amount, currency, source, date, description, created_at, deleted_at FROM income
+SELECT id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at FROM income
 WHERE user_id = $1 
     AND deleted_at IS NULL
     AND date >= $2::TIMESTAMPTZ
@@ -108,6 +109,7 @@ func (q *Queries) GetIncomeByDateRange(ctx context.Context, arg GetIncomeByDateR
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
+			&i.UpdatedAt,
 			&i.DeletedAt,
 		); err != nil {
 			return nil, err
@@ -121,7 +123,7 @@ func (q *Queries) GetIncomeByDateRange(ctx context.Context, arg GetIncomeByDateR
 }
 
 const getIncomeByID = `-- name: GetIncomeByID :one
-SELECT id, user_id, amount, currency, source, date, description, created_at, deleted_at FROM income
+SELECT id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at FROM income
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
 `
 
@@ -142,13 +144,14 @@ func (q *Queries) GetIncomeByID(ctx context.Context, arg GetIncomeByIDParams) (I
 		&i.Date,
 		&i.Description,
 		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.DeletedAt,
 	)
 	return i, err
 }
 
 const getIncomeBySource = `-- name: GetIncomeBySource :many
-SELECT id, user_id, amount, currency, source, date, description, created_at, deleted_at FROM income
+SELECT id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at FROM income
 WHERE user_id = $1 
     AND source = $2 
     AND deleted_at IS NULL
@@ -178,6 +181,7 @@ func (q *Queries) GetIncomeBySource(ctx context.Context, arg GetIncomeBySourcePa
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
+			&i.UpdatedAt,
 			&i.DeletedAt,
 		); err != nil {
 			return nil, err
@@ -275,7 +279,7 @@ func (q *Queries) GetMonthlyIncomeTotal(ctx context.Context, arg GetMonthlyIncom
 }
 
 const getRecentIncome = `-- name: GetRecentIncome :many
-SELECT id, user_id, amount, currency, source, date, description, created_at, deleted_at FROM income
+SELECT id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at FROM income
 WHERE user_id = $1 
     AND deleted_at IS NULL
 ORDER BY date DESC
@@ -305,6 +309,7 @@ func (q *Queries) GetRecentIncome(ctx context.Context, arg GetRecentIncomeParams
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
+			&i.UpdatedAt,
 			&i.DeletedAt,
 		); err != nil {
 			return nil, err
@@ -318,7 +323,7 @@ func (q *Queries) GetRecentIncome(ctx context.Context, arg GetRecentIncomeParams
 }
 
 const listIncome = `-- name: ListIncome :many
-SELECT id, user_id, amount, currency, source, date, description, created_at, deleted_at FROM income
+SELECT id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at FROM income
 WHERE user_id = $1 AND deleted_at IS NULL
 ORDER BY date DESC
 `
@@ -341,6 +346,7 @@ func (q *Queries) ListIncome(ctx context.Context, userID uuid.UUID) ([]Income, e
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
+			&i.UpdatedAt,
 			&i.DeletedAt,
 		); err != nil {
 			return nil, err
@@ -363,7 +369,7 @@ SET
     description = $6,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $7 AND deleted_at IS NULL
-RETURNING id, user_id, amount, currency, source, date, description, created_at, deleted_at
+RETURNING id, user_id, amount, currency, source, date, description, created_at, updated_at, deleted_at
 `
 
 type UpdateIncomeParams struct {
@@ -396,6 +402,7 @@ func (q *Queries) UpdateIncome(ctx context.Context, arg UpdateIncomeParams) (Inc
 		&i.Date,
 		&i.Description,
 		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.DeletedAt,
 	)
 	return i, err

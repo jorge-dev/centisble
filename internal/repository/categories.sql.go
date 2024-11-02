@@ -34,7 +34,7 @@ func (q *Queries) CheckCategoryExists(ctx context.Context, arg CheckCategoryExis
 const createCategory = `-- name: CreateCategory :one
 INSERT INTO categories (id, user_id, name, created_at)
 VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-RETURNING id, user_id, name, created_at, deleted_at
+RETURNING id, user_id, name, created_at, updated_at, deleted_at
 `
 
 type CreateCategoryParams struct {
@@ -51,6 +51,7 @@ func (q *Queries) CreateCategory(ctx context.Context, arg CreateCategoryParams) 
 		&i.UserID,
 		&i.Name,
 		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.DeletedAt,
 	)
 	return i, err
@@ -73,7 +74,7 @@ func (q *Queries) DeleteCategory(ctx context.Context, arg DeleteCategoryParams) 
 }
 
 const getCategoryByID = `-- name: GetCategoryByID :one
-SELECT id, user_id, name, created_at, deleted_at FROM categories
+SELECT id, user_id, name, created_at, updated_at, deleted_at FROM categories
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
 `
 
@@ -90,6 +91,7 @@ func (q *Queries) GetCategoryByID(ctx context.Context, arg GetCategoryByIDParams
 		&i.UserID,
 		&i.Name,
 		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.DeletedAt,
 	)
 	return i, err
@@ -199,7 +201,7 @@ func (q *Queries) GetMostUsedCategories(ctx context.Context, arg GetMostUsedCate
 }
 
 const listCategories = `-- name: ListCategories :many
-SELECT id, user_id, name, created_at, deleted_at FROM categories
+SELECT id, user_id, name, created_at, updated_at, deleted_at FROM categories
 WHERE user_id = $1 AND deleted_at IS NULL
 ORDER BY name ASC
 `
@@ -218,6 +220,7 @@ func (q *Queries) ListCategories(ctx context.Context, userID uuid.UUID) ([]Categ
 			&i.UserID,
 			&i.Name,
 			&i.CreatedAt,
+			&i.UpdatedAt,
 			&i.DeletedAt,
 		); err != nil {
 			return nil, err
@@ -236,7 +239,7 @@ SET
     name = $2,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $3 AND deleted_at IS NULL
-RETURNING id, user_id, name, created_at, deleted_at
+RETURNING id, user_id, name, created_at, updated_at, deleted_at
 `
 
 type UpdateCategoryParams struct {
@@ -253,6 +256,7 @@ func (q *Queries) UpdateCategory(ctx context.Context, arg UpdateCategoryParams) 
 		&i.UserID,
 		&i.Name,
 		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.DeletedAt,
 	)
 	return i, err
