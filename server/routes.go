@@ -22,7 +22,7 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager) http
 
 	// Public routes
 	r.Group(func(r chi.Router) {
-		r.Get("/", s.HelloWorldHandler)
+		r.Get("/live", s.liveCheck)
 		r.Get("/health", s.healthHandler)
 
 	})
@@ -44,19 +44,26 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager) http
 	return r
 }
 
-func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]string)
-	resp["message"] = "Hello World"
+func (s *Server) liveCheck(w http.ResponseWriter, r *http.Request) {
 
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+	liveCheckResponse := map[string]string{"status": "ok", "version": "0.0.1", "message": "Service is running"}
+
+	if err := writeJSON(w, http.StatusOK, liveCheckResponse); err != nil {
+		log.Printf("Error writing JSON: %v", err)
 	}
 
-	_, _ = w.Write(jsonResp)
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
-	jsonResp, _ := json.Marshal(s.db.Health())
-	_, _ = w.Write(jsonResp)
+	healthResponse := s.db.Health()
+	if err := writeJSON(w, http.StatusOK, healthResponse); err != nil {
+		log.Printf("Error writing JSON: %v", err)
+	}
+
+}
+
+func writeJSON(w http.ResponseWriter, status int, data any) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	return json.NewEncoder(w).Encode(data)
 }
