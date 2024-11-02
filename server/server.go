@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,37 +10,52 @@ import (
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/jorge-dev/centsible/internal/auth"
 	"github.com/jorge-dev/centsible/internal/database"
 )
 
 type Server struct {
 	port int
-
-	db database.Service
+	db   database.Service
 }
 
-func NewServer() *http.Server {
+// GetDB returns the database service
+func (s *Server) GetDB() database.Service {
+	return s.db
+}
+
+func NewServer(ctx context.Context) (*http.Server, *Server) {
+
+	// get the jwt secret from the environment
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET is required")
+	}
+
+	jwtManager := auth.NewJWTManager(jwtSecret)
 	port, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatalf("Invalid port: %v", err)
 	}
-	NewServer := &Server{
+
+	db := database.New(ctx)
+	serverImpl := &Server{
 		port: port,
-		db:   database.New(),
+		db:   db,
 	}
 
-	// log.Printf("Configuring server on port %d", NewServer.port)
+	if err != nil {
+		log.Fatalf("Unable to get database connection: %v", err)
+	}
 
 	// Declare Server config
-	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      NewServer.RegisterRoutes(),
+	httpServer := &http.Server{
+		Addr:         fmt.Sprintf(":%d", serverImpl.port),
+		Handler:      serverImpl.RegisterRoutes(serverImpl.db.GetConnection(), *jwtManager),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
 
-	// log.Println("Server configuration complete")
-
-	return server
+	return httpServer, serverImpl
 }
