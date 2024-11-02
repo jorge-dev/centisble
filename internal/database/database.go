@@ -55,11 +55,6 @@ func New(ctx context.Context) Service {
 	if err != nil {
 		log.Fatalf("unable to connect to database: %v", err)
 	}
-	// defer connection.Close(ctx)
-	// db, err := sql.Conn("pgx", connStr)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	// Test the connection
 	if err := connection.Ping(ctx); err != nil {
@@ -83,10 +78,6 @@ func New(ctx context.Context) Service {
 
 // Add this helper function
 func runMigrations(connectionString string) error {
-	// driver, err := postgres.WithInstance(conn, &postgres.Config{})
-	// if err != nil {
-	// 	return fmt.Errorf("error creating driver: %v", err)
-	// }
 
 	log.Println("Applying migrations...")
 	migration, err := migrate.New(
@@ -112,29 +103,28 @@ func (s *dbService) Health() map[string]string {
 
 	stats := make(map[string]string)
 
-	// try to query the database
-	_, err := s.conn.Exec(ctx, "SELECT 1")
-	if err != nil {
-		log.Printf("db down: %v", err)
-	} else {
-		log.Printf("db up")
-	}
-
 	// Ping the database
-	err = s.conn.Ping(ctx)
+	err := s.conn.Ping(ctx)
 	if err != nil {
 		stats["status"] = "down"
-		stats["error"] = fmt.Sprintf("db down: %v", err)
+		stats["message"] = "The database connection is unhealthy."
+		stats["error"] = "db not responding"
 		log.Printf("db down: %v", err)
 		return stats
+	}
+
+	// try to query the database
+	_, err = s.conn.Exec(ctx, "SELECT 1")
+	if err != nil {
+		log.Printf("db not responding after query: %v", err)
+		stats["status"] = "degraded"
+		stats["message"] = "The database connection is unhealthy."
+		stats["error"] = fmt.Sprintf("Cant connect to database: %v", err)
 	}
 
 	// Database is up, add a basic health message
 	stats["status"] = "up"
 	stats["message"] = "The database connection is healthy."
-
-	// Additional health indicators
-	stats["connection_info"] = "Using single connection (pgx.Conn)"
 
 	return stats
 }
