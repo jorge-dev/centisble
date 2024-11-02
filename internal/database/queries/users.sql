@@ -4,7 +4,7 @@ VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 RETURNING *;
 
 -- name: GetUserByEmail :one
-SELECT id, email, password_hash
+SELECT id, name, email, password_hash
 FROM users
 WHERE email = $1 AND deleted_at IS NULL;
 
