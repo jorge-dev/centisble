@@ -32,8 +32,8 @@ func (q *Queries) CheckCategoryExists(ctx context.Context, arg CheckCategoryExis
 }
 
 const createCategory = `-- name: CreateCategory :one
-INSERT INTO categories (id, user_id, name, created_at)
-VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+INSERT INTO categories (id, user_id, name, created_at, updated_at)
+VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 RETURNING id, user_id, name, created_at, updated_at, deleted_at
 `
 
