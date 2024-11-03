@@ -10,5 +10,5 @@
 
 {{ .TextColor }}{{ .ApplicationTitle }}:   {{ .ApplicationVersion }} 
 Build Info:  {{.CompileDate}}, {{.GitCommit}}, {{.OS}}/{{.Arch}}
-Powered by:  {{ .Version }}{{ .Reset }}
+Powered by:  {{ .GoVersion }}{{ .Reset }}
 

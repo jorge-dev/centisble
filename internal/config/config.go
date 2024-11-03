@@ -10,6 +10,7 @@ import (
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/jorge-dev/centsible/internal/version"
 )
 
 type Config struct {
@@ -121,18 +122,20 @@ func (c *Config) PrintBannerFromFile() {
 		log.Fatalf("Failed to parse banner template: %v", err)
 	}
 
+	versionInfo := version.Get()
+
 	data := BannerData{
 		BannerColor:        Blue,
 		TextColor:          Green,
 		Reset:              Reset,
 		ApplicationTitle:   "Centsible",
-		ApplicationVersion: "v0.1.0",
-		CompileDate:        time.Now().Format("2006-01-02 15:04:05"),
-		GitCommit:          "develop",
-		GoVersion:          runtime.Version(),
+		ApplicationVersion: versionInfo.GitVersion,
+		CompileDate:        time.Now().UTC().Format(time.RFC1123),
+		GitCommit:          versionInfo.GitCommit,
+		GoVersion:          versionInfo.GoVersion,
 		OS:                 runtime.GOOS,
 		Arch:               runtime.GOARCH,
-		Version:            runtime.Version(),
+		Version:            versionInfo.GitVersion,
 	}
 
 	err = bannerTemplate.Execute(os.Stdout, data)
