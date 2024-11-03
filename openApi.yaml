@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Budget Tracking API
   description: API for managing income, expenses, recurring and one-time budgets, and financial summaries.
-  version: 1.0.0
+  version: 1.1.0
   contact:
     name: John Doe
     email: ""
@@ -78,7 +78,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/IncomeRecord"
+              $ref: "#/components/schemas/CreateIncomeRequest"
       responses:
         "201":
           description: Income record created successfully
@@ -100,6 +100,69 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/IncomeRecordResponse"
+  /income/{id}:
+    get:
+      description: Get an income record by ID
+      operationId: getIncomeByID
+      tags:
+        - Income
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Income record details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomeRecordResponse"
+        "404":
+          description: Income record not found
+    put:
+      description: Update an existing income record
+      operationId: updateIncomeRecord
+      tags:
+        - Income
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateIncomeRequest"
+      responses:
+        "200":
+          description: Income record updated successfully
+        "400":
+          description: Invalid input
+    delete:
+      description: Delete an income record
+      operationId: deleteIncomeRecord
+      tags:
+        - Income
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Income record deleted successfully
   /expenses:
     post:
       description: Add a new expense record
@@ -306,7 +369,7 @@ components:
         token:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-    IncomeRecord:
+    CreateIncomeRequest:
       type: object
       properties:
         amount:
