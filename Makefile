@@ -10,9 +10,13 @@ help:
 all: ## Build the application and test it
 	build test
 
-build: ## Build the application
+build: ## Build the application with version information
 	@echo "Building..."
-	@go build -o main cmd/api/main.go
+	$(eval BUILD_DATE=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ'))
+	$(eval GIT_COMMIT=$(shell git rev-parse HEAD))
+	$(eval VERSION=$(shell git describe --tags --abbrev=0 | tr -d '\n'))
+	@echo "Building version: ${VERSION} commit: ${GIT_COMMIT} date: ${BUILD_DATE}"
+	@go build -o main -ldflags="-X 'github.com/jorge-dev/centsible/internal/version.buildDate=${BUILD_DATE}' -X 'github.com/jorge-dev/centsible/internal/version.gitCommit=${GIT_COMMIT}' -X 'github.com/jorge-dev/centsible/internal/version.gitVersion=${VERSION}'" ./cmd/api/main.go
 
 run: ## Run the application
 	@go run cmd/api/main.go
