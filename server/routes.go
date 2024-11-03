@@ -19,6 +19,7 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 	queries := repository.New(conn)
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+
 	r.Use(middleware.Recoverer)
 
 	// Public routes
@@ -49,10 +50,18 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 
 		// User routes
 		userHandler := handlers.NewUserHandler(queries)
-		r.Get("/api/user/profile", userHandler.GetProfile)
-		r.Put("/api/user/profile", userHandler.UpdateProfile)
-		r.Put("/api/user/password", userHandler.UpdatePassword)
-		r.Get("/api/user/stats", userHandler.GetStats)
+		r.Get("/user/profile", userHandler.GetProfile)
+		r.Put("/user/profile", userHandler.UpdateProfile)
+		r.Put("/user/password", userHandler.UpdatePassword)
+		r.Get("/user/stats", userHandler.GetStats)
+
+		// Income routes
+		incomeHandler := handlers.NewIncomeHandler(queries)
+		r.Post("/income", incomeHandler.CreateIncome)
+		r.Get("/income", incomeHandler.GetIncomeList)
+		r.Get("/income/{id}", incomeHandler.GetIncomeByID)
+		r.Put("/income/{id}", incomeHandler.UpdateIncome)
+		r.Delete("/income/{id}", incomeHandler.DeleteIncome)
 	})
 
 	return r
