@@ -2,15 +2,13 @@ openapi: 3.1.0
 info:
   title: Budget Tracking API
   description: API for managing income, expenses, recurring and one-time budgets, and financial summaries.
-  version: 1.1.0
+  version: 1.1.1
   contact:
     name: John Doe
     email: ""
 servers:
   - url: http://localhost:8080
     description: Local development server
-  - url: https://api.budgettracker.com
-    description: Production server
 tags:
   - name: Authentication
     description: Operations related to user authentication
