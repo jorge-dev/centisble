@@ -44,6 +44,8 @@ test: ## Run the tests
 	@echo "Testing..."
 	@go test ./... -v
 
+postman:
+	npx openapi-to-postmanv2 -s ./openApi.yaml -o collection.json -p
 
 itest: ## Run the integration tests
 	@echo "Running integration tests..."
