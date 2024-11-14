@@ -203,25 +203,25 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
   - [x] Test containerized setup
 - [ ] Database Setup
   - [x] PostgreSQL setup
-  - [ ] Create database schema
-  - [ ] Implement migrations
-  - [ ] Create tables:
-    - [ ] users
-    - [ ] income
-    - [ ] expenses
-    - [ ] categories
-    - [ ] budgets
-- [ ] User Authentication
-  - [ ] Implement user registration
-  - [ ] Implement user login
-  - [ ] Setup JWT authentication
-  - [ ] Create auth middleware
+  - [x] Create database schema
+  - [x] Implement migrations
+  - [x] Create tables:
+    - [x] users
+    - [x] income
+    - [x] expenses
+    - [x] categories
+    - [x] budgets
+- [x] User Authentication
+  - [x] Implement user registration
+  - [x] Implement user login
+  - [x] Setup JWT authentication
+  - [x] Create auth middleware
 
 ### Phase 2: Income, Expense, and Budget Management
 
-- [ ] Income Management
-  - [ ] CRUD endpoints for income
-  - [ ] User-income association
+- [X] Income Management
+  - [X] CRUD endpoints for income
+  - [X] User-income association
 - [ ] Expense Management
   - [ ] CRUD endpoints for expenses
   - [ ] Expense categorization
