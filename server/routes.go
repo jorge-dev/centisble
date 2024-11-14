@@ -62,6 +62,20 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 		r.Get("/income/{id}", incomeHandler.GetIncomeByID)
 		r.Put("/income/{id}", incomeHandler.UpdateIncome)
 		r.Delete("/income/{id}", incomeHandler.DeleteIncome)
+
+		// Expense routes
+		expenseHandler := handlers.NewExpenseHandler(queries)
+		r.Post("/expenses", expenseHandler.CreateExpense)
+		r.Get("/expenses", expenseHandler.ListExpenses)
+		r.Get("/expenses/{id}", expenseHandler.GetExpenseByID)
+		r.Put("/expenses/{id}", expenseHandler.UpdateExpense)
+		r.Delete("/expenses/{id}", expenseHandler.DeleteExpense)
+		r.Get("/expenses/category/{category}", expenseHandler.GetExpensesByCategory)
+		r.Get("/expenses/range", expenseHandler.GetExpensesByDateRange)
+		// Add missing routes
+		r.Get("/expenses/monthly/total", expenseHandler.GetMonthlyExpenseTotal)
+		r.Get("/expenses/category/totals", expenseHandler.GetExpenseTotalsByCategory)
+		r.Get("/expenses/recent", expenseHandler.GetRecentExpenses)
 	})
 
 	return r
