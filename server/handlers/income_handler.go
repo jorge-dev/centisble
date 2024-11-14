@@ -31,7 +31,35 @@ type CreateIncomeRequest struct {
 func (h *IncomeHandler) CreateIncome(w http.ResponseWriter, r *http.Request) {
 	var req CreateIncomeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		log.Printf("Error decoding request body: %v", err.Error())
+		errMsg := "Invalid request body: "
+		switch {
+		case err.Error() == "EOF":
+			errMsg += "request body is empty"
+		case err.Error() == "unexpected end of JSON input":
+			errMsg += "incomplete JSON data"
+		default:
+			errMsg += "malformed JSON - " + err.Error()
+		}
+		http.Error(w, errMsg, http.StatusBadRequest)
+		return
+	}
+
+	// Validate required fields
+	if req.Amount <= 0 {
+		http.Error(w, "Invalid request body: amount must be greater than 0", http.StatusBadRequest)
+		return
+	}
+	if req.Currency == "" {
+		http.Error(w, "Invalid request body: currency is required", http.StatusBadRequest)
+		return
+	}
+	if req.Source == "" {
+		http.Error(w, "Invalid request body: source is required", http.StatusBadRequest)
+		return
+	}
+	if req.Date.IsZero() {
+		http.Error(w, "Invalid request body: date is required", http.StatusBadRequest)
 		return
 	}
 
@@ -78,7 +106,6 @@ func (h *IncomeHandler) GetIncomeList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	incomes, err := h.db.ListIncome(r.Context(), uid)
-	log.Printf("Incomes: %v", incomes)
 	if err != nil {
 		http.Error(w, "Error fetching income records", http.StatusInternalServerError)
 		return
@@ -126,39 +153,90 @@ func (h *IncomeHandler) GetIncomeByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *IncomeHandler) UpdateIncome(w http.ResponseWriter, r *http.Request) {
-	var req CreateIncomeRequest
+	var req map[string]interface{}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		errMsg := "Invalid request body: "
+		switch {
+		case err.Error() == "EOF":
+			errMsg += "request body is empty"
+		case err.Error() == "unexpected end of JSON input":
+			errMsg += "incomplete JSON data"
+		default:
+			errMsg += "malformed JSON - " + err.Error()
+		}
+		http.Error(w, errMsg, http.StatusBadRequest)
 		return
 	}
 
-	userID, ok := r.Context().Value(middleware.UserIDKey).(string)
-	if !ok {
-		http.Error(w, "User ID not found in context", http.StatusUnauthorized)
-		return
-	}
-	uid, err := uuid.Parse(userID)
-	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+	if len(req) == 0 {
+		http.Error(w, "Invalid request body: at least one field must be provided for update", http.StatusBadRequest)
 		return
 	}
 
+	// Get existing income record first
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+	uid, _ := uuid.Parse(userID)
 	incomeID := chi.URLParam(r, "id")
-	incomeUUID, err := uuid.Parse(incomeID)
+	incomeUUID, _ := uuid.Parse(incomeID)
+
+	currentIncome, err := h.db.GetIncomeByID(r.Context(), repository.GetIncomeByIDParams{
+		ID:     incomeUUID,
+		UserID: uid,
+	})
 	if err != nil {
-		http.Error(w, "Invalid income ID", http.StatusBadRequest)
+		http.Error(w, "Income record not found", http.StatusNotFound)
 		return
 	}
 
-	income, err := h.db.UpdateIncome(r.Context(), repository.UpdateIncomeParams{
+	updateParams := repository.UpdateIncomeParams{
 		ID:          incomeUUID,
-		Amount:      req.Amount,
-		Currency:    req.Currency,
-		Source:      req.Source,
-		Date:        req.Date,
-		Description: req.Description,
 		UserID:      uid,
-	})
+		Amount:      currentIncome.Amount,
+		Currency:    currentIncome.Currency,
+		Source:      currentIncome.Source,
+		Date:        currentIncome.Date,
+		Description: currentIncome.Description,
+	}
+
+	// Only validate and update fields that are present in the request
+	if amount, ok := req["amount"].(float64); ok {
+		if amount <= 0 {
+			http.Error(w, "Invalid request body: amount must be greater than 0", http.StatusBadRequest)
+			return
+		}
+		updateParams.Amount = amount
+	}
+
+	if currency, ok := req["currency"].(string); ok {
+		if currency == "" {
+			http.Error(w, "Invalid request body: currency cannot be empty", http.StatusBadRequest)
+			return
+		}
+		updateParams.Currency = currency
+	}
+
+	if source, ok := req["source"].(string); ok {
+		if source == "" {
+			http.Error(w, "Invalid request body: source cannot be empty", http.StatusBadRequest)
+			return
+		}
+		updateParams.Source = source
+	}
+
+	if dateStr, ok := req["date"].(string); ok {
+		date, err := time.Parse(time.RFC3339, dateStr)
+		if err != nil {
+			http.Error(w, "Invalid request body: invalid date format", http.StatusBadRequest)
+			return
+		}
+		updateParams.Date = date
+	}
+
+	if description, ok := req["description"].(string); ok {
+		updateParams.Description = description
+	}
+
+	income, err := h.db.UpdateIncome(r.Context(), updateParams)
 	if err != nil {
 		http.Error(w, "Error updating income record", http.StatusInternalServerError)
 		return

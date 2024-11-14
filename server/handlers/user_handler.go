@@ -73,17 +73,35 @@ func (h *UserHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := r.Context().Value("user_id").(string)
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
 
+	// Get current user data
+	currentUser, err := h.db.GetUserByID(r.Context(), uid)
+	if err != nil {
+		http.Error(w, "Error fetching user data", http.StatusInternalServerError)
+		return
+	}
+
+	// Use current values if request fields are empty
+	name := currentUser.Name
+	email := currentUser.Email
+
+	if req.Name != "" {
+		name = req.Name
+	}
+	if req.Email != "" {
+		email = req.Email
+	}
+
 	user, err := h.db.UpdateUser(r.Context(), repository.UpdateUserParams{
 		ID:    uid,
-		Name:  req.Name,
-		Email: req.Email,
+		Name:  name,
+		Email: email,
 	})
 	if err != nil {
 		http.Error(w, "Error updating user", http.StatusInternalServerError)
@@ -109,7 +127,7 @@ func (h *UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := r.Context().Value("user_id").(string)
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
@@ -117,7 +135,7 @@ func (h *UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get current user to verify password
-	user, err := h.db.GetUserByEmail(r.Context(), r.Context().Value("email").(string))
+	user, err := h.db.GetUserByEmail(r.Context(), r.Context().Value(middleware.EmailKey).(string))
 	if err != nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
@@ -146,12 +164,11 @@ func (h *UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 }
 
 // GetStats handles GET /api/user/stats
 func (h *UserHandler) GetStats(w http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value("user_id").(string)
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
