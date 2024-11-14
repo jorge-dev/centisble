@@ -259,10 +259,10 @@ func (q *Queries) GetExpensesByDateRange(ctx context.Context, arg GetExpensesByD
 	return items, nil
 }
 
-const getMonthlyExpenseTotal = `-- name: GetMonthlyExpenseTotal :one
+const getMonthlyExpenseTotal = `-- name: GetMonthlyExpenseTotal :many
 SELECT 
-    COALESCE(SUM(amount), 0) as total_amount,
-    currency
+    COALESCE(SUM(amount), 0)::float8 as total_amount,
+    currency as currency
 FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
@@ -276,15 +276,28 @@ type GetMonthlyExpenseTotalParams struct {
 }
 
 type GetMonthlyExpenseTotalRow struct {
-	TotalAmount interface{} `json:"total_amount"`
-	Currency    string      `json:"currency"`
+	TotalAmount float64 `json:"total_amount"`
+	Currency    string  `json:"currency"`
 }
 
-func (q *Queries) GetMonthlyExpenseTotal(ctx context.Context, arg GetMonthlyExpenseTotalParams) (GetMonthlyExpenseTotalRow, error) {
-	row := q.db.QueryRow(ctx, getMonthlyExpenseTotal, arg.UserID, arg.Date)
-	var i GetMonthlyExpenseTotalRow
-	err := row.Scan(&i.TotalAmount, &i.Currency)
-	return i, err
+func (q *Queries) GetMonthlyExpenseTotal(ctx context.Context, arg GetMonthlyExpenseTotalParams) ([]GetMonthlyExpenseTotalRow, error) {
+	rows, err := q.db.Query(ctx, getMonthlyExpenseTotal, arg.UserID, arg.Date)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMonthlyExpenseTotalRow
+	for rows.Next() {
+		var i GetMonthlyExpenseTotalRow
+		if err := rows.Scan(&i.TotalAmount, &i.Currency); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getRecentExpenses = `-- name: GetRecentExpenses :many

@@ -73,10 +73,10 @@ WHERE user_id = $1
 ORDER BY date DESC
 LIMIT $2;
 
--- name: GetMonthlyExpenseTotal :one
+-- name: GetMonthlyExpenseTotal :many
 SELECT 
-    COALESCE(SUM(amount), 0) as total_amount,
-    currency
+    COALESCE(SUM(amount), 0)::float8 as total_amount,
+    currency as currency
 FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
