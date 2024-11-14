@@ -5,7 +5,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "560ec2ad-e208-46df-9c2d-777d730faf92",
+                    "id": "7d1f069d-6f69-4a47-ad4d-57d5bd3d005c",
                     "name": "register User",
                     "request": {
                         "name": "register User",
@@ -44,7 +44,7 @@
                     },
                     "response": [
                         {
-                            "id": "3ca823d6-17f1-442b-99e4-f1f6afd33752",
+                            "id": "5ee5f628-1235-4555-b0d7-f9a076bab20a",
                             "name": "User registered successfully",
                             "originalRequest": {
                                 "url": {
@@ -82,7 +82,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "df675646-c338-45a9-9fe0-428c43eb793f",
+                            "id": "9740f818-c11e-4091-92bb-6bf7fc7ba996",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -132,7 +132,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "adea8c49-e84e-4ee9-9fd5-e30c66b68d53",
+                    "id": "a601282b-252a-4e5a-bcfa-d7500263f23d",
                     "name": "login User",
                     "request": {
                         "name": "login User",
@@ -175,7 +175,7 @@
                     },
                     "response": [
                         {
-                            "id": "a3672df4-2410-4940-b37d-ad51f02f3b11",
+                            "id": "20815d07-b517-4cc0-ae40-8bc475ebda86",
                             "name": "Authentication successful",
                             "originalRequest": {
                                 "url": {
@@ -223,7 +223,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "a92bd315-c32e-4af1-aa84-d4f24cb2e579",
+                            "id": "bcdfe2c0-c7fa-477e-936e-33b44125d990",
                             "name": "Unauthorized - Invalid credentials",
                             "originalRequest": {
                                 "url": {
@@ -261,20 +261,7 @@
                             "_postman_previewlanguage": "text"
                         }
                     ],
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "type": "text/javascript",
-                                "exec": [
-                                    "if (pm.response.code === 200) {",
-                                    "    const jsonData = pm.response.json();",
-                                    "    pm.collectionVariables.set(\"bearerToken\", jsonData.token);",
-                                    "}"
-                                ]
-                            }
-                        }
-                    ],
+                    "event": [],
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     }
@@ -286,7 +273,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "63d1f1fa-6821-4ecc-84cd-a64b60e0064f",
+                    "id": "d807174c-479a-413e-9555-a040eb3bed6b",
                     "name": "add Income Record",
                     "request": {
                         "name": "add Income Record",
@@ -333,7 +320,7 @@
                     },
                     "response": [
                         {
-                            "id": "95fbc7ed-5ff3-470a-ae69-0b007e764b09",
+                            "id": "2888fc63-902c-4a04-8f6f-52e48c93cdff",
                             "name": "Income record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -379,7 +366,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "6a55224d-953b-4213-b7a2-7e77d8bc9c71",
+                            "id": "ee244615-926c-40c3-9a18-da7a83ad20cc",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -431,7 +418,7 @@
                     }
                 },
                 {
-                    "id": "5690d63b-83c4-40de-bbfe-da7ceb292674",
+                    "id": "3397c7d7-52c1-4d30-a4e1-8414a348a19d",
                     "name": "get All Income Records",
                     "request": {
                         "name": "get All Income Records",
@@ -469,7 +456,7 @@
                     },
                     "response": [
                         {
-                            "id": "f8829132-1a4f-4cf4-aa79-66cea5afdd28",
+                            "id": "19ba7fba-a60a-443f-8dae-12eed942fa18",
                             "name": "A list of income records",
                             "originalRequest": {
                                 "url": {
@@ -522,7 +509,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "d43d252a-cc5f-49d4-b7cd-66b67be509eb",
+                            "id": "1ef5f13c-0537-443e-a956-2ca8edd301fc",
                             "name": "get Income By ID",
                             "request": {
                                 "name": "get Income By ID",
@@ -572,7 +559,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "30e80e19-1cf2-44c4-a734-3091827c5b18",
+                                    "id": "6c3aeb41-38e9-426d-be55-145d09716d17",
                                     "name": "Income record details",
                                     "originalRequest": {
                                         "url": {
@@ -616,7 +603,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "0e5d036c-d73c-4c63-a2da-e246aa545e2b",
+                                    "id": "2de35245-c586-42e1-ba49-1643093eb70a",
                                     "name": "Income record not found",
                                     "originalRequest": {
                                         "url": {
@@ -656,7 +643,7 @@
                             }
                         },
                         {
-                            "id": "2ed5fbcf-6f90-4e81-b1e9-78e46f34a20c",
+                            "id": "6af757ba-6d89-40c3-a9ed-f53a2db5f457",
                             "name": "update Income Record",
                             "request": {
                                 "name": "update Income Record",
@@ -715,7 +702,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "15eb9b0e-8907-40e7-b3be-70c327635a8b",
+                                    "id": "17a452d8-2fe8-4d5b-ac04-ab88d7542281",
                                     "name": "Income record updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -762,7 +749,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "f8f2134e-3103-47ac-9e60-efa7a987ae43",
+                                    "id": "3c838239-db01-4c7b-9a20-519ffb4b6b2a",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -815,7 +802,7 @@
                             }
                         },
                         {
-                            "id": "9c558d5b-d192-4a74-9094-3e092a7af494",
+                            "id": "740ed2c7-d747-45c6-a1b1-e33f4c53d3db",
                             "name": "delete Income Record",
                             "request": {
                                 "name": "delete Income Record",
@@ -859,7 +846,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "68a4f32d-4468-4fe7-a043-f117412b823a",
+                                    "id": "7e0ad0e5-7cac-4eb1-8d7d-3d7f5ae91ddf",
                                     "name": "Income record deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -907,7 +894,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "c52b3e55-8077-4563-9ace-ccaeaba8bfbd",
+                    "id": "80124b3c-18ec-4102-be8b-64e4c8da4abe",
                     "name": "add Expense Record",
                     "request": {
                         "name": "add Expense Record",
@@ -954,7 +941,7 @@
                     },
                     "response": [
                         {
-                            "id": "f03a484a-a9f4-4afc-93da-da0746515201",
+                            "id": "031c462a-7730-4f74-8ee7-d0cc28259633",
                             "name": "Expense record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -1000,7 +987,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "ef59c167-e188-4c48-87e2-edec516d1b2b",
+                            "id": "bc5fb5eb-723d-4ff1-abe9-eef503a573b9",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -1052,7 +1039,7 @@
                     }
                 },
                 {
-                    "id": "282a39e7-0e6a-4edc-83f8-35a0ee15f941",
+                    "id": "9f12b85e-78cd-4e2d-b981-b97c168780ae",
                     "name": "get All Expense Records",
                     "request": {
                         "name": "get All Expense Records",
@@ -1090,7 +1077,7 @@
                     },
                     "response": [
                         {
-                            "id": "cc846f56-cb33-434a-acd6-d1fdeb155076",
+                            "id": "c515e7a0-82f8-4076-9db1-5a3fc3a537a3",
                             "name": "A list of expense records",
                             "originalRequest": {
                                 "url": {
@@ -1145,7 +1132,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "995069c9-32b9-4da6-b9ff-b913b267f0c1",
+                    "id": "70f3956b-e10f-43fd-8474-0f43cecf6b7b",
                     "name": "add Budget Record",
                     "request": {
                         "name": "add Budget Record",
@@ -1172,7 +1159,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"recurring\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
+                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"one-time\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -1192,7 +1179,7 @@
                     },
                     "response": [
                         {
-                            "id": "7404fb4d-54c1-4871-b235-8c152551ff13",
+                            "id": "d895b58b-dbfb-442e-adde-512c53644610",
                             "name": "Budget created successfully",
                             "originalRequest": {
                                 "url": {
@@ -1222,7 +1209,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"recurring\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
+                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"one-time\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1238,7 +1225,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "90c8ba1c-479c-4825-8474-99bfc1f1a516",
+                            "id": "f117de54-bcea-4927-aa01-3bf267b4959f",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -1268,7 +1255,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"recurring\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
+                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"one-time\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1290,7 +1277,7 @@
                     }
                 },
                 {
-                    "id": "20982707-1d5f-42ce-a69f-69bb7a7c33a8",
+                    "id": "15e86f64-f4a9-45a3-9ec5-5f56236ef79b",
                     "name": "get All Budget Records",
                     "request": {
                         "name": "get All Budget Records",
@@ -1328,7 +1315,7 @@
                     },
                     "response": [
                         {
-                            "id": "fb098b06-e52e-4b1f-92a4-c1f01c9483f7",
+                            "id": "f38f012f-b7a8-4610-86dd-ddbe1fff7628",
                             "name": "A list of budgets",
                             "originalRequest": {
                                 "url": {
@@ -1366,7 +1353,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"type\": \"recurring\",\n    \"start_date\": \"<date>\",\n    \"end_date\": \"<date>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"type\": \"recurring\",\n    \"start_date\": \"<date>\",\n    \"end_date\": \"<date>\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"type\": \"recurring\",\n    \"start_date\": \"<date>\",\n    \"end_date\": \"<date>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"type\": \"one-time\",\n    \"start_date\": \"<date>\",\n    \"end_date\": \"<date>\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1377,7 +1364,7 @@
                     }
                 },
                 {
-                    "id": "e5144c7a-e9ec-4c3c-a595-5d3db3d116d2",
+                    "id": "c0f7c725-8438-4748-a1dc-a6fd2b51d850",
                     "name": "update Budget Record",
                     "request": {
                         "name": "update Budget Record",
@@ -1424,7 +1411,7 @@
                     },
                     "response": [
                         {
-                            "id": "8cc6413c-c156-4c82-a24f-a1a7ee63e734",
+                            "id": "16974622-5347-480a-bc67-adf69036848d",
                             "name": "Budget updated successfully",
                             "originalRequest": {
                                 "url": {
@@ -1470,7 +1457,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "ba2ab81a-130d-4df1-86b4-15158c8a7df2",
+                            "id": "faf0f50b-6dac-435c-84ce-6c5ef06cd462",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -1532,7 +1519,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "59dc3e73-5b70-4307-b810-e6408cf97fd8",
+                            "id": "8ec68dea-08df-4d65-bf23-d1e9557dfc09",
                             "name": "get Monthly Summary",
                             "request": {
                                 "name": "get Monthly Summary",
@@ -1571,7 +1558,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "697147b4-0f5a-4d70-8979-e09fe2a9f152",
+                                    "id": "debb4a79-c4af-4f5e-9781-e5f0a9a3a65d",
                                     "name": "Monthly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -1627,7 +1614,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "78957dda-ea6c-4dc3-90f2-6ec2f503fb52",
+                            "id": "1d3b5d1e-81cc-454e-8410-f4006ba3cf32",
                             "name": "get Yearly Summary",
                             "request": {
                                 "name": "get Yearly Summary",
@@ -1666,7 +1653,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "2c5b6d37-71a1-42ce-80c9-12d93e64ed1f",
+                                    "id": "47281814-51c6-4580-882a-841bf4603944",
                                     "name": "Yearly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -1724,7 +1711,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "e58d6871-7610-406a-95a4-0598eb5a9150",
+                    "id": "c700f556-afe9-4dff-be2f-5294199e3483",
                     "name": "check Live",
                     "request": {
                         "name": "check Live",
@@ -1754,7 +1741,7 @@
                     },
                     "response": [
                         {
-                            "id": "2b37fda1-d245-4221-99a6-0c6e12edca06",
+                            "id": "00c27fb1-9731-4817-8c72-db3196228b88",
                             "name": "API is live",
                             "originalRequest": {
                                 "url": {
@@ -1801,7 +1788,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "0c144882-b2fa-4471-9e32-f7fae38a31b6",
+                    "id": "cafb4c03-dcf0-4d9d-ba66-023b06f90582",
                     "name": "check Health",
                     "request": {
                         "name": "check Health",
@@ -1831,7 +1818,7 @@
                     },
                     "response": [
                         {
-                            "id": "6be1b5d6-aaa9-4c20-a1f9-c1a4bff9cbe4",
+                            "id": "8f34fecb-71fd-4e88-9d01-be5569317f67",
                             "name": "API is healthy",
                             "originalRequest": {
                                 "url": {
@@ -1872,6 +1859,680 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "user",
+            "description": "",
+            "item": [
+                {
+                    "name": "profile",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "2cf9a164-1cfb-4b6d-b746-1e4bde80b933",
+                            "name": "get User Profile",
+                            "request": {
+                                "name": "get User Profile",
+                                "description": {
+                                    "content": "Get user profile information",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "user",
+                                        "profile"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "32ff33aa-ab95-4e65-9aac-d119a223b2f0",
+                                    "name": "User profile retrieved successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "profile"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"created_at\": \"<dateTime>\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "1d568dd9-9c8b-470a-80f6-3f8d97471b00",
+                                    "name": "Unauthorized",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "profile"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Unauthorized",
+                                    "code": 401,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "fdf3e0c2-4228-417d-a4bc-f62f7fd04cce",
+                            "name": "update User Profile",
+                            "request": {
+                                "name": "update User Profile",
+                                "description": {
+                                    "content": "Update user profile information",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "user",
+                                        "profile"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "PUT",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "314b7658-49f9-4772-b353-21ac2de2024d",
+                                    "name": "Profile updated successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "profile"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"created_at\": \"<dateTime>\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "cf0fab3e-c5e2-4eb2-8cbe-cc4ad47d8ab8",
+                                    "name": "Invalid input",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "profile"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Bad Request",
+                                    "code": 400,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "20a0e630-b49c-4a9b-ba7f-0bed26087c6d",
+                                    "name": "Unauthorized",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "profile"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Unauthorized",
+                                    "code": 401,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "password",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "9c1cdec6-d27a-46ee-8040-d09f71454321",
+                            "name": "update User Password",
+                            "request": {
+                                "name": "update User Password",
+                                "description": {
+                                    "content": "Update user password",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "user",
+                                        "password"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "PUT",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "00e0a187-3f11-4ca7-b286-b30a5727e50e",
+                                    "name": "Password updated successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "password"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "8a66c462-59a5-4df4-a2fd-e2c1202d6650",
+                                    "name": "Invalid input",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "password"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Bad Request",
+                                    "code": 400,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "7ce8e7a9-86dc-48a7-a42c-cece671cd713",
+                                    "name": "Unauthorized or invalid current password",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "password"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Unauthorized",
+                                    "code": 401,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "stats",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "5b36465a-be44-42f0-b7aa-e206388cb58c",
+                            "name": "get User Stats",
+                            "request": {
+                                "name": "get User Stats",
+                                "description": {
+                                    "content": "Get user statistics",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "user",
+                                        "stats"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "4830932a-345f-4b1c-8781-8336be54d846",
+                                    "name": "User statistics retrieved successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "stats"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"total_income\": \"<float>\",\n  \"total_expenses\": \"<float>\",\n  \"average_monthly_savings\": \"<float>\",\n  \"budget_adherence\": \"<float>\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "e82050db-b743-4681-9f49-880341d6763c",
+                                    "name": "Unauthorized",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "stats"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Unauthorized",
+                                    "code": 401,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "event": [],
@@ -1882,7 +2543,7 @@
         }
     ],
     "info": {
-        "_postman_id": "fe177160-6454-441e-98cf-8a3324a17849",
+        "_postman_id": "0ef45f6e-37ee-4805-946c-1ebb143723ba",
         "name": "Budget Tracking API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {

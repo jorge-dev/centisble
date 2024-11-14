@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Budget Tracking API
   description: API for managing income, expenses, recurring and one-time budgets, and financial summaries.
-  version: 1.1.1
+  version: 1.2.0
   contact:
     name: John Doe
     email: ""
@@ -24,6 +24,9 @@ tags:
     description: Operations related to checking API status
   - name: Health
     description: Operations related to checking API health
+  - name: User
+    description: Operations related to user profile and statistics
+
 paths:
   /register:
     post:
@@ -322,6 +325,87 @@ paths:
                   message:
                     type: string
                     example: "API is healthy"
+  /user/profile:
+    get:
+      description: Get user profile information
+      operationId: getUserProfile
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "401":
+          description: Unauthorized
+    put:
+      description: Update user profile information
+      operationId: updateUserProfile
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "401":
+          description: Unauthorized
+        "400":
+          description: Invalid input
+
+  /user/password:
+    put:
+      description: Update user password
+      operationId: updateUserPassword
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePasswordRequest"
+      responses:
+        "200":
+          description: Password updated successfully
+        "401":
+          description: Unauthorized or invalid current password
+        "400":
+          description: Invalid input
+
+  /user/stats:
+    get:
+      description: Get user statistics
+      operationId: getUserStats
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStats"
+        "401":
+          description: Unauthorized
 components:
   securitySchemes:
     bearerAuth:
@@ -582,3 +666,64 @@ components:
           items:
             type: string
             example: Rent
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-17T10:00:00Z"
+    UpdateProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+    UpdatePasswordRequest:
+      type: object
+      properties:
+        current_password:
+          type: string
+          format: password
+          example: "currentPass123"
+        new_password:
+          type: string
+          format: password
+          example: "newPass123"
+      required:
+        - current_password
+        - new_password
+    UserStats:
+      type: object
+      properties:
+        total_income:
+          type: number
+          format: float
+          example: 5000.00
+        total_expenses:
+          type: number
+          format: float
+          example: 3000.00
+        average_monthly_savings:
+          type: number
+          format: float
+          example: 2000.00
+        budget_adherence:
+          type: number
+          format: float
+          example: 85.5
