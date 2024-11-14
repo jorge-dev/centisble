@@ -5,7 +5,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "7d1f069d-6f69-4a47-ad4d-57d5bd3d005c",
+                    "id": "150d0608-f5df-450d-9633-4e3533e41e0f",
                     "name": "register User",
                     "request": {
                         "name": "register User",
@@ -32,7 +32,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -44,7 +44,7 @@
                     },
                     "response": [
                         {
-                            "id": "5ee5f628-1235-4555-b0d7-f9a076bab20a",
+                            "id": "671d04b7-80b7-4c3e-8e48-4f0758e30b26",
                             "name": "User registered successfully",
                             "originalRequest": {
                                 "url": {
@@ -66,7 +66,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -82,7 +82,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "9740f818-c11e-4091-92bb-6bf7fc7ba996",
+                            "id": "4704e1d2-1db4-4e1a-a686-dcf015ea003c",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -104,7 +104,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -132,7 +132,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "a601282b-252a-4e5a-bcfa-d7500263f23d",
+                    "id": "d9702620-ce0b-4910-81b2-e774c775678f",
                     "name": "login User",
                     "request": {
                         "name": "login User",
@@ -163,7 +163,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                            "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -175,7 +175,7 @@
                     },
                     "response": [
                         {
-                            "id": "20815d07-b517-4cc0-ae40-8bc475ebda86",
+                            "id": "0f2ac55e-0b39-48d3-a08a-065371d96e88",
                             "name": "Authentication successful",
                             "originalRequest": {
                                 "url": {
@@ -201,7 +201,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -218,12 +218,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"token\": \"<string>\"\n}",
+                            "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "bcdfe2c0-c7fa-477e-936e-33b44125d990",
+                            "id": "d232fb67-9741-4a61-80df-b9725eedc06e",
                             "name": "Unauthorized - Invalid credentials",
                             "originalRequest": {
                                 "url": {
@@ -245,7 +245,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -273,7 +273,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "d807174c-479a-413e-9555-a040eb3bed6b",
+                    "id": "ddc0a600-ab06-4433-93ff-0561e3d00b77",
                     "name": "add Income Record",
                     "request": {
                         "name": "add Income Record",
@@ -300,7 +300,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                            "raw": "{\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -320,7 +320,7 @@
                     },
                     "response": [
                         {
-                            "id": "2888fc63-902c-4a04-8f6f-52e48c93cdff",
+                            "id": "f9a82994-e6a0-4bd7-bfd6-5881fff23a66",
                             "name": "Income record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -350,7 +350,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                    "raw": "{\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -366,7 +366,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "ee244615-926c-40c3-9a18-da7a83ad20cc",
+                            "id": "6497f38c-7b30-470e-ae37-95b7c6ad6a20",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -396,7 +396,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                    "raw": "{\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -418,7 +418,7 @@
                     }
                 },
                 {
-                    "id": "3397c7d7-52c1-4d30-a4e1-8414a348a19d",
+                    "id": "ed64475e-c177-496c-a80f-cb82ae9b060d",
                     "name": "get All Income Records",
                     "request": {
                         "name": "get All Income Records",
@@ -456,7 +456,7 @@
                     },
                     "response": [
                         {
-                            "id": "19ba7fba-a60a-443f-8dae-12eed942fa18",
+                            "id": "44dca113-372e-47f1-b3be-3147249f6868",
                             "name": "A list of income records",
                             "originalRequest": {
                                 "url": {
@@ -494,7 +494,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"source\": \"<string>\",\n    \"date\": \"<date>\",\n    \"description\": \"<string>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"source\": \"<string>\",\n    \"date\": \"<date>\",\n    \"description\": \"<string>\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 1500,\n    \"currency\": \"USD\",\n    \"source\": \"Salary\",\n    \"date\": \"2024-01-15T00:00:00Z\",\n    \"description\": \"Monthly salary for January\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 1500,\n    \"currency\": \"USD\",\n    \"source\": \"Salary\",\n    \"date\": \"2024-01-15T00:00:00Z\",\n    \"description\": \"Monthly salary for January\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -509,7 +509,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "1ef5f13c-0537-443e-a956-2ca8edd301fc",
+                            "id": "c9801688-cb62-4b43-913f-3c84912c9ea4",
                             "name": "get Income By ID",
                             "request": {
                                 "name": "get Income By ID",
@@ -529,7 +529,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "<string>",
+                                            "value": "elit cillum tempor",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -559,7 +559,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "6c3aeb41-38e9-426d-be55-145d09716d17",
+                                    "id": "c405a910-f07f-4275-9fa2-d5976fa9b946",
                                     "name": "Income record details",
                                     "originalRequest": {
                                         "url": {
@@ -598,12 +598,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"<string>\",\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                    "body": "{\n  \"id\": \"1\",\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "2de35245-c586-42e1-ba49-1643093eb70a",
+                                    "id": "dac98db2-d52f-43ad-b306-90b93a15a9f7",
                                     "name": "Income record not found",
                                     "originalRequest": {
                                         "url": {
@@ -643,7 +643,7 @@
                             }
                         },
                         {
-                            "id": "6af757ba-6d89-40c3-a9ed-f53a2db5f457",
+                            "id": "d6fb1948-6a26-4d02-a969-53d413409abd",
                             "name": "update Income Record",
                             "request": {
                                 "name": "update Income Record",
@@ -663,7 +663,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "<string>",
+                                            "value": "elit cillum tempor",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -682,7 +682,7 @@
                                 "method": "PUT",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                    "raw": "{\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -702,7 +702,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "17a452d8-2fe8-4d5b-ac04-ab88d7542281",
+                                    "id": "f23380fb-50d2-45ee-a7b9-cd5ac9138a9e",
                                     "name": "Income record updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -733,7 +733,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                            "raw": "{\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -749,7 +749,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "3c838239-db01-4c7b-9a20-519ffb4b6b2a",
+                                    "id": "fe4fb757-8996-4b4a-b880-4d3de2afe5eb",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -780,7 +780,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"source\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                            "raw": "{\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -802,7 +802,7 @@
                             }
                         },
                         {
-                            "id": "740ed2c7-d747-45c6-a1b1-e33f4c53d3db",
+                            "id": "dcce2286-0232-4077-ad0b-72f5275cf973",
                             "name": "delete Income Record",
                             "request": {
                                 "name": "delete Income Record",
@@ -822,7 +822,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "<string>",
+                                            "value": "elit cillum tempor",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -846,7 +846,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "7e0ad0e5-7cac-4eb1-8d7d-3d7f5ae91ddf",
+                                    "id": "b2ffdcbc-b31a-498d-93d4-2c1747cc7dc9",
                                     "name": "Income record deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -894,7 +894,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "80124b3c-18ec-4102-be8b-64e4c8da4abe",
+                    "id": "1a0a4b88-34a6-49f2-9f5a-f301088c22cf",
                     "name": "add Expense Record",
                     "request": {
                         "name": "add Expense Record",
@@ -916,12 +916,16 @@
                             {
                                 "key": "Content-Type",
                                 "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
                             }
                         ],
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                            "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -941,7 +945,7 @@
                     },
                     "response": [
                         {
-                            "id": "031c462a-7730-4f74-8ee7-d0cc28259633",
+                            "id": "815b70b9-4d7a-45b8-bb2e-2a397d6dfe84",
                             "name": "Expense record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -960,49 +964,7 @@
                                         "value": "application/json"
                                     },
                                     {
-                                        "description": {
-                                            "content": "Added as a part of security scheme: bearer",
-                                            "type": "text/plain"
-                                        },
-                                        "key": "Authorization",
-                                        "value": "Bearer <token>"
-                                    }
-                                ],
-                                "method": "POST",
-                                "body": {
-                                    "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
-                                    "options": {
-                                        "raw": {
-                                            "headerFamily": "json",
-                                            "language": "json"
-                                        }
-                                    }
-                                }
-                            },
-                            "status": "Created",
-                            "code": 201,
-                            "header": [],
-                            "cookie": [],
-                            "_postman_previewlanguage": "text"
-                        },
-                        {
-                            "id": "bc5fb5eb-723d-4ff1-abe9-eef503a573b9",
-                            "name": "Invalid input",
-                            "originalRequest": {
-                                "url": {
-                                    "path": [
-                                        "expenses"
-                                    ],
-                                    "host": [
-                                        "{{baseUrl}}"
-                                    ],
-                                    "query": [],
-                                    "variable": []
-                                },
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
+                                        "key": "Accept",
                                         "value": "application/json"
                                     },
                                     {
@@ -1017,7 +979,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"date\": \"<date>\",\n  \"description\": \"<string>\"\n}",
+                                    "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1026,11 +988,17 @@
                                     }
                                 }
                             },
-                            "status": "Bad Request",
-                            "code": 400,
-                            "header": [],
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"id\": \"1\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
                             "cookie": [],
-                            "_postman_previewlanguage": "text"
+                            "_postman_previewlanguage": "json"
                         }
                     ],
                     "event": [],
@@ -1039,7 +1007,7 @@
                     }
                 },
                 {
-                    "id": "9f12b85e-78cd-4e2d-b981-b97c168780ae",
+                    "id": "67b8f146-8f31-4a25-b3fa-816390dbdeae",
                     "name": "get All Expense Records",
                     "request": {
                         "name": "get All Expense Records",
@@ -1077,7 +1045,7 @@
                     },
                     "response": [
                         {
-                            "id": "c515e7a0-82f8-4076-9db1-5a3fc3a537a3",
+                            "id": "74972fa3-5120-4d9a-a6a1-6b7b3aa8248c",
                             "name": "A list of expense records",
                             "originalRequest": {
                                 "url": {
@@ -1115,7 +1083,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"date\": \"<date>\",\n    \"description\": \"<string>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"date\": \"<date>\",\n    \"description\": \"<string>\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1124,6 +1092,1014 @@
                     "protocolProfileBehavior": {
                         "disableBodyPruning": true
                     }
+                },
+                {
+                    "name": "{id}",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "57387832-a3eb-4816-a708-c85edefdeb22",
+                            "name": "get Expense By ID",
+                            "request": {
+                                "name": "get Expense By ID",
+                                "description": {
+                                    "content": "Get an expense record by ID",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "expenses",
+                                        ":id"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "type": "any",
+                                            "value": "f173f5ac-e47b-cd7a-7172-57dffd93a20f",
+                                            "key": "id",
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "7d74c0e0-f0b6-46d8-a94b-cbdcd7ea7a45",
+                                    "name": "Expense record found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"id\": \"1\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "721e13b7-941b-4359-af1e-432ee9113372",
+                                    "name": "Expense record not found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Not Found",
+                                    "code": 404,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "c5b1885e-5213-46b3-863b-a82515247d6e",
+                            "name": "update Expense",
+                            "request": {
+                                "name": "update Expense",
+                                "description": {
+                                    "content": "Update an expense record",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "expenses",
+                                        ":id"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "type": "any",
+                                            "value": "f173f5ac-e47b-cd7a-7172-57dffd93a20f",
+                                            "key": "id",
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "PUT",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "72b0dfec-62e2-45fe-8a15-452a1339c39b",
+                                    "name": "Expense updated successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"id\": \"1\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "7912148b-8501-4f1e-a2b7-7467c4efdfe5",
+                            "name": "delete Expense",
+                            "request": {
+                                "name": "delete Expense",
+                                "description": {
+                                    "content": "Delete an expense record",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "expenses",
+                                        ":id"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "type": "any",
+                                            "value": "f173f5ac-e47b-cd7a-7172-57dffd93a20f",
+                                            "key": "id",
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "method": "DELETE",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "a9d09895-2d58-4097-84e3-1709e99807c3",
+                                    "name": "Expense deleted successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "DELETE",
+                                        "body": {}
+                                    },
+                                    "status": "No Content",
+                                    "code": 204,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "category",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "{category}",
+                            "description": "",
+                            "item": [
+                                {
+                                    "id": "0dcb8d61-8a28-4bf4-be02-1e5bb0161fd4",
+                                    "name": "get Expenses By Category",
+                                    "request": {
+                                        "name": "get Expenses By Category",
+                                        "description": {
+                                            "content": "Get expenses by category within a date range",
+                                            "type": "text/plain"
+                                        },
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                "category",
+                                                ":category"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "start_date",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                },
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "end_date",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                }
+                                            ],
+                                            "variable": [
+                                                {
+                                                    "type": "any",
+                                                    "value": "elit cillum tempor",
+                                                    "key": "category",
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {},
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": [
+                                                {
+                                                    "key": "token",
+                                                    "value": "{{bearerToken}}"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "725cbcff-f4cc-43d4-aa4f-c9a1a1e322a4",
+                                            "name": "List of expenses for the category",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "expenses",
+                                                        "category",
+                                                        ":category"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "start_date",
+                                                            "value": "1975-04-30T08:32:59.035Z"
+                                                        },
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "end_date",
+                                                            "value": "1975-04-30T08:32:59.035Z"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "key": "Accept",
+                                                        "value": "application/json"
+                                                    },
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "header": [
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json"
+                                                }
+                                            ],
+                                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "json"
+                                        }
+                                    ],
+                                    "event": [],
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "totals",
+                            "description": "",
+                            "item": [
+                                {
+                                    "id": "974b85bc-3e47-4f18-a8a7-0675531de430",
+                                    "name": "get Expense Totals By Category",
+                                    "request": {
+                                        "name": "get Expense Totals By Category",
+                                        "description": {
+                                            "content": "Get expense totals by category for a date range",
+                                            "type": "text/plain"
+                                        },
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                "category",
+                                                "totals"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "start_date",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                },
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "end_date",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                }
+                                            ],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {},
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": [
+                                                {
+                                                    "key": "token",
+                                                    "value": "{{bearerToken}}"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "526b79c9-c679-454a-b2cc-1e1389b5750e",
+                                            "name": "Expense totals by category",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "expenses",
+                                                        "category",
+                                                        "totals"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "start_date",
+                                                            "value": "1975-04-30T08:32:59.035Z"
+                                                        },
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "end_date",
+                                                            "value": "1975-04-30T08:32:59.035Z"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "key": "Accept",
+                                                        "value": "application/json"
+                                                    },
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "header": [
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json"
+                                                }
+                                            ],
+                                            "body": "[\n  {\n    \"category\": \"Lorem \",\n    \"currency\": \"occaecat magna ali\",\n    \"transaction_count\": 13902581,\n    \"total_amount\": 70681156.15319228\n  },\n  {\n    \"category\": \"nostrud quis est\",\n    \"currency\": \"cillum deserunt\",\n    \"transaction_count\": 75723536,\n    \"total_amount\": 56052465.16379166\n  }\n]",
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "json"
+                                        }
+                                    ],
+                                    "event": [],
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "range",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "5451731e-5531-442d-bd8c-2905f9a3bbe7",
+                            "name": "get Expenses By Date Range",
+                            "request": {
+                                "name": "get Expenses By Date Range",
+                                "description": {
+                                    "content": "Get expenses within a date range",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "expenses",
+                                        "range"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [
+                                        {
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            },
+                                            "key": "start_date",
+                                            "value": "1975-04-30T08:32:59.035Z"
+                                        },
+                                        {
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            },
+                                            "key": "end_date",
+                                            "value": "1975-04-30T08:32:59.035Z"
+                                        }
+                                    ],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "5675706e-390e-4fe2-a253-ae5f54f3466f",
+                                    "name": "List of expenses within date range",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                "range"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "start_date",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                },
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "end_date",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                }
+                                            ],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "recent",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "c404bc9d-2472-4e06-9cf4-9f3ed38c757f",
+                            "name": "get Recent Expenses",
+                            "request": {
+                                "name": "get Recent Expenses",
+                                "description": {
+                                    "content": "Get recent expenses",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "expenses",
+                                        "recent"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [
+                                        {
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            },
+                                            "key": "limit",
+                                            "value": "84962062"
+                                        }
+                                    ],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "91b966ec-89da-4d88-8071-9116c0acffb0",
+                                    "name": "List of recent expenses",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                "recent"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "limit",
+                                                    "value": "84962062"
+                                                }
+                                            ],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "monthly",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "total",
+                            "description": "",
+                            "item": [
+                                {
+                                    "id": "af7870cc-9698-4a91-9dd6-631cd0de0d2c",
+                                    "name": "get Monthly Expense Total",
+                                    "request": {
+                                        "name": "get Monthly Expense Total",
+                                        "description": {
+                                            "content": "Get monthly expense total",
+                                            "type": "text/plain"
+                                        },
+                                        "url": {
+                                            "path": [
+                                                "expenses",
+                                                "monthly",
+                                                "total"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "date-time",
+                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                }
+                                            ],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {},
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": [
+                                                {
+                                                    "key": "token",
+                                                    "value": "{{bearerToken}}"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "1975e1f6-e3de-464d-8f74-c226d08842f1",
+                                            "name": "Monthly expense total",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "expenses",
+                                                        "monthly",
+                                                        "total"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "date-time",
+                                                            "value": "1975-04-30T08:32:59.035Z"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "key": "Accept",
+                                                        "value": "application/json"
+                                                    },
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "header": [
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json"
+                                                }
+                                            ],
+                                            "body": "{\n  \"total_amount\": 48715422.32375842,\n  \"currency\": \"irure ipsum occaecat incididunt Excepteur\"\n}",
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "json"
+                                        }
+                                    ],
+                                    "event": [],
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -1132,7 +2108,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "70f3956b-e10f-43fd-8474-0f43cecf6b7b",
+                    "id": "1b2b50b0-e12b-4a93-9c8e-c765564d37a3",
                     "name": "add Budget Record",
                     "request": {
                         "name": "add Budget Record",
@@ -1159,7 +2135,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"one-time\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
+                            "raw": "{\n  \"amount\": 500,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"type\": \"recurring\",\n  \"start_date\": \"2024-01-01T00:00:00Z\",\n  \"end_date\": \"2024-12-31T00:00:00Z\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -1179,7 +2155,7 @@
                     },
                     "response": [
                         {
-                            "id": "d895b58b-dbfb-442e-adde-512c53644610",
+                            "id": "53706fb8-39a5-4659-bfce-8683ed44b7c6",
                             "name": "Budget created successfully",
                             "originalRequest": {
                                 "url": {
@@ -1209,7 +2185,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"one-time\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
+                                    "raw": "{\n  \"amount\": 500,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"type\": \"recurring\",\n  \"start_date\": \"2024-01-01T00:00:00Z\",\n  \"end_date\": \"2024-12-31T00:00:00Z\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1225,7 +2201,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "f117de54-bcea-4927-aa01-3bf267b4959f",
+                            "id": "7784b36d-40b4-4c94-bb3a-8c63b135ccd5",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -1255,7 +2231,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"category\": \"<string>\",\n  \"type\": \"one-time\",\n  \"start_date\": \"<date>\",\n  \"end_date\": \"<date>\"\n}",
+                                    "raw": "{\n  \"amount\": 500,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"type\": \"recurring\",\n  \"start_date\": \"2024-01-01T00:00:00Z\",\n  \"end_date\": \"2024-12-31T00:00:00Z\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1277,7 +2253,7 @@
                     }
                 },
                 {
-                    "id": "15e86f64-f4a9-45a3-9ec5-5f56236ef79b",
+                    "id": "6b651ecd-c4d1-4e08-a3c4-71a8f6042835",
                     "name": "get All Budget Records",
                     "request": {
                         "name": "get All Budget Records",
@@ -1315,7 +2291,7 @@
                     },
                     "response": [
                         {
-                            "id": "f38f012f-b7a8-4610-86dd-ddbe1fff7628",
+                            "id": "57180b0e-c69c-414a-8fac-fed8b2779b4c",
                             "name": "A list of budgets",
                             "originalRequest": {
                                 "url": {
@@ -1353,7 +2329,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"type\": \"recurring\",\n    \"start_date\": \"<date>\",\n    \"end_date\": \"<date>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"category\": \"<string>\",\n    \"type\": \"one-time\",\n    \"start_date\": \"<date>\",\n    \"end_date\": \"<date>\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 500,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"type\": \"recurring\",\n    \"start_date\": \"2024-01-01T00:00:00Z\",\n    \"end_date\": \"2024-12-31T00:00:00Z\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 500,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"type\": \"recurring\",\n    \"start_date\": \"2024-01-01T00:00:00Z\",\n    \"end_date\": \"2024-12-31T00:00:00Z\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1364,7 +2340,7 @@
                     }
                 },
                 {
-                    "id": "c0f7c725-8438-4748-a1dc-a6fd2b51d850",
+                    "id": "be18e240-9fdf-4911-b5ca-b2bef2a628a5",
                     "name": "update Budget Record",
                     "request": {
                         "name": "update Budget Record",
@@ -1391,7 +2367,7 @@
                         "method": "PUT",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"end_date\": \"<date>\"\n}",
+                            "raw": "{\n  \"amount\": 600,\n  \"currency\": \"USD\",\n  \"end_date\": \"2025-12-31T00:00:00Z\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -1411,7 +2387,7 @@
                     },
                     "response": [
                         {
-                            "id": "16974622-5347-480a-bc67-adf69036848d",
+                            "id": "3b97d313-2b45-4cd8-b0f3-593987231cbf",
                             "name": "Budget updated successfully",
                             "originalRequest": {
                                 "url": {
@@ -1441,7 +2417,7 @@
                                 "method": "PUT",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"end_date\": \"<date>\"\n}",
+                                    "raw": "{\n  \"amount\": 600,\n  \"currency\": \"USD\",\n  \"end_date\": \"2025-12-31T00:00:00Z\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1457,7 +2433,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "faf0f50b-6dac-435c-84ce-6c5ef06cd462",
+                            "id": "2595bea8-0585-492b-9bf9-412879d88255",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -1487,7 +2463,7 @@
                                 "method": "PUT",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amount\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"end_date\": \"<date>\"\n}",
+                                    "raw": "{\n  \"amount\": 600,\n  \"currency\": \"USD\",\n  \"end_date\": \"2025-12-31T00:00:00Z\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -1519,7 +2495,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "8ec68dea-08df-4d65-bf23-d1e9557dfc09",
+                            "id": "5812e14f-5ade-49ef-84c1-0c12f4623561",
                             "name": "get Monthly Summary",
                             "request": {
                                 "name": "get Monthly Summary",
@@ -1558,7 +2534,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "debb4a79-c4af-4f5e-9781-e5f0a9a3a65d",
+                                    "id": "c359506f-bcbf-4049-8bda-2c5a346e006e",
                                     "name": "Monthly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -1597,7 +2573,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"total_income\": \"<float>\",\n  \"total_expenses\": \"<float>\",\n  \"total_savings\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"top_expense_categories\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                                    "body": "{\n  \"total_income\": 5000,\n  \"total_expenses\": 3000,\n  \"total_savings\": 2000,\n  \"currency\": \"USD\",\n  \"top_expense_categories\": [\n    \"Groceries\",\n    \"Groceries\"\n  ]\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1614,7 +2590,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "1d3b5d1e-81cc-454e-8410-f4006ba3cf32",
+                            "id": "1779a754-174f-4165-b165-f834abc61272",
                             "name": "get Yearly Summary",
                             "request": {
                                 "name": "get Yearly Summary",
@@ -1653,7 +2629,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "47281814-51c6-4580-882a-841bf4603944",
+                                    "id": "dd330c1b-0cd0-430c-803c-7d11728dc026",
                                     "name": "Yearly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -1692,7 +2668,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"total_income\": \"<float>\",\n  \"total_expenses\": \"<float>\",\n  \"total_savings\": \"<float>\",\n  \"currency\": \"<string>\",\n  \"top_expense_categories\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                                    "body": "{\n  \"total_income\": 60000,\n  \"total_expenses\": 36000,\n  \"total_savings\": 24000,\n  \"currency\": \"USD\",\n  \"top_expense_categories\": [\n    \"Rent\",\n    \"Rent\"\n  ]\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1711,7 +2687,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "c700f556-afe9-4dff-be2f-5294199e3483",
+                    "id": "4f597502-e595-4528-9a3a-313c39465b00",
                     "name": "check Live",
                     "request": {
                         "name": "check Live",
@@ -1741,7 +2717,7 @@
                     },
                     "response": [
                         {
-                            "id": "00c27fb1-9731-4817-8c72-db3196228b88",
+                            "id": "65d83473-2896-461f-a164-b225748bbb2f",
                             "name": "API is live",
                             "originalRequest": {
                                 "url": {
@@ -1771,7 +2747,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"status\": \"<string>\",\n  \"message\": \"<string>\",\n  \"version\": \"<string>\"\n}",
+                            "body": "{\n  \"status\": \"ok\",\n  \"message\": \"API is live\",\n  \"version\": \"1.0.0\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1788,7 +2764,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "cafb4c03-dcf0-4d9d-ba66-023b06f90582",
+                    "id": "50150225-559f-4707-9548-79c2700a4b3d",
                     "name": "check Health",
                     "request": {
                         "name": "check Health",
@@ -1818,7 +2794,7 @@
                     },
                     "response": [
                         {
-                            "id": "8f34fecb-71fd-4e88-9d01-be5569317f67",
+                            "id": "cfac0730-df28-42a5-b08a-091e18ceb849",
                             "name": "API is healthy",
                             "originalRequest": {
                                 "url": {
@@ -1848,7 +2824,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"status\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                            "body": "{\n  \"status\": \"up\",\n  \"message\": \"API is healthy\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1869,7 +2845,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "2cf9a164-1cfb-4b6d-b746-1e4bde80b933",
+                            "id": "55cecfcf-86f6-4859-919e-22d078aa94c1",
                             "name": "get User Profile",
                             "request": {
                                 "name": "get User Profile",
@@ -1908,7 +2884,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "32ff33aa-ab95-4e65-9aac-d119a223b2f0",
+                                    "id": "98ffa254-1e3a-4820-b32b-d069ac9b50a5",
                                     "name": "User profile retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1947,12 +2923,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"created_at\": \"<dateTime>\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"created_at\": \"2024-01-17T10:00:00Z\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "1d568dd9-9c8b-470a-80f6-3f8d97471b00",
+                                    "id": "8fe394a2-19d8-488b-9bd6-e5700cbe15c7",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -1992,7 +2968,7 @@
                             }
                         },
                         {
-                            "id": "fdf3e0c2-4228-417d-a4bc-f62f7fd04cce",
+                            "id": "55a93d66-0f69-4cea-a0e8-dbdde0ed5862",
                             "name": "update User Profile",
                             "request": {
                                 "name": "update User Profile",
@@ -2024,7 +3000,7 @@
                                 "method": "PUT",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -2044,7 +3020,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "314b7658-49f9-4772-b353-21ac2de2024d",
+                                    "id": "2a5fcfa8-a66b-4629-9d2c-8660d32ed10c",
                                     "name": "Profile updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2079,7 +3055,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -2096,12 +3072,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"created_at\": \"<dateTime>\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"created_at\": \"2024-01-17T10:00:00Z\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "cf0fab3e-c5e2-4eb2-8cbe-cc4ad47d8ab8",
+                                    "id": "1e82ae34-882b-4a97-8bb4-31a718fcb792",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -2132,7 +3108,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -2148,7 +3124,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "20a0e630-b49c-4a9b-ba7f-0bed26087c6d",
+                                    "id": "06c09b90-b5f2-4053-8bda-d8128ba91df2",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2179,7 +3155,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<email>\"\n}",
+                                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -2207,7 +3183,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "9c1cdec6-d27a-46ee-8040-d09f71454321",
+                            "id": "d6234130-6c54-473f-9d10-87ee53e54fb8",
                             "name": "update User Password",
                             "request": {
                                 "name": "update User Password",
@@ -2235,7 +3211,7 @@
                                 "method": "PUT",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                    "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -2255,7 +3231,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "00e0a187-3f11-4ca7-b286-b30a5727e50e",
+                                    "id": "236cb79d-a99a-441f-bec3-626f361661d3",
                                     "name": "Password updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2286,7 +3262,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                            "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -2302,7 +3278,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "8a66c462-59a5-4df4-a2fd-e2c1202d6650",
+                                    "id": "62814175-daec-4f95-8e63-063191f9f5b8",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -2333,7 +3309,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                            "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -2349,7 +3325,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "7ce8e7a9-86dc-48a7-a42c-cece671cd713",
+                                    "id": "7e39f195-5e3b-46a5-8829-01ecc975d142",
                                     "name": "Unauthorized or invalid current password",
                                     "originalRequest": {
                                         "url": {
@@ -2380,7 +3356,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"current_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                            "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -2408,7 +3384,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "5b36465a-be44-42f0-b7aa-e206388cb58c",
+                            "id": "a3b4ceb2-d22d-4259-bdb0-8db1dd939774",
                             "name": "get User Stats",
                             "request": {
                                 "name": "get User Stats",
@@ -2447,7 +3423,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "4830932a-345f-4b1c-8781-8336be54d846",
+                                    "id": "56fa5904-1937-4b91-a3ea-c956857c4cc2",
                                     "name": "User statistics retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2486,12 +3462,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"total_income\": \"<float>\",\n  \"total_expenses\": \"<float>\",\n  \"average_monthly_savings\": \"<float>\",\n  \"budget_adherence\": \"<float>\"\n}",
+                                    "body": "{\n  \"total_income\": 5000,\n  \"total_expenses\": 3000,\n  \"average_monthly_savings\": 2000,\n  \"budget_adherence\": 85.5\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "e82050db-b743-4681-9f49-880341d6763c",
+                                    "id": "4f4f9312-da85-4af6-96be-2f8a8acc48b8",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2543,7 +3519,7 @@
         }
     ],
     "info": {
-        "_postman_id": "0ef45f6e-37ee-4805-946c-1ebb143723ba",
+        "_postman_id": "65259840-8484-4ce4-9cd4-2a9a6fe81da2",
         "name": "Budget Tracking API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {

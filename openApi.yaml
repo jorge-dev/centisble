@@ -181,8 +181,10 @@ paths:
       responses:
         "201":
           description: Expense record created successfully
-        "400":
-          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpenseRecordResponse"
     get:
       description: Get all expense records
       operationId: getAllExpenseRecords
@@ -199,6 +201,231 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExpenseRecordResponse"
+  /expenses/{id}:
+    get:
+      description: Get an expense record by ID
+      operationId: getExpenseByID
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Expense record found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpenseRecordResponse"
+        "404":
+          description: Expense record not found
+    put:
+      description: Update an expense record
+      operationId: updateExpense
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExpenseRecord"
+      responses:
+        "200":
+          description: Expense updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpenseRecordResponse"
+    delete:
+      description: Delete an expense record
+      operationId: deleteExpense
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Expense deleted successfully
+  /expenses/category/{category}:
+    get:
+      description: Get expenses by category within a date range
+      operationId: getExpensesByCategory
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of expenses for the category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExpenseRecordResponse"
+  /expenses/range:
+    get:
+      description: Get expenses within a date range
+      operationId: getExpensesByDateRange
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of expenses within date range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExpenseRecordResponse"
+  /expenses/recent:
+    get:
+      description: Get recent expenses
+      operationId: getRecentExpenses
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: List of recent expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExpenseRecordResponse"
+  /expenses/monthly/total:
+    get:
+      description: Get monthly expense total
+      operationId: getMonthlyExpenseTotal
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: date-time
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Monthly expense total
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_amount:
+                    type: number
+                    format: float
+                  currency:
+                    type: string
+  /expenses/category/totals:
+    get:
+      description: Get expense totals by category for a date range
+      operationId: getExpenseTotalsByCategory
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Expense totals by category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    category:
+                      type: string
+                    currency:
+                      type: string
+                    transaction_count:
+                      type: integer
+                    total_amount:
+                      type: number
+                      format: float
   /budgets:
     post:
       description: Create a new budget
@@ -466,8 +693,8 @@ components:
           example: Salary
         date:
           type: string
-          format: date
-          example: 2024-01-15
+          format: date-time
+          example: 2024-01-15T00:00:00Z
         description:
           type: string
           example: Monthly salary for January
@@ -494,8 +721,8 @@ components:
           example: Salary
         date:
           type: string
-          format: date
-          example: 2024-01-15
+          format: date-time
+          example: 2024-01-15T00:00:00Z
         description:
           type: string
           example: Monthly salary for January
@@ -514,8 +741,8 @@ components:
           example: Groceries
         date:
           type: string
-          format: date
-          example: 2024-01-16
+          format: date-time
+          example: 2024-01-16T00:00:00Z
         description:
           type: string
           example: Grocery shopping at local market
@@ -542,8 +769,8 @@ components:
           example: Groceries
         date:
           type: string
-          format: date
-          example: 2024-01-16
+          format: date-time
+          example: 2024-01-16T00:00:00Z
         description:
           type: string
           example: Grocery shopping at local market
@@ -566,12 +793,12 @@ components:
           example: recurring
         start_date:
           type: string
-          format: date
-          example: 2024-01-01
+          format: date-time
+          example: 2024-01-01T00:00:00Z
         end_date:
           type: string
-          format: date
-          example: 2024-12-31
+          format: date-time
+          example: 2024-12-31T00:00:00Z
       required:
         - amount
         - currency
@@ -600,12 +827,12 @@ components:
           example: recurring
         start_date:
           type: string
-          format: date
-          example: 2024-01-01
+          format: date-time
+          example: 2024-01-01T00:00:00Z
         end_date:
           type: string
-          format: date
-          example: 2024-12-31
+          format: date-time
+          example: 2024-12-31T00:00:00Z
     BudgetUpdate:
       type: object
       properties:
@@ -618,8 +845,8 @@ components:
           example: USD
         end_date:
           type: string
-          format: date
-          example: 2025-12-31
+          format: date-time
+          example: 2025-12-31T00:00:00Z
     MonthlySummary:
       type: object
       properties:
