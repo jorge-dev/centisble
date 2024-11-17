@@ -1,9 +1,21 @@
 -- name: SeedUsers :exec
-INSERT INTO users (id, name, email, password_hash, created_at, updated_at, role)
+WITH role_ids AS (
+    SELECT id, name FROM roles
+)
+INSERT INTO users (id, name, email, password_hash, created_at, updated_at, role_id)
 VALUES 
-    (uuid_generate_v4(), 'John Doe', 'john.doe@example.com', '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Admin'),
-    (uuid_generate_v4(), 'Jane Smith', 'jane.smith@example.com', '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'User'),
-    (uuid_generate_v4(), 'Bob Wilson', 'bob.wilson@example.com', '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'User');
+    (uuid_generate_v4(), 'John Doe', 'john.doe@example.com', 
+     '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
+     (SELECT id FROM role_ids WHERE name = 'Admin')),
+    (uuid_generate_v4(), 'Jane Smith', 'jane.smith@example.com', 
+     '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
+     (SELECT id FROM role_ids WHERE name = 'User')),
+    (uuid_generate_v4(), 'Bob Wilson', 'bob.wilson@example.com', 
+     '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
+     (SELECT id FROM role_ids WHERE name = 'User'));
 
 -- name: SeedCategories :exec
 WITH users AS (
@@ -104,6 +116,7 @@ FROM users u
 JOIN categories c ON c.user_id = u.id;
 
 -- name: DeleteSeedData :exec
+-- First delete the users (cascading delete will handle related records)
 DELETE FROM users WHERE email IN (
     'john.doe@example.com',
     'jane.smith@example.com',

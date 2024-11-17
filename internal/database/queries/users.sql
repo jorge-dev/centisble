@@ -61,18 +61,20 @@ GROUP BY u.id, u.name;
 -- name: UpdateUserRole :one
 UPDATE users 
 SET 
-    role = $2,
+    role_id = $2,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND deleted_at IS NULL
 RETURNING *;
 
 -- name: GetUserRole :one
-SELECT role
-FROM users
-WHERE id = $1 AND deleted_at IS NULL;
+SELECT r.name as role
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE u.id = $1 AND u.deleted_at IS NULL;
 
 -- name: ListUsersByRole :many
-SELECT id, name, email, role, created_at, updated_at
-FROM users
-WHERE role = $1 AND deleted_at IS NULL
-ORDER BY created_at DESC;
+SELECT u.id, u.name, u.email, r.name as role, u.created_at, u.updated_at
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE r.name = $1 AND u.deleted_at IS NULL
+ORDER BY u.created_at DESC;
