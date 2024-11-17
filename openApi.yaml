@@ -271,7 +271,7 @@ paths:
           description: Expense deleted successfully
   /expenses/category/{category}:
     get:
-      description: Get expenses by category within a date range
+      description: Get expenses by category
       operationId: getExpensesByCategory
       tags:
         - Expenses
@@ -283,18 +283,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: start_date
-          in: query
-          required: true
-          schema:
-            type: string
-            format: date-time
-        - name: end_date
-          in: query
-          required: true
-          schema:
-            type: string
-            format: date-time
+            format: uuid
       responses:
         "200":
           description: List of expenses for the category
@@ -388,25 +377,12 @@ paths:
                     type: string
   /expenses/category/totals:
     get:
-      description: Get expense totals by category for a date range
+      description: Get expense totals by category
       operationId: getExpenseTotalsByCategory
       tags:
         - Expenses
       security:
         - bearerAuth: []
-      parameters:
-        - name: start_date
-          in: query
-          required: true
-          schema:
-            type: string
-            format: date-time
-        - name: end_date
-          in: query
-          required: true
-          schema:
-            type: string
-            format: date-time
       responses:
         "200":
           description: Expense totals by category
@@ -417,7 +393,10 @@ paths:
                 items:
                   type: object
                   properties:
-                    category:
+                    category_id:
+                      type: string
+                      format: uuid
+                    category_name:
                       type: string
                     currency:
                       type: string
