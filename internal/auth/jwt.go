@@ -8,8 +8,9 @@ import (
 )
 
 type JWTClaims struct {
-	UserID string `json:"user_id"`
-	Email  string `json:"email"`
+	UserID    string `json:"user_id"`
+	RoleIDKey string `json:"role_id"`
+	Email     string `json:"email"`
 	jwt.RegisteredClaims
 }
 
@@ -21,10 +22,11 @@ func NewJWTManager(secretKey string) *JWTManager {
 	return &JWTManager{secretKey: []byte(secretKey)}
 }
 
-func (m *JWTManager) GenerateToken(userID, email string) (string, error) {
+func (m *JWTManager) GenerateToken(userID, email, role_id string) (string, error) {
 	claims := JWTClaims{
-		UserID: userID,
-		Email:  email,
+		UserID:    userID,
+		Email:     email,
+		RoleIDKey: role_id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
