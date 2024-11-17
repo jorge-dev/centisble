@@ -30,7 +30,7 @@ func (q *Queries) CheckEmailExists(ctx context.Context, email string) (bool, err
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (id, name, email, password_hash, created_at, updated_at)
 VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role
+RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role_id
 `
 
 type CreateUserParams struct {
@@ -56,7 +56,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
-		&i.Role,
+		&i.RoleID,
 	)
 	return i, err
 }
@@ -128,9 +128,10 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow
 }
 
 const getUserRole = `-- name: GetUserRole :one
-SELECT role
-FROM users
-WHERE id = $1 AND deleted_at IS NULL
+SELECT r.name as role
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE u.id = $1 AND u.deleted_at IS NULL
 `
 
 func (q *Queries) GetUserRole(ctx context.Context, id uuid.UUID) (string, error) {
@@ -177,10 +178,11 @@ func (q *Queries) GetUserStats(ctx context.Context, id uuid.UUID) (GetUserStatsR
 }
 
 const listUsersByRole = `-- name: ListUsersByRole :many
-SELECT id, name, email, role, created_at, updated_at
-FROM users
-WHERE role = $1 AND deleted_at IS NULL
-ORDER BY created_at DESC
+SELECT u.id, u.name, u.email, r.name as role, u.created_at, u.updated_at
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE r.name = $1 AND u.deleted_at IS NULL
+ORDER BY u.created_at DESC
 `
 
 type ListUsersByRoleRow struct {
@@ -192,8 +194,8 @@ type ListUsersByRoleRow struct {
 	UpdatedAt *time.Time `json:"updated_at"`
 }
 
-func (q *Queries) ListUsersByRole(ctx context.Context, role string) ([]ListUsersByRoleRow, error) {
-	rows, err := q.db.Query(ctx, listUsersByRole, role)
+func (q *Queries) ListUsersByRole(ctx context.Context, name string) ([]ListUsersByRoleRow, error) {
+	rows, err := q.db.Query(ctx, listUsersByRole, name)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +228,7 @@ SET
     email = $3,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND deleted_at IS NULL
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role
+RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role_id
 `
 
 type UpdateUserParams struct {
@@ -246,7 +248,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
-		&i.Role,
+		&i.RoleID,
 	)
 	return i, err
 }
@@ -275,19 +277,19 @@ func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPassword
 const updateUserRole = `-- name: UpdateUserRole :one
 UPDATE users 
 SET 
-    role = $2,
+    role_id = $2,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND deleted_at IS NULL
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role
+RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role_id
 `
 
 type UpdateUserRoleParams struct {
-	ID   uuid.UUID `json:"id"`
-	Role string    `json:"role"`
+	ID     uuid.UUID `json:"id"`
+	RoleID uuid.UUID `json:"role_id"`
 }
 
 func (q *Queries) UpdateUserRole(ctx context.Context, arg UpdateUserRoleParams) (User, error) {
-	row := q.db.QueryRow(ctx, updateUserRole, arg.ID, arg.Role)
+	row := q.db.QueryRow(ctx, updateUserRole, arg.ID, arg.RoleID)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -297,7 +299,7 @@ func (q *Queries) UpdateUserRole(ctx context.Context, arg UpdateUserRoleParams) 
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
-		&i.Role,
+		&i.RoleID,
 	)
 	return i, err
 }

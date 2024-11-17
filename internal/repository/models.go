@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Budget struct {
@@ -59,6 +60,13 @@ type Income struct {
 	DeletedAt   *time.Time `json:"deleted_at"`
 }
 
+type Role struct {
+	ID          uuid.UUID   `json:"id"`
+	Name        string      `json:"name"`
+	Description pgtype.Text `json:"description"`
+	CreatedAt   time.Time   `json:"created_at"`
+}
+
 type User struct {
 	ID           uuid.UUID  `json:"id"`
 	Name         string     `json:"name"`
@@ -67,5 +75,5 @@ type User struct {
 	CreatedAt    time.Time  `json:"created_at"`
 	UpdatedAt    *time.Time `json:"updated_at"`
 	DeletedAt    *time.Time `json:"deleted_at"`
-	Role         string     `json:"role"`
+	RoleID       uuid.UUID  `json:"role_id"`
 }

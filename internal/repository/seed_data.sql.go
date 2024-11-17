@@ -17,6 +17,7 @@ DELETE FROM users WHERE email IN (
 )
 `
 
+// First delete the users (cascading delete will handle related records)
 func (q *Queries) DeleteSeedData(ctx context.Context) error {
 	_, err := q.db.Exec(ctx, deleteSeedData)
 	return err
@@ -145,11 +146,23 @@ func (q *Queries) SeedIncome(ctx context.Context) error {
 }
 
 const seedUsers = `-- name: SeedUsers :exec
-INSERT INTO users (id, name, email, password_hash, created_at, updated_at, role)
+WITH role_ids AS (
+    SELECT id, name FROM roles
+)
+INSERT INTO users (id, name, email, password_hash, created_at, updated_at, role_id)
 VALUES 
-    (uuid_generate_v4(), 'John Doe', 'john.doe@example.com', '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Admin'),
-    (uuid_generate_v4(), 'Jane Smith', 'jane.smith@example.com', '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'User'),
-    (uuid_generate_v4(), 'Bob Wilson', 'bob.wilson@example.com', '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'User')
+    (uuid_generate_v4(), 'John Doe', 'john.doe@example.com', 
+     '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
+     (SELECT id FROM role_ids WHERE name = 'Admin')),
+    (uuid_generate_v4(), 'Jane Smith', 'jane.smith@example.com', 
+     '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
+     (SELECT id FROM role_ids WHERE name = 'User')),
+    (uuid_generate_v4(), 'Bob Wilson', 'bob.wilson@example.com', 
+     '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
+     (SELECT id FROM role_ids WHERE name = 'User'))
 `
 
 func (q *Queries) SeedUsers(ctx context.Context) error {
