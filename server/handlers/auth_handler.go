@@ -73,7 +73,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate JWT
-	token, err := h.jwtManager.GenerateToken(user.ID.String(), user.Email)
+	token, err := h.jwtManager.GenerateToken(user.ID.String(), user.Email, user.RoleID.String())
 	if err != nil {
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
@@ -113,7 +113,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate JWT
-	token, err := h.jwtManager.GenerateToken(user.ID.String(), user.Email)
+	token, err := h.jwtManager.GenerateToken(user.ID.String(), user.Email, user.RoleID.String())
 	if err != nil {
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return

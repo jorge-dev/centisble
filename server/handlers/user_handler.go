@@ -184,3 +184,98 @@ func (h *UserHandler) GetStats(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(stats)
 }
+
+// GetUserRole handles GET /api/user/role
+func (h *UserHandler) GetUserRole(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+	uid, err := uuid.Parse(userID)
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+
+	role, err := h.db.GetUserRole(r.Context(), uid)
+	if err != nil {
+		http.Error(w, "Error fetching user role", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(role)
+}
+
+// UpdateUserRole handles PUT /api/user/role
+func (h *UserHandler) UpdateUserRole(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+	uid, err := uuid.Parse(userID)
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+
+	// check if the current user is an admin
+	isAdmin, err := h.db.CheckUserIsAdmin(r.Context(), uid)
+	if err != nil {
+		http.Error(w, "Error checking user role", http.StatusInternalServerError)
+		return
+	}
+
+	if !isAdmin {
+		http.Error(w, "You do not have permission to update user roles", http.StatusForbidden)
+		return
+	}
+
+	// get the roleID from the request body
+	var roleID struct {
+		RoleID string `json:"role_id"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&roleID); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	rId, err := uuid.Parse(roleID.RoleID)
+
+	if err != nil {
+		http.Error(w, "Invalid role ID", http.StatusBadRequest)
+		return
+	}
+
+	roleInfo, err := h.db.UpdateUserRole(r.Context(), repository.UpdateUserRoleParams{
+		RoleID: rId,
+		UserID: uid,
+	})
+	if err != nil {
+		http.Error(w, "Error updating user role", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(roleInfo)
+
+}
+
+// ListUsersByRole handles GET /api/users/role/list
+func (h *UserHandler) ListUsersByRole(w http.ResponseWriter, r *http.Request) {
+	// get role name from params
+	roleName := r.URL.Query().Get("role_name")
+	if roleName == "" {
+		http.Error(w, "Role name is required", http.StatusBadRequest)
+		return
+	}
+
+	users, err := h.db.ListUsersByRole(r.Context(), roleName)
+	if err != nil {
+		http.Error(w, "Error fetching users", http.StatusInternalServerError)
+		return
+	}
+
+	if len(users) == 0 {
+		http.Error(w, "No users found for this role. Please make sure role is valid", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(users)
+
+}
