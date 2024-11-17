@@ -11,17 +11,17 @@ import (
 )
 
 type Budget struct {
-	ID        uuid.UUID  `json:"id"`
-	UserID    uuid.UUID  `json:"user_id"`
-	Amount    float64    `json:"amount"`
-	Currency  string     `json:"currency"`
-	Category  string     `json:"category"`
-	Type      string     `json:"type"`
-	StartDate time.Time  `json:"start_date"`
-	EndDate   time.Time  `json:"end_date"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
-	DeletedAt *time.Time `json:"deleted_at"`
+	ID         uuid.UUID  `json:"id"`
+	UserID     uuid.UUID  `json:"user_id"`
+	Amount     float64    `json:"amount"`
+	Currency   string     `json:"currency"`
+	CategoryID uuid.UUID  `json:"category_id"`
+	Type       string     `json:"type"`
+	StartDate  time.Time  `json:"start_date"`
+	EndDate    time.Time  `json:"end_date"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  *time.Time `json:"updated_at"`
+	DeletedAt  *time.Time `json:"deleted_at"`
 }
 
 type Category struct {
@@ -38,7 +38,7 @@ type Expense struct {
 	UserID      uuid.UUID  `json:"user_id"`
 	Amount      float64    `json:"amount"`
 	Currency    string     `json:"currency"`
-	Category    string     `json:"category"`
+	CategoryID  uuid.UUID  `json:"category_id"`
 	Date        time.Time  `json:"date"`
 	Description string     `json:"description"`
 	CreatedAt   time.Time  `json:"created_at"`

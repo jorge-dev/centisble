@@ -207,17 +207,9 @@ SELECT
 FROM income
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND date >= $2::TIMESTAMPTZ
-    AND date <= $3::TIMESTAMPTZ
 GROUP BY source, currency
 ORDER BY total_amount DESC
 `
-
-type GetIncomeSummaryBySourceParams struct {
-	UserID    uuid.UUID `json:"user_id"`
-	StartDate time.Time `json:"start_date"`
-	EndDate   time.Time `json:"end_date"`
-}
 
 type GetIncomeSummaryBySourceRow struct {
 	Source           string  `json:"source"`
@@ -227,8 +219,8 @@ type GetIncomeSummaryBySourceRow struct {
 	AverageAmount    float64 `json:"average_amount"`
 }
 
-func (q *Queries) GetIncomeSummaryBySource(ctx context.Context, arg GetIncomeSummaryBySourceParams) ([]GetIncomeSummaryBySourceRow, error) {
-	rows, err := q.db.Query(ctx, getIncomeSummaryBySource, arg.UserID, arg.StartDate, arg.EndDate)
+func (q *Queries) GetIncomeSummaryBySource(ctx context.Context, userID uuid.UUID) ([]GetIncomeSummaryBySourceRow, error) {
+	rows, err := q.db.Query(ctx, getIncomeSummaryBySource, userID)
 	if err != nil {
 		return nil, err
 	}

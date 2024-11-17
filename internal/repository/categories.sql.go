@@ -7,7 +7,6 @@ package repository
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -158,18 +157,14 @@ LEFT JOIN expenses e ON
     AND e.deleted_at IS NULL
 WHERE c.user_id = $1::UUID
     AND c.deleted_at IS NULL
-    AND e.date >= $2::TIMESTAMPTZ 
-    AND e.date <= $3::TIMESTAMPTZ
 GROUP BY c.name
 ORDER BY usage_count DESC
-LIMIT $4::int
+LIMIT $2::int
 `
 
 type GetMostUsedCategoriesParams struct {
-	ID        uuid.UUID `json:"id"`
-	StartDate time.Time `json:"start_date"`
-	EndDate   time.Time `json:"end_date"`
-	Limit     int32     `json:"limit"`
+	ID    uuid.UUID `json:"id"`
+	Limit int32     `json:"limit"`
 }
 
 type GetMostUsedCategoriesRow struct {
@@ -179,12 +174,7 @@ type GetMostUsedCategoriesRow struct {
 }
 
 func (q *Queries) GetMostUsedCategories(ctx context.Context, arg GetMostUsedCategoriesParams) ([]GetMostUsedCategoriesRow, error) {
-	rows, err := q.db.Query(ctx, getMostUsedCategories,
-		arg.ID,
-		arg.StartDate,
-		arg.EndDate,
-		arg.Limit,
-	)
+	rows, err := q.db.Query(ctx, getMostUsedCategories, arg.ID, arg.Limit)
 	if err != nil {
 		return nil, err
 	}

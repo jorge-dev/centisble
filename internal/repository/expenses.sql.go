@@ -14,14 +14,14 @@ import (
 
 const createExpense = `-- name: CreateExpense :one
 INSERT INTO expenses (
-    id, user_id, amount, currency, category,
+    id, user_id, amount, currency, category_id,
     date, description, created_at, updated_at
 )
 VALUES (
     $1, $2, $3, $4, $5,
     $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 )
-RETURNING id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at
+RETURNING id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at
 `
 
 type CreateExpenseParams struct {
@@ -29,7 +29,7 @@ type CreateExpenseParams struct {
 	UserID      uuid.UUID `json:"user_id"`
 	Amount      float64   `json:"amount"`
 	Currency    string    `json:"currency"`
-	Category    string    `json:"category"`
+	CategoryID  uuid.UUID `json:"category_id"`
 	Date        time.Time `json:"date"`
 	Description string    `json:"description"`
 }
@@ -40,7 +40,7 @@ func (q *Queries) CreateExpense(ctx context.Context, arg CreateExpenseParams) (E
 		arg.UserID,
 		arg.Amount,
 		arg.Currency,
-		arg.Category,
+		arg.CategoryID,
 		arg.Date,
 		arg.Description,
 	)
@@ -50,7 +50,7 @@ func (q *Queries) CreateExpense(ctx context.Context, arg CreateExpenseParams) (E
 		&i.UserID,
 		&i.Amount,
 		&i.Currency,
-		&i.Category,
+		&i.CategoryID,
 		&i.Date,
 		&i.Description,
 		&i.CreatedAt,
@@ -80,7 +80,7 @@ func (q *Queries) DeleteExpense(ctx context.Context, arg DeleteExpenseParams) (i
 }
 
 const getExpenseByID = `-- name: GetExpenseByID :one
-SELECT id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at FROM expenses
+SELECT id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at FROM expenses
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
 `
 
@@ -97,7 +97,7 @@ func (q *Queries) GetExpenseByID(ctx context.Context, arg GetExpenseByIDParams) 
 		&i.UserID,
 		&i.Amount,
 		&i.Currency,
-		&i.Category,
+		&i.CategoryID,
 		&i.Date,
 		&i.Description,
 		&i.CreatedAt,
@@ -109,34 +109,29 @@ func (q *Queries) GetExpenseByID(ctx context.Context, arg GetExpenseByIDParams) 
 
 const getExpenseTotalsByCategory = `-- name: GetExpenseTotalsByCategory :many
 SELECT 
-    category,
-    currency,
-    COUNT(*) as transaction_count,
-    SUM(amount) as total_amount
-FROM expenses
-WHERE user_id = $1 
-    AND deleted_at IS NULL
-    AND date >= $2::TIMESTAMPTZ
-    AND date <= $3::TIMESTAMPTZ
-GROUP BY category, currency
+    e.category_id,
+    c.name as category_name,
+    e.currency,
+    COUNT(*)::float8 as transaction_count,
+    SUM(e.amount)::float8 as total_amount
+FROM expenses e
+JOIN categories c ON e.category_id = c.id
+WHERE e.user_id = $1 
+    AND e.deleted_at IS NULL
+GROUP BY e.category_id, c.name, e.currency
 ORDER BY total_amount DESC
 `
 
-type GetExpenseTotalsByCategoryParams struct {
-	UserID    uuid.UUID `json:"user_id"`
-	StartDate time.Time `json:"start_date"`
-	EndDate   time.Time `json:"end_date"`
-}
-
 type GetExpenseTotalsByCategoryRow struct {
-	Category         string `json:"category"`
-	Currency         string `json:"currency"`
-	TransactionCount int64  `json:"transaction_count"`
-	TotalAmount      int64  `json:"total_amount"`
+	CategoryID       uuid.UUID `json:"category_id"`
+	CategoryName     string    `json:"category_name"`
+	Currency         string    `json:"currency"`
+	TransactionCount float64   `json:"transaction_count"`
+	TotalAmount      float64   `json:"total_amount"`
 }
 
-func (q *Queries) GetExpenseTotalsByCategory(ctx context.Context, arg GetExpenseTotalsByCategoryParams) ([]GetExpenseTotalsByCategoryRow, error) {
-	rows, err := q.db.Query(ctx, getExpenseTotalsByCategory, arg.UserID, arg.StartDate, arg.EndDate)
+func (q *Queries) GetExpenseTotalsByCategory(ctx context.Context, userID uuid.UUID) ([]GetExpenseTotalsByCategoryRow, error) {
+	rows, err := q.db.Query(ctx, getExpenseTotalsByCategory, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +140,8 @@ func (q *Queries) GetExpenseTotalsByCategory(ctx context.Context, arg GetExpense
 	for rows.Next() {
 		var i GetExpenseTotalsByCategoryRow
 		if err := rows.Scan(
-			&i.Category,
+			&i.CategoryID,
+			&i.CategoryName,
 			&i.Currency,
 			&i.TransactionCount,
 			&i.TotalAmount,
@@ -161,29 +157,20 @@ func (q *Queries) GetExpenseTotalsByCategory(ctx context.Context, arg GetExpense
 }
 
 const getExpensesByCategory = `-- name: GetExpensesByCategory :many
-SELECT id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at FROM expenses
+SELECT id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at FROM expenses
 WHERE user_id = $1 
-    AND category = $2 
+    AND category_id = $2 
     AND deleted_at IS NULL
-    AND date >= $3::TIMESTAMPTZ
-    AND date <= $4::TIMESTAMPTZ
 ORDER BY date DESC
 `
 
 type GetExpensesByCategoryParams struct {
-	UserID    uuid.UUID `json:"user_id"`
-	Category  string    `json:"category"`
-	StartDate time.Time `json:"start_date"`
-	EndDate   time.Time `json:"end_date"`
+	UserID     uuid.UUID `json:"user_id"`
+	CategoryID uuid.UUID `json:"category_id"`
 }
 
 func (q *Queries) GetExpensesByCategory(ctx context.Context, arg GetExpensesByCategoryParams) ([]Expense, error) {
-	rows, err := q.db.Query(ctx, getExpensesByCategory,
-		arg.UserID,
-		arg.Category,
-		arg.StartDate,
-		arg.EndDate,
-	)
+	rows, err := q.db.Query(ctx, getExpensesByCategory, arg.UserID, arg.CategoryID)
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +183,7 @@ func (q *Queries) GetExpensesByCategory(ctx context.Context, arg GetExpensesByCa
 			&i.UserID,
 			&i.Amount,
 			&i.Currency,
-			&i.Category,
+			&i.CategoryID,
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
@@ -214,7 +201,7 @@ func (q *Queries) GetExpensesByCategory(ctx context.Context, arg GetExpensesByCa
 }
 
 const getExpensesByDateRange = `-- name: GetExpensesByDateRange :many
-SELECT id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at FROM expenses
+SELECT id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
     AND date >= $2::TIMESTAMPTZ
@@ -242,7 +229,7 @@ func (q *Queries) GetExpensesByDateRange(ctx context.Context, arg GetExpensesByD
 			&i.UserID,
 			&i.Amount,
 			&i.Currency,
-			&i.Category,
+			&i.CategoryID,
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
@@ -301,7 +288,7 @@ func (q *Queries) GetMonthlyExpenseTotal(ctx context.Context, arg GetMonthlyExpe
 }
 
 const getRecentExpenses = `-- name: GetRecentExpenses :many
-SELECT id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at FROM expenses
+SELECT id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at FROM expenses
 WHERE user_id = $1 
     AND deleted_at IS NULL
 ORDER BY date DESC
@@ -327,7 +314,7 @@ func (q *Queries) GetRecentExpenses(ctx context.Context, arg GetRecentExpensesPa
 			&i.UserID,
 			&i.Amount,
 			&i.Currency,
-			&i.Category,
+			&i.CategoryID,
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
@@ -345,7 +332,7 @@ func (q *Queries) GetRecentExpenses(ctx context.Context, arg GetRecentExpensesPa
 }
 
 const listExpenses = `-- name: ListExpenses :many
-SELECT id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at FROM expenses
+SELECT id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at FROM expenses
 WHERE user_id = $1 AND deleted_at IS NULL
 ORDER BY date DESC
 `
@@ -364,7 +351,7 @@ func (q *Queries) ListExpenses(ctx context.Context, userID uuid.UUID) ([]Expense
 			&i.UserID,
 			&i.Amount,
 			&i.Currency,
-			&i.Category,
+			&i.CategoryID,
 			&i.Date,
 			&i.Description,
 			&i.CreatedAt,
@@ -386,19 +373,19 @@ UPDATE expenses
 SET 
     amount = $2,
     currency = $3,
-    category = $4,
+    category_id = $4,
     date = $5,
     description = $6,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND user_id = $7 AND deleted_at IS NULL
-RETURNING id, user_id, amount, currency, category, date, description, created_at, updated_at, deleted_at
+RETURNING id, user_id, amount, currency, category_id, date, description, created_at, updated_at, deleted_at
 `
 
 type UpdateExpenseParams struct {
 	ID          uuid.UUID `json:"id"`
 	Amount      float64   `json:"amount"`
 	Currency    string    `json:"currency"`
-	Category    string    `json:"category"`
+	CategoryID  uuid.UUID `json:"category_id"`
 	Date        time.Time `json:"date"`
 	Description string    `json:"description"`
 	UserID      uuid.UUID `json:"user_id"`
@@ -409,7 +396,7 @@ func (q *Queries) UpdateExpense(ctx context.Context, arg UpdateExpenseParams) (E
 		arg.ID,
 		arg.Amount,
 		arg.Currency,
-		arg.Category,
+		arg.CategoryID,
 		arg.Date,
 		arg.Description,
 		arg.UserID,
@@ -420,7 +407,7 @@ func (q *Queries) UpdateExpense(ctx context.Context, arg UpdateExpenseParams) (E
 		&i.UserID,
 		&i.Amount,
 		&i.Currency,
-		&i.Category,
+		&i.CategoryID,
 		&i.Date,
 		&i.Description,
 		&i.CreatedAt,

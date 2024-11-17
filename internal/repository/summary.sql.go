@@ -33,26 +33,30 @@ WITH monthly_totals AS (
 ),
 top_categories AS (
     SELECT 
-        e.category,
+        e.category_id,
+        c.name as category_name,
         e.currency,
         COUNT(*) as usage_count,
         SUM(e.amount) as total_spent,
         ROW_NUMBER() OVER (PARTITION BY e.currency ORDER BY SUM(e.amount) DESC) as rank
     FROM expenses e
+    JOIN categories c ON e.category_id = c.id
     WHERE e.user_id = $1
         AND e.deleted_at IS NULL
-        AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month',  $2::TIMESTAMPTZ)
-    GROUP BY e.category, e.currency
+        AND c.deleted_at IS NULL
+        AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month', $2::TIMESTAMPTZ)
+    GROUP BY e.category_id, c.name, e.currency
 )
 SELECT 
     mt.currency, mt.total_income, mt.total_expenses, mt.total_savings,
     json_agg(
         json_build_object(
-            'category', tc.category,
+            'category_id', tc.category_id,
+            'category_name', tc.category_name,
             'usage_count', tc.usage_count,
             'total_spent', tc.total_spent
         )
-    ) FILTER (WHERE tc.category IS NOT NULL) as top_categories
+    ) FILTER (WHERE tc.category_id IS NOT NULL) as top_categories
 FROM monthly_totals mt
 LEFT JOIN top_categories tc ON 
     tc.currency = mt.currency 
@@ -123,41 +127,49 @@ WITH yearly_totals AS (
 ),
 top_categories AS (
     SELECT 
-        e.category,
+        e.category_id,
+        c.name as category_name,
         e.currency,
         COUNT(*) as usage_count,
         SUM(e.amount) as total_spent,
         ROW_NUMBER() OVER (PARTITION BY e.currency ORDER BY SUM(e.amount) DESC) as rank
     FROM expenses e
+    JOIN categories c ON e.category_id = c.id
     WHERE e.user_id = $1
         AND e.deleted_at IS NULL
+        AND c.deleted_at IS NULL
         AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', $2::TIMESTAMPTZ)
-    GROUP BY e.category, e.currency
+    GROUP BY e.category_id, c.name, e.currency
 ),
 monthly_trend AS (
     SELECT 
-        DATE_TRUNC('month', date) as month,
-        currency,
-        SUM(amount) as monthly_expenses
-    FROM expenses
-    WHERE user_id = $1
-        AND deleted_at IS NULL
-        AND DATE_TRUNC('year', date) = DATE_TRUNC('year', $2::TIMESTAMPTZ)
-    GROUP BY DATE_TRUNC('month', date), currency
+        DATE_TRUNC('month', e.date) as month,
+        e.currency,
+        c.name as category_name,
+        SUM(e.amount) as monthly_expenses
+    FROM expenses e
+    JOIN categories c ON e.category_id = c.id
+    WHERE e.user_id = $1
+        AND e.deleted_at IS NULL
+        AND c.deleted_at IS NULL
+        AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', $2::TIMESTAMPTZ)
+    GROUP BY DATE_TRUNC('month', e.date), e.currency, c.name
     ORDER BY month
 )
 SELECT 
     yt.currency, yt.total_income, yt.total_expenses, yt.total_savings,
     json_agg(
         json_build_object(
-            'category', tc.category,
+            'category_id', tc.category_id,
+            'category_name', tc.category_name,
             'usage_count', tc.usage_count,
             'total_spent', tc.total_spent
         )
-    ) FILTER (WHERE tc.category IS NOT NULL) as top_categories,
+    ) FILTER (WHERE tc.category_id IS NOT NULL) as top_categories,
     json_agg(
         json_build_object(
             'month', mt.month,
+            'category_name', mt.category_name,
             'amount', mt.monthly_expenses
         )
     ) FILTER (WHERE mt.month IS NOT NULL) as monthly_trend
