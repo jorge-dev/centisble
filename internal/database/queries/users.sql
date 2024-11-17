@@ -4,7 +4,7 @@ VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 RETURNING *;
 
 -- name: GetUserByEmail :one
-SELECT id, name, email, password_hash
+SELECT id, name, email, password_hash, role_id
 FROM users
 WHERE email = $1 AND deleted_at IS NULL;
 
@@ -44,6 +44,13 @@ SELECT EXISTS(
     WHERE email = $1 AND deleted_at IS NULL
 );
 
+-- name: CheckUserIsAdmin :one
+SELECT EXISTS(
+    SELECT 1 
+    FROM users 
+    WHERE id = sqlc.arg('user_id')::uuid AND role_id = (SELECT id FROM roles WHERE name = 'Admin') AND deleted_at IS NULL
+) AS is_admin;
+
 -- name: GetUserStats :one
 SELECT 
     u.id,
@@ -61,20 +68,34 @@ GROUP BY u.id, u.name;
 -- name: UpdateUserRole :one
 UPDATE users 
 SET 
-    role_id = $2,
+    role_id = sqlc.arg('role_id')::uuid,
     updated_at = CURRENT_TIMESTAMP
-WHERE id = $1 AND deleted_at IS NULL
-RETURNING *;
+WHERE users.id = sqlc.arg('user_id')::uuid AND deleted_at IS NULL
+RETURNING (
+    SELECT json_build_object(
+        'user_id', u.id,
+        'user_name', u.name,
+        'role_id', r.id,
+        'role_name', r.name
+    )
+    FROM users u
+    JOIN roles r ON r.id = sqlc.arg('role_id')::uuid
+    WHERE u.id = sqlc.arg('user_id')::uuid
+);
 
 -- name: GetUserRole :one
-SELECT r.name as role
+SELECT 
+    u.id as user_id,
+    u.name as user_name,
+    r.id as role_id,
+    r.name as role_name
 FROM users u
 JOIN roles r ON u.role_id = r.id
 WHERE u.id = $1 AND u.deleted_at IS NULL;
 
 -- name: ListUsersByRole :many
-SELECT u.id, u.name, u.email, r.name as role, u.created_at, u.updated_at
-FROM users u
-JOIN roles r ON u.role_id = r.id
-WHERE r.name = $1 AND u.deleted_at IS NULL
+SELECT u.id::uuid, u.name::varchar(255), u.email::varchar(255), r.name::varchar(255) as role
+FROM roles r
+LEFT JOIN users u ON u.role_id = r.id AND u.deleted_at IS NULL
+WHERE r.name = $1
 ORDER BY u.created_at DESC;

@@ -27,6 +27,21 @@ func (q *Queries) CheckEmailExists(ctx context.Context, email string) (bool, err
 	return exists, err
 }
 
+const checkUserIsAdmin = `-- name: CheckUserIsAdmin :one
+SELECT EXISTS(
+    SELECT 1 
+    FROM users 
+    WHERE id = $1::uuid AND role_id = (SELECT id FROM roles WHERE name = 'Admin') AND deleted_at IS NULL
+) AS is_admin
+`
+
+func (q *Queries) CheckUserIsAdmin(ctx context.Context, userID uuid.UUID) (bool, error) {
+	row := q.db.QueryRow(ctx, checkUserIsAdmin, userID)
+	var is_admin bool
+	err := row.Scan(&is_admin)
+	return is_admin, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (id, name, email, password_hash, created_at, updated_at)
 VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
@@ -78,7 +93,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error) {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, email, password_hash
+SELECT id, name, email, password_hash, role_id
 FROM users
 WHERE email = $1 AND deleted_at IS NULL
 `
@@ -88,6 +103,7 @@ type GetUserByEmailRow struct {
 	Name         string    `json:"name"`
 	Email        string    `json:"email"`
 	PasswordHash string    `json:"password_hash"`
+	RoleID       uuid.UUID `json:"role_id"`
 }
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEmailRow, error) {
@@ -98,6 +114,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEm
 		&i.Name,
 		&i.Email,
 		&i.PasswordHash,
+		&i.RoleID,
 	)
 	return i, err
 }
@@ -128,17 +145,33 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow
 }
 
 const getUserRole = `-- name: GetUserRole :one
-SELECT r.name as role
+SELECT 
+    u.id as user_id,
+    u.name as user_name,
+    r.id as role_id,
+    r.name as role_name
 FROM users u
 JOIN roles r ON u.role_id = r.id
 WHERE u.id = $1 AND u.deleted_at IS NULL
 `
 
-func (q *Queries) GetUserRole(ctx context.Context, id uuid.UUID) (string, error) {
+type GetUserRoleRow struct {
+	UserID   uuid.UUID `json:"user_id"`
+	UserName string    `json:"user_name"`
+	RoleID   uuid.UUID `json:"role_id"`
+	RoleName string    `json:"role_name"`
+}
+
+func (q *Queries) GetUserRole(ctx context.Context, id uuid.UUID) (GetUserRoleRow, error) {
 	row := q.db.QueryRow(ctx, getUserRole, id)
-	var role string
-	err := row.Scan(&role)
-	return role, err
+	var i GetUserRoleRow
+	err := row.Scan(
+		&i.UserID,
+		&i.UserName,
+		&i.RoleID,
+		&i.RoleName,
+	)
+	return i, err
 }
 
 const getUserStats = `-- name: GetUserStats :one
@@ -178,20 +211,18 @@ func (q *Queries) GetUserStats(ctx context.Context, id uuid.UUID) (GetUserStatsR
 }
 
 const listUsersByRole = `-- name: ListUsersByRole :many
-SELECT u.id, u.name, u.email, r.name as role, u.created_at, u.updated_at
-FROM users u
-JOIN roles r ON u.role_id = r.id
-WHERE r.name = $1 AND u.deleted_at IS NULL
+SELECT u.id::uuid, u.name::varchar(255), u.email::varchar(255), r.name::varchar(255) as role
+FROM roles r
+LEFT JOIN users u ON u.role_id = r.id AND u.deleted_at IS NULL
+WHERE r.name = $1
 ORDER BY u.created_at DESC
 `
 
 type ListUsersByRoleRow struct {
-	ID        uuid.UUID  `json:"id"`
-	Name      string     `json:"name"`
-	Email     string     `json:"email"`
-	Role      string     `json:"role"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
+	UID    uuid.UUID `json:"u_id"`
+	UName  string    `json:"u_name"`
+	UEmail string    `json:"u_email"`
+	Role   string    `json:"role"`
 }
 
 func (q *Queries) ListUsersByRole(ctx context.Context, name string) ([]ListUsersByRoleRow, error) {
@@ -204,12 +235,10 @@ func (q *Queries) ListUsersByRole(ctx context.Context, name string) ([]ListUsers
 	for rows.Next() {
 		var i ListUsersByRoleRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.Email,
+			&i.UID,
+			&i.UName,
+			&i.UEmail,
 			&i.Role,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -277,29 +306,30 @@ func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPassword
 const updateUserRole = `-- name: UpdateUserRole :one
 UPDATE users 
 SET 
-    role_id = $2,
+    role_id = $1::uuid,
     updated_at = CURRENT_TIMESTAMP
-WHERE id = $1 AND deleted_at IS NULL
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role_id
+WHERE users.id = $2::uuid AND deleted_at IS NULL
+RETURNING (
+    SELECT json_build_object(
+        'user_id', u.id,
+        'user_name', u.name,
+        'role_id', r.id,
+        'role_name', r.name
+    )
+    FROM users u
+    JOIN roles r ON r.id = $1::uuid
+    WHERE u.id = $2::uuid
+)
 `
 
 type UpdateUserRoleParams struct {
-	ID     uuid.UUID `json:"id"`
 	RoleID uuid.UUID `json:"role_id"`
+	UserID uuid.UUID `json:"user_id"`
 }
 
-func (q *Queries) UpdateUserRole(ctx context.Context, arg UpdateUserRoleParams) (User, error) {
-	row := q.db.QueryRow(ctx, updateUserRole, arg.ID, arg.RoleID)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Email,
-		&i.PasswordHash,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.DeletedAt,
-		&i.RoleID,
-	)
-	return i, err
+func (q *Queries) UpdateUserRole(ctx context.Context, arg UpdateUserRoleParams) ([]byte, error) {
+	row := q.db.QueryRow(ctx, updateUserRole, arg.RoleID, arg.UserID)
+	var json_build_object []byte
+	err := row.Scan(&json_build_object)
+	return json_build_object, err
 }
