@@ -1,6 +1,6 @@
 -- name: CreateBudget :one
 INSERT INTO budgets (
-    id, user_id, amount, currency, category, 
+    id, user_id, amount, currency, category_id, 
     type, start_date, end_date, created_at, updated_at
 )
 VALUES (
@@ -23,7 +23,7 @@ UPDATE budgets
 SET 
     amount = $2,
     currency = $3,
-    category = $4,
+    category_id = $4,
     type = $5,
     start_date = $6,
     end_date = $7,
@@ -47,7 +47,7 @@ ORDER BY start_date ASC;
 -- name: GetBudgetsByCategory :many
 SELECT * FROM budgets
 WHERE user_id = $1 
-    AND category = $2 
+    AND category_id = $2 
     AND deleted_at IS NULL
 ORDER BY start_date DESC;
 
@@ -56,9 +56,7 @@ WITH budget_expenses AS (
     SELECT COALESCE(SUM(amount), 0) AS total_spent
     FROM expenses
     WHERE user_id = $2
-      AND category = (SELECT category FROM budgets WHERE id = $1)
-      AND date >= (SELECT start_date FROM budgets WHERE id = $1)
-      AND date <= COALESCE((SELECT end_date FROM budgets WHERE id = $1), CURRENT_DATE)
+      AND category_id = (SELECT category_id FROM budgets WHERE id = $1)
       AND deleted_at IS NULL
 )
 SELECT 
@@ -91,14 +89,14 @@ SELECT
 FROM budgets b
 LEFT JOIN (
     SELECT 
-        e.category,
+        e.category_id,
         e.user_id,
         SUM(e.amount) AS spent_amount
     FROM expenses e
     WHERE e.deleted_at IS NULL
-    GROUP BY e.category, e.user_id
+    GROUP BY e.category_id, e.user_id
 ) AS spent_data 
-ON b.category = spent_data.category 
+ON b.category_id = spent_data.category_id 
    AND b.user_id = spent_data.user_id
 WHERE b.user_id = $1 
   AND b.deleted_at IS NULL

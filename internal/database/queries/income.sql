@@ -70,8 +70,6 @@ SELECT
 FROM income
 WHERE user_id = $1 
     AND deleted_at IS NULL
-    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
-    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 GROUP BY source, currency
 ORDER BY total_amount DESC;
 

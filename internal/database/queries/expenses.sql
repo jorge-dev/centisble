@@ -1,6 +1,6 @@
 -- name: CreateExpense :one
 INSERT INTO expenses (
-    id, user_id, amount, currency, category,
+    id, user_id, amount, currency, category_id,
     date, description, created_at, updated_at
 )
 VALUES (
@@ -23,7 +23,7 @@ UPDATE expenses
 SET 
     amount = $2,
     currency = $3,
-    category = $4,
+    category_id = $4,
     date = $5,
     description = $6,
     updated_at = CURRENT_TIMESTAMP
@@ -38,10 +38,8 @@ WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL;
 -- name: GetExpensesByCategory :many
 SELECT * FROM expenses
 WHERE user_id = $1 
-    AND category = $2 
+    AND category_id = $2 
     AND deleted_at IS NULL
-    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
-    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
 ORDER BY date DESC;
 
 -- name: GetExpensesByDateRange :many
@@ -54,16 +52,16 @@ ORDER BY date DESC;
 
 -- name: GetExpenseTotalsByCategory :many
 SELECT 
-    category,
-    currency,
-    COUNT(*) as transaction_count,
-    SUM(amount) as total_amount
-FROM expenses
-WHERE user_id = $1 
-    AND deleted_at IS NULL
-    AND date >= sqlc.arg(start_date)::TIMESTAMPTZ
-    AND date <= sqlc.arg(end_date)::TIMESTAMPTZ
-GROUP BY category, currency
+    e.category_id,
+    c.name as category_name,
+    e.currency,
+    COUNT(*)::float8 as transaction_count,
+    SUM(e.amount)::float8 as total_amount
+FROM expenses e
+JOIN categories c ON e.category_id = c.id
+WHERE e.user_id = $1 
+    AND e.deleted_at IS NULL
+GROUP BY e.category_id, c.name, e.currency
 ORDER BY total_amount DESC;
 
 -- name: GetRecentExpenses :many
