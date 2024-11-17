@@ -117,6 +117,8 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       responses:
         "200":
           description: Income record details
@@ -139,6 +141,8 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       requestBody:
         required: true
         content:
@@ -218,6 +222,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       responses:
         "200":
           description: Expense record found
@@ -268,6 +273,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       responses:
         "204":
           description: Expense deleted successfully
@@ -286,6 +292,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       responses:
         "200":
           description: List of expenses for the category
@@ -310,12 +317,14 @@ paths:
           schema:
             type: string
             format: date-time
+            example: 2024-01-01T00:00:00Z
         - name: end_date
           in: query
           required: true
           schema:
             type: string
             format: date-time
+            example: 2024-01-31T23:59:59Z
       responses:
         "200":
           description: List of expenses within date range
@@ -364,6 +373,7 @@ paths:
           schema:
             type: string
             format: date-time
+            example: 2024-01-01T00:00:00Z
       responses:
         "200":
           description: Monthly expense total
@@ -675,7 +685,8 @@ paths:
           required: true
           schema:
             type: string
-            example: "admin"
+            enum: [Admin, User, Guest, Moderator, Editor, Viewer, Manager]
+            example: Admin
       responses:
         "200":
           description: List of users with specified role
@@ -746,6 +757,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       responses:
         "200":
           description: Category details
@@ -769,6 +781,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       requestBody:
         required: true
         content:
@@ -819,6 +832,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "3c94bf9c-15a9-4137-a317-9d78db0a5dbd"
       responses:
         "200":
           description: Category usage statistics
@@ -844,7 +858,7 @@ paths:
           schema:
             type: integer
             minimum: 1
-            default: 10
+            default: 100
           description: Maximum number of categories to return
       responses:
         "200":
@@ -876,7 +890,7 @@ components:
         password:
           type: string
           format: password
-          example: strongpassword123
+          example: password
       required:
         - name
         - email
@@ -891,7 +905,7 @@ components:
         password:
           type: string
           format: password
-          example: strongpassword123
+          example: password
       required:
         - email
         - password
@@ -931,7 +945,8 @@ components:
       properties:
         id:
           type: string
-          example: "1"
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
         amount:
           type: number
           format: float
@@ -979,7 +994,8 @@ components:
       properties:
         id:
           type: string
-          example: "1"
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
         amount:
           type: number
           format: float
@@ -1033,7 +1049,8 @@ components:
       properties:
         id:
           type: string
-          example: "1"
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
         amount:
           type: number
           format: float
@@ -1150,11 +1167,11 @@ components:
         current_password:
           type: string
           format: password
-          example: "currentPass123"
+          example: "password"
         new_password:
           type: string
           format: password
-          example: "newPass123"
+          example: "password1"
       required:
         - current_password
         - new_password
@@ -1225,6 +1242,7 @@ components:
         id:
           type: string
           format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
         name:
           type: string
         expense_count:
@@ -1255,6 +1273,7 @@ components:
         user_id:
           type: string
           format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
         user_name:
           type: string
         role_id:
@@ -1269,6 +1288,7 @@ components:
         role_id:
           type: string
           format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
       required:
         - role_id
 
@@ -1278,9 +1298,14 @@ components:
         u_id:
           type: string
           format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
         u_name:
           type: string
+          example: John Doe
         u_email:
           type: string
+          example: john@email.com
         role:
           type: string
+          enum: [Admin, User, Guest, Moderator, Editor, Viewer, Manager]
+          example: Admin

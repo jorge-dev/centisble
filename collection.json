@@ -5,7 +5,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "9d612909-be6e-42f6-b05a-ccf602f46eb2",
+                    "id": "794c6c60-8db7-4669-bf05-747432187801",
                     "name": "register User",
                     "request": {
                         "name": "register User",
@@ -32,7 +32,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
+                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -44,7 +44,7 @@
                     },
                     "response": [
                         {
-                            "id": "868e9527-cf60-48ba-a5f6-f2f75cdd10f5",
+                            "id": "946d8165-814e-4cde-97fc-f20993004956",
                             "name": "User registered successfully",
                             "originalRequest": {
                                 "url": {
@@ -66,7 +66,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
+                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -82,7 +82,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "bdeea5f4-df29-4a7e-b5cd-e9882fdf631c",
+                            "id": "0fab637d-bb28-4747-a844-c1ce91eaf047",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -104,7 +104,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
+                                    "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -132,7 +132,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "e8133dee-947b-4b05-8526-f0d57c8755e2",
+                    "id": "24d71eb5-dc0a-4771-aa1c-e9a88836cd93",
                     "name": "login User",
                     "request": {
                         "name": "login User",
@@ -163,7 +163,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
+                            "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password\"\n}",
                             "options": {
                                 "raw": {
                                     "headerFamily": "json",
@@ -175,7 +175,7 @@
                     },
                     "response": [
                         {
-                            "id": "329cbc58-f3a1-4083-bd11-16660e6a25b0",
+                            "id": "01981e10-b50a-4728-907f-3f9fcbc94ff1",
                             "name": "Authentication successful",
                             "originalRequest": {
                                 "url": {
@@ -201,7 +201,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
+                                    "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -223,7 +223,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "254660e6-c3ef-45b5-8869-accb4396b9d5",
+                            "id": "15e27a8b-3056-4d32-8898-530481df5f18",
                             "name": "Unauthorized - Invalid credentials",
                             "originalRequest": {
                                 "url": {
@@ -245,7 +245,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"strongpassword123\"\n}",
+                                    "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -273,7 +273,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "5d3a9807-7634-4ffa-b891-e7cb0f8ac74f",
+                    "id": "82c61469-f710-4e55-b33e-bb852aed51d1",
                     "name": "add Income Record",
                     "request": {
                         "name": "add Income Record",
@@ -320,7 +320,7 @@
                     },
                     "response": [
                         {
-                            "id": "a199ee1b-a5d3-4c30-8d6e-79ebddeff0b4",
+                            "id": "98a5b40d-e780-4de4-a25c-efe59e17a81b",
                             "name": "Income record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -366,7 +366,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "2442bfc6-4764-4b0f-8d55-30bf707e157d",
+                            "id": "c636198b-f49c-4be0-b8c7-8c6e7bd8e2e9",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -418,7 +418,7 @@
                     }
                 },
                 {
-                    "id": "17904195-0a6c-4593-800e-de7cf0f4e0b3",
+                    "id": "6f4e305e-7394-4cdd-b323-2d15a6d84ab5",
                     "name": "get All Income Records",
                     "request": {
                         "name": "get All Income Records",
@@ -456,7 +456,7 @@
                     },
                     "response": [
                         {
-                            "id": "1dc8e141-32de-48ee-a3da-f10bb17322a6",
+                            "id": "eb3d0297-a29c-4698-9bcf-2bc2fd71f842",
                             "name": "A list of income records",
                             "originalRequest": {
                                 "url": {
@@ -494,7 +494,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 1500,\n    \"currency\": \"USD\",\n    \"source\": \"Salary\",\n    \"date\": \"2024-01-15T00:00:00Z\",\n    \"description\": \"Monthly salary for January\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 1500,\n    \"currency\": \"USD\",\n    \"source\": \"Salary\",\n    \"date\": \"2024-01-15T00:00:00Z\",\n    \"description\": \"Monthly salary for January\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 1500,\n    \"currency\": \"USD\",\n    \"source\": \"Salary\",\n    \"date\": \"2024-01-15T00:00:00Z\",\n    \"description\": \"Monthly salary for January\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 1500,\n    \"currency\": \"USD\",\n    \"source\": \"Salary\",\n    \"date\": \"2024-01-15T00:00:00Z\",\n    \"description\": \"Monthly salary for January\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -509,7 +509,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "2dbb6959-5417-47b1-96d7-f99fc8022649",
+                            "id": "5d5de047-0456-4b43-bac7-fc1c6ada2ce6",
                             "name": "get Income By ID",
                             "request": {
                                 "name": "get Income By ID",
@@ -529,7 +529,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "dolor eiusmod ullamco",
+                                            "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -559,7 +559,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f22002f9-0e75-4a0b-95f2-fb6fabce1b6a",
+                                    "id": "30745228-c1f6-4d37-96a8-8ab1d2adb5c5",
                                     "name": "Income record details",
                                     "originalRequest": {
                                         "url": {
@@ -598,12 +598,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"1\",\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"amount\": 1500,\n  \"currency\": \"USD\",\n  \"source\": \"Salary\",\n  \"date\": \"2024-01-15T00:00:00Z\",\n  \"description\": \"Monthly salary for January\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "a78f811f-c1e1-4173-9fc2-9cfddd6d55cf",
+                                    "id": "f1128ed7-3b82-440f-b8a9-1808467c6eaa",
                                     "name": "Income record not found",
                                     "originalRequest": {
                                         "url": {
@@ -643,7 +643,7 @@
                             }
                         },
                         {
-                            "id": "a6dfe47d-2f15-4ae3-869f-b3a76707edce",
+                            "id": "8cd12247-d8be-4006-a777-613aea715ca9",
                             "name": "update Income Record",
                             "request": {
                                 "name": "update Income Record",
@@ -663,7 +663,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "dolor eiusmod ullamco",
+                                            "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -702,7 +702,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "c8f45f7d-0c0d-4fcb-9065-abab1f357d6e",
+                                    "id": "c02ca0c1-519f-414b-8af4-b0a515c3550b",
                                     "name": "Income record updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -749,7 +749,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "8e8bfdb8-f7c8-44cf-b619-5f8da4fe4e07",
+                                    "id": "a1b55af0-2d47-411d-90d6-fae8e4b7a645",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -802,7 +802,7 @@
                             }
                         },
                         {
-                            "id": "a9066e1d-46fe-4ca9-85d3-15ada3c5d989",
+                            "id": "9ef9afb8-d3d2-4472-a832-5566157b660e",
                             "name": "delete Income Record",
                             "request": {
                                 "name": "delete Income Record",
@@ -822,7 +822,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "dolor eiusmod ullamco",
+                                            "value": "ipsum in ea",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -846,7 +846,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "84be936b-4d03-4abb-8e4c-8bbb4b912145",
+                                    "id": "d656308d-6df0-4810-851d-edb5db1a35b6",
                                     "name": "Income record deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -894,7 +894,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "99675e18-a3b9-4e39-b587-506e27d81335",
+                    "id": "d133c806-f59b-4e82-a21f-b188a0fe3e8f",
                     "name": "add Expense Record",
                     "request": {
                         "name": "add Expense Record",
@@ -945,7 +945,7 @@
                     },
                     "response": [
                         {
-                            "id": "0dcac38c-fd1a-4d00-bba7-be01932c5d70",
+                            "id": "8969c87d-b20d-4b67-bc54-f6236e865785",
                             "name": "Expense record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -996,7 +996,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"id\": \"1\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1007,7 +1007,7 @@
                     }
                 },
                 {
-                    "id": "9edc5c2a-8124-4924-ae54-70a1c6f6cd55",
+                    "id": "46174bff-31f3-47a9-8d91-38742e63fb3b",
                     "name": "get All Expense Records",
                     "request": {
                         "name": "get All Expense Records",
@@ -1045,7 +1045,7 @@
                     },
                     "response": [
                         {
-                            "id": "b42b3dc2-f690-4eca-bbaa-a8ebdea0fc59",
+                            "id": "3ea5c678-d50d-4b28-8051-6523ce43588b",
                             "name": "A list of expense records",
                             "originalRequest": {
                                 "url": {
@@ -1083,7 +1083,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1098,7 +1098,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "2cec7c9d-31c7-418e-b657-74b6aa381b57",
+                            "id": "e256758e-bf36-4a64-bdc7-5236207f8b72",
                             "name": "get Expense By ID",
                             "request": {
                                 "name": "get Expense By ID",
@@ -1118,7 +1118,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
+                                            "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1148,7 +1148,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "930f735d-24db-4136-9366-d87640be94f5",
+                                    "id": "a66eaccb-71e2-4dde-a774-9c2c8f1188c2",
                                     "name": "Expense record found",
                                     "originalRequest": {
                                         "url": {
@@ -1187,12 +1187,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"1\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "64a90b98-9b87-43e3-a8ce-b07f6194f74d",
+                                    "id": "8fec81e5-028d-4542-8bf5-ed8a1e77254a",
                                     "name": "Expense record not found",
                                     "originalRequest": {
                                         "url": {
@@ -1232,7 +1232,7 @@
                             }
                         },
                         {
-                            "id": "07892da1-e5ba-44b3-9a6f-9ffc68ce0167",
+                            "id": "c5bb06ed-4972-4ca0-a7a3-2829fe59264a",
                             "name": "update Expense",
                             "request": {
                                 "name": "update Expense",
@@ -1252,7 +1252,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
+                                            "value": "0394cf64-3790-38d2-2cd1-0d7090df59b7",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1295,7 +1295,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f7ad80d1-e719-49c4-803b-4751ef2c9aeb",
+                                    "id": "b5dcd847-625f-48ba-872a-0510b7c94855",
                                     "name": "Expense updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1347,7 +1347,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"1\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"category\": \"Groceries\",\n  \"date\": \"2024-01-16T00:00:00Z\",\n  \"description\": \"Grocery shopping at local market\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1358,7 +1358,7 @@
                             }
                         },
                         {
-                            "id": "3893c0b7-a166-4449-b8fb-b526c9de578e",
+                            "id": "11587f11-001d-4a10-a342-208f9d0078bc",
                             "name": "delete Expense",
                             "request": {
                                 "name": "delete Expense",
@@ -1378,7 +1378,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
+                                            "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1402,7 +1402,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "2a638ceb-95da-499a-8fec-329bd00c5870",
+                                    "id": "f3cc214d-06a3-4fbc-8293-3bc6ee0649bd",
                                     "name": "Expense deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1452,7 +1452,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "6c8d88e2-a5cc-4e07-8830-e740b968987a",
+                                    "id": "3012c22e-6a23-48d6-a886-1e39fc731c2b",
                                     "name": "get Expenses By Category",
                                     "request": {
                                         "name": "get Expenses By Category",
@@ -1473,7 +1473,7 @@
                                             "variable": [
                                                 {
                                                     "type": "any",
-                                                    "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
+                                                    "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
                                                     "key": "category",
                                                     "disabled": false,
                                                     "description": {
@@ -1503,7 +1503,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "4adda900-97ce-47c2-aaaf-b280263b6125",
+                                            "id": "80aa1e7e-11ca-4b6d-8956-acddc652b6ff",
                                             "name": "List of expenses for the category",
                                             "originalRequest": {
                                                 "url": {
@@ -1543,7 +1543,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -1560,7 +1560,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "9b59d620-a449-4996-bda5-e99de5b79106",
+                                    "id": "e1a2378a-ea6b-41db-baae-07d201995235",
                                     "name": "get Expense Totals By Category",
                                     "request": {
                                         "name": "get Expense Totals By Category",
@@ -1600,7 +1600,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "a8b70cbb-2d15-4b06-932e-2ad901303345",
+                                            "id": "3e8801ff-88a3-4384-80c2-eacbf318276c",
                                             "name": "Expense totals by category",
                                             "originalRequest": {
                                                 "url": {
@@ -1640,7 +1640,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "[\n  {\n    \"category_id\": \"urn:uuid:97d4a3d4-7b7b-cb97-ac5a-ec93a8310fdd\",\n    \"category_name\": \"ad eu dolor ipsum\",\n    \"currency\": \"consectetur laborum\",\n    \"transaction_count\": 66231435,\n    \"total_amount\": 43425560.735943735\n  },\n  {\n    \"category_id\": \"460ffd97-0343-a29f-8bac-92af7d7b2ee9\",\n    \"category_name\": \"ad occaecat\",\n    \"currency\": \"cupidatat pariatur\",\n    \"transaction_count\": -71054505,\n    \"total_amount\": -63122786.3550317\n  }\n]",
+                                            "body": "[\n  {\n    \"category_id\": \"d534cae9-ac32-aa64-0693-14e08e4736da\",\n    \"category_name\": \"aliqua quis laborum cil\",\n    \"currency\": \"in in\",\n    \"transaction_count\": -44113315,\n    \"total_amount\": -41295913.06456275\n  },\n  {\n    \"category_id\": \"urn:uuid:a13bdc8f-e743-857c-46c1-531334d303c2\",\n    \"category_name\": \"Duis voluptate magna consectetur\",\n    \"currency\": \"in mag\",\n    \"transaction_count\": 47413431,\n    \"total_amount\": -46647909.32809626\n  }\n]",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -1659,7 +1659,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "96643643-3341-47c1-859e-d8021b2a6592",
+                            "id": "bed9dd2a-b4b3-453c-862c-e2be57d66f4a",
                             "name": "get Expenses By Date Range",
                             "request": {
                                 "name": "get Expenses By Date Range",
@@ -1683,7 +1683,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "start_date",
-                                            "value": "2013-02-15T17:38:52.099Z"
+                                            "value": "2024-01-01T00:00:00Z"
                                         },
                                         {
                                             "disabled": false,
@@ -1692,7 +1692,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "end_date",
-                                            "value": "2013-02-15T17:38:52.099Z"
+                                            "value": "2024-01-31T23:59:59Z"
                                         }
                                     ],
                                     "variable": []
@@ -1717,7 +1717,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "3d7ac687-06da-49bd-b2b2-1d0da59382e0",
+                                    "id": "78e402ec-b25f-4d0c-b739-6826576ae3af",
                                     "name": "List of expenses within date range",
                                     "originalRequest": {
                                         "url": {
@@ -1736,7 +1736,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "start_date",
-                                                    "value": "2013-02-15T17:38:52.099Z"
+                                                    "value": "2024-01-01T00:00:00Z"
                                                 },
                                                 {
                                                     "disabled": false,
@@ -1745,7 +1745,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "end_date",
-                                                    "value": "2013-02-15T17:38:52.099Z"
+                                                    "value": "2024-01-31T23:59:59Z"
                                                 }
                                             ],
                                             "variable": []
@@ -1775,7 +1775,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                                    "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1792,7 +1792,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "1165c8f0-47da-4d02-9b89-13c5538fea7d",
+                            "id": "be42ce13-83c3-40fc-b711-e5f82e81e5a1",
                             "name": "get Recent Expenses",
                             "request": {
                                 "name": "get Recent Expenses",
@@ -1816,7 +1816,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "limit",
-                                            "value": "82877381"
+                                            "value": "84872893"
                                         }
                                     ],
                                     "variable": []
@@ -1841,7 +1841,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "ad5b62d3-f3a7-4e61-be78-a52a09793a4c",
+                                    "id": "dfd72b24-9637-41d3-a1ce-cd5638fc0281",
                                     "name": "List of recent expenses",
                                     "originalRequest": {
                                         "url": {
@@ -1860,7 +1860,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "limit",
-                                                    "value": "82877381"
+                                                    "value": "84872893"
                                                 }
                                             ],
                                             "variable": []
@@ -1890,7 +1890,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
+                                    "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"date\": \"2024-01-16T00:00:00Z\",\n    \"description\": \"Grocery shopping at local market\"\n  }\n]",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1911,7 +1911,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "890ef772-8707-46fb-a3c8-9097acb706e7",
+                                    "id": "61dfad25-c7eb-40b7-8d74-0989077ee4e7",
                                     "name": "get Monthly Expense Total",
                                     "request": {
                                         "name": "get Monthly Expense Total",
@@ -1936,7 +1936,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "date-time",
-                                                    "value": "2013-02-15T17:38:52.099Z"
+                                                    "value": "2024-01-01T00:00:00Z"
                                                 }
                                             ],
                                             "variable": []
@@ -1961,7 +1961,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "aea913bc-6d8b-4aa0-b1f1-4e41a9935db4",
+                                            "id": "07a00677-3f77-4dd0-a50b-864f1fa4fe80",
                                             "name": "Monthly expense total",
                                             "originalRequest": {
                                                 "url": {
@@ -1981,7 +1981,7 @@
                                                                 "type": "text/plain"
                                                             },
                                                             "key": "date-time",
-                                                            "value": "2013-02-15T17:38:52.099Z"
+                                                            "value": "2024-01-01T00:00:00Z"
                                                         }
                                                     ],
                                                     "variable": []
@@ -2011,7 +2011,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "{\n  \"total_amount\": -17010361.464999273,\n  \"currency\": \"ut veniam\"\n}",
+                                            "body": "{\n  \"total_amount\": 58207222.01081142,\n  \"currency\": \"sint voluptate elit consequat exercitation\"\n}",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -2032,7 +2032,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "9aa25662-49c8-4071-a4dc-5004db2698cb",
+                    "id": "02f9f34c-83d0-4466-b439-4844039fd5bb",
                     "name": "add Budget Record",
                     "request": {
                         "name": "add Budget Record",
@@ -2079,7 +2079,7 @@
                     },
                     "response": [
                         {
-                            "id": "8b00c9a8-fe5d-42d3-a639-a994cd5bf93b",
+                            "id": "1d1bbeef-d3bb-4e57-98a2-3af31d41ffc0",
                             "name": "Budget created successfully",
                             "originalRequest": {
                                 "url": {
@@ -2125,7 +2125,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "9d76361b-4986-4530-8d24-25a5d916c867",
+                            "id": "7d1b2bc9-5535-40d1-a697-72b53cf5f91e",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -2177,7 +2177,7 @@
                     }
                 },
                 {
-                    "id": "ce2ffc1e-e78e-490c-93ba-85d37a275277",
+                    "id": "d2703aba-34ce-44e8-89ec-ea81be7e558e",
                     "name": "get All Budget Records",
                     "request": {
                         "name": "get All Budget Records",
@@ -2215,7 +2215,7 @@
                     },
                     "response": [
                         {
-                            "id": "f41032c9-a2b2-4fdd-996d-bba3b53b0090",
+                            "id": "c1b21e52-11b1-4ff6-931b-6a9c912c95df",
                             "name": "A list of budgets",
                             "originalRequest": {
                                 "url": {
@@ -2253,7 +2253,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"1\",\n    \"amount\": 500,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"type\": \"recurring\",\n    \"start_date\": \"2024-01-01T00:00:00Z\",\n    \"end_date\": \"2024-12-31T00:00:00Z\"\n  },\n  {\n    \"id\": \"1\",\n    \"amount\": 500,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"type\": \"recurring\",\n    \"start_date\": \"2024-01-01T00:00:00Z\",\n    \"end_date\": \"2024-12-31T00:00:00Z\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 500,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"type\": \"recurring\",\n    \"start_date\": \"2024-01-01T00:00:00Z\",\n    \"end_date\": \"2024-12-31T00:00:00Z\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"amount\": 500,\n    \"currency\": \"USD\",\n    \"category\": \"Groceries\",\n    \"type\": \"recurring\",\n    \"start_date\": \"2024-01-01T00:00:00Z\",\n    \"end_date\": \"2024-12-31T00:00:00Z\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -2264,7 +2264,7 @@
                     }
                 },
                 {
-                    "id": "36bf30ae-ae16-4800-8832-015d4f62b480",
+                    "id": "a30322db-02c2-4ac8-a505-67713e3788ce",
                     "name": "update Budget Record",
                     "request": {
                         "name": "update Budget Record",
@@ -2311,7 +2311,7 @@
                     },
                     "response": [
                         {
-                            "id": "887ea567-a191-46aa-ac9a-f5ca499dde11",
+                            "id": "9daaae59-1306-4c96-ae91-7b3b1c6bcf0f",
                             "name": "Budget updated successfully",
                             "originalRequest": {
                                 "url": {
@@ -2357,7 +2357,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "48b12e8e-973a-413a-80c9-4ee629d1a52e",
+                            "id": "94f94f7f-de9f-4144-9438-6c2be965b39a",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -2419,7 +2419,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "908f5984-bb4b-488d-b0a4-7fc730d0ce20",
+                            "id": "71fc92cf-ba2d-4db1-89ec-fc523f5dcb43",
                             "name": "get Monthly Summary",
                             "request": {
                                 "name": "get Monthly Summary",
@@ -2458,7 +2458,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "2df013de-4b94-4bc9-a761-ae4fe83a84f9",
+                                    "id": "879ae8fc-b8d4-4fb2-9331-826bb1e142e1",
                                     "name": "Monthly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -2514,7 +2514,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "19f1799a-f164-4c14-8074-ed7c108d98be",
+                            "id": "a7a3e555-ea9d-4b33-b54e-0ce4006842fa",
                             "name": "get Yearly Summary",
                             "request": {
                                 "name": "get Yearly Summary",
@@ -2553,7 +2553,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "0c0ba42c-4432-4c85-978e-86516157dd5d",
+                                    "id": "a05cf881-8294-4d2c-a234-5e5ba8f17a94",
                                     "name": "Yearly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -2611,7 +2611,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "9509c59b-d392-4719-9108-546a71b12c92",
+                    "id": "8eaf2de8-0c61-4e28-a19e-f930411e6ffa",
                     "name": "check Live",
                     "request": {
                         "name": "check Live",
@@ -2641,7 +2641,7 @@
                     },
                     "response": [
                         {
-                            "id": "e579497d-e561-46de-8fcd-63ca162cb4ca",
+                            "id": "41d22d66-5748-446c-af60-f6e36e3e5a56",
                             "name": "API is live",
                             "originalRequest": {
                                 "url": {
@@ -2688,7 +2688,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "8995234c-ff2b-41b1-9071-35ea6e88c939",
+                    "id": "438de6dc-b5c7-4303-9c8a-6186b2f079af",
                     "name": "check Health",
                     "request": {
                         "name": "check Health",
@@ -2718,7 +2718,7 @@
                     },
                     "response": [
                         {
-                            "id": "66c56ae6-c1c5-4b01-9d54-da9fa564c2d1",
+                            "id": "f82e541e-9ee5-4b8f-aa88-ad4a6bff0bce",
                             "name": "API is healthy",
                             "originalRequest": {
                                 "url": {
@@ -2769,7 +2769,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "228098f1-7a75-44ac-b1ca-52c9f79dc390",
+                            "id": "259a73d0-44ed-4055-ac2d-2f9ad7fbcbf6",
                             "name": "get User Profile",
                             "request": {
                                 "name": "get User Profile",
@@ -2808,7 +2808,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "79583be7-0ae1-4aae-beb2-e9509d31fce8",
+                                    "id": "12721e79-126f-4352-82e4-d862fbec25c2",
                                     "name": "User profile retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2852,7 +2852,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "8f08e953-fa6a-4920-aa3b-6113689eb819",
+                                    "id": "8a523171-81f0-4d25-aa6a-bbdfcb5de716",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2892,7 +2892,7 @@
                             }
                         },
                         {
-                            "id": "32ce6fe9-8f71-418c-b61c-2e3d1e38c2b2",
+                            "id": "bd7964dc-9145-47cd-918f-b490383d510a",
                             "name": "update User Profile",
                             "request": {
                                 "name": "update User Profile",
@@ -2944,7 +2944,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "4e5ccd2e-e13d-41f7-aa75-a8bb01c12c7e",
+                                    "id": "fcbf89f8-9143-46b9-8e49-3fb91481572f",
                                     "name": "Profile updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3001,7 +3001,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "eeeeb88c-c7ba-4b2c-81ae-00e2efcd7bf3",
+                                    "id": "8a27aa9c-e80a-4ccc-837f-262ec212c4b0",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -3048,7 +3048,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "46b6baba-e822-411e-8248-9af555918f2f",
+                                    "id": "597703b4-9dd4-4e11-8b15-d81f2df33145",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3107,7 +3107,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "741e5c30-f285-4080-894c-d2a6e462c0d1",
+                            "id": "3eaf0e4e-fa79-4713-b26d-0e9712b3afc6",
                             "name": "update User Password",
                             "request": {
                                 "name": "update User Password",
@@ -3135,7 +3135,7 @@
                                 "method": "PUT",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
+                                    "raw": "{\n  \"current_password\": \"password\",\n  \"new_password\": \"password1\"\n}",
                                     "options": {
                                         "raw": {
                                             "headerFamily": "json",
@@ -3155,7 +3155,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "17cc02be-8ca1-4fd3-8d5b-a94f5edfe220",
+                                    "id": "babf6d12-8775-45d3-87b8-2945dff734b7",
                                     "name": "Password updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3186,7 +3186,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
+                                            "raw": "{\n  \"current_password\": \"password\",\n  \"new_password\": \"password1\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -3202,7 +3202,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "f08e6b5b-e9a5-43a3-bf22-11ca59178081",
+                                    "id": "da0bf309-2700-4a34-8c1e-1486db1615f3",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -3233,7 +3233,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
+                                            "raw": "{\n  \"current_password\": \"password\",\n  \"new_password\": \"password1\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -3249,7 +3249,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "36a53e5a-220e-49bd-887a-db7eea28887c",
+                                    "id": "e9175fef-8ba5-4b23-943c-033642e24ac2",
                                     "name": "Unauthorized or invalid current password",
                                     "originalRequest": {
                                         "url": {
@@ -3280,7 +3280,7 @@
                                         "method": "PUT",
                                         "body": {
                                             "mode": "raw",
-                                            "raw": "{\n  \"current_password\": \"currentPass123\",\n  \"new_password\": \"newPass123\"\n}",
+                                            "raw": "{\n  \"current_password\": \"password\",\n  \"new_password\": \"password1\"\n}",
                                             "options": {
                                                 "raw": {
                                                     "headerFamily": "json",
@@ -3308,7 +3308,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "c895f71c-d763-4ec0-b4a5-4c9b2f503a57",
+                            "id": "c8ea065e-ad96-48f7-a490-82924fc75c6c",
                             "name": "get User Stats",
                             "request": {
                                 "name": "get User Stats",
@@ -3347,7 +3347,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "204ccc43-f06d-4628-ada0-5c1fbedd21eb",
+                                    "id": "0835101c-31e6-4d30-82d1-3cc8379aefff",
                                     "name": "User statistics retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3391,7 +3391,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "df2011e6-c521-4a9a-9248-e642d7f9fee5",
+                                    "id": "0d16a7bf-f766-427a-bc13-16d25d4dbcb0",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3431,6 +3431,1627 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "roles",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "cc97ba3b-8a8a-4db5-abef-103129b9dcd6",
+                            "name": "get User Role",
+                            "request": {
+                                "name": "get User Role",
+                                "description": {
+                                    "content": "Get user role information",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "user",
+                                        "roles"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "f4afd458-4ef0-48c2-9857-c4c830106ab3",
+                                    "name": "User role retrieved successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"user_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_name\": \"in\",\n  \"role_id\": \"urn:uuid:9d05871c-f7b4-d2ec-fee8-3e662058822a\",\n  \"role_name\": \"Lorem Excepteur reprehenderit anim laborum\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "a55a83a5-91e3-4a24-b521-3320bbfc2fe1",
+                                    "name": "Unauthorized",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Unauthorized",
+                                    "code": 401,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "7cf2df33-f185-431b-8e06-65521e1c7db4",
+                                    "name": "User role not found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Not Found",
+                                    "code": 404,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "9afed106-9b45-41cf-a727-b0a393bfe6bf",
+                            "name": "update User Role",
+                            "request": {
+                                "name": "update User Role",
+                                "description": {
+                                    "content": "Update user role",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "user",
+                                        "roles"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "PUT",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"role_id\": \"123e4567-e89b-12d3-a456-426614174000\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "6f0cd661-8229-4ae6-9593-c7075ff9b70e",
+                                    "name": "User role updated successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"role_id\": \"123e4567-e89b-12d3-a456-426614174000\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"user_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_name\": \"in\",\n  \"role_id\": \"urn:uuid:9d05871c-f7b4-d2ec-fee8-3e662058822a\",\n  \"role_name\": \"Lorem Excepteur reprehenderit anim laborum\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "c59dbe71-f5c7-4d74-a55a-fc95513a83af",
+                                    "name": "Unauthorized",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"role_id\": \"123e4567-e89b-12d3-a456-426614174000\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Unauthorized",
+                                    "code": 401,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "b649b75c-8032-4609-b53f-e6202dcf8fbe",
+                                    "name": "Permission denied - Admin only operation",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"role_id\": \"123e4567-e89b-12d3-a456-426614174000\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Forbidden",
+                                    "code": 403,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "1ce94766-235f-43c7-be1e-40e1239a94b0",
+                                    "name": "User or role not found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"role_id\": \"123e4567-e89b-12d3-a456-426614174000\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Not Found",
+                                    "code": 404,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "name": "list",
+                            "description": "",
+                            "item": [
+                                {
+                                    "id": "a715f773-a5f2-429a-ae1b-5dc474a4e527",
+                                    "name": "list Users By Role",
+                                    "request": {
+                                        "name": "list Users By Role",
+                                        "description": {
+                                            "content": "List users by role",
+                                            "type": "text/plain"
+                                        },
+                                        "url": {
+                                            "path": [
+                                                "user",
+                                                "roles",
+                                                "list"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "role_name",
+                                                    "value": "Admin"
+                                                }
+                                            ],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {},
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": [
+                                                {
+                                                    "key": "token",
+                                                    "value": "{{bearerToken}}"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "a69f5156-67f8-4760-86f9-dde83c83ee1a",
+                                            "name": "List of users with specified role",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "user",
+                                                        "roles",
+                                                        "list"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "role_name",
+                                                            "value": "Admin"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "key": "Accept",
+                                                        "value": "application/json"
+                                                    },
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "header": [
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json"
+                                                }
+                                            ],
+                                            "body": "[\n  {\n    \"u_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"u_name\": \"John Doe\",\n    \"u_email\": \"john@email.com\",\n    \"role\": \"Admin\"\n  },\n  {\n    \"u_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"u_name\": \"John Doe\",\n    \"u_email\": \"john@email.com\",\n    \"role\": \"Admin\"\n  }\n]",
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "json"
+                                        },
+                                        {
+                                            "id": "6db8150e-3f37-42ca-a1d0-bb4f93314c71",
+                                            "name": "Unauthorized",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "user",
+                                                        "roles",
+                                                        "list"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "role_name",
+                                                            "value": "Admin"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "Unauthorized",
+                                            "code": 401,
+                                            "header": [],
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "text"
+                                        },
+                                        {
+                                            "id": "85b7e7fb-e122-46ee-bbc9-4043b67848c0",
+                                            "name": "No users found for specified role",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "user",
+                                                        "roles",
+                                                        "list"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "(Required) ",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "role_name",
+                                                            "value": "Admin"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "Not Found",
+                                            "code": 404,
+                                            "header": [],
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "text"
+                                        }
+                                    ],
+                                    "event": [],
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "categories",
+            "description": "",
+            "item": [
+                {
+                    "id": "055ac5b2-f39d-412b-928d-a5e38e01d5db",
+                    "name": "create Category",
+                    "request": {
+                        "name": "create Category",
+                        "description": {
+                            "content": "Create a new category",
+                            "type": "text/plain"
+                        },
+                        "url": {
+                            "path": [
+                                "categories"
+                            ],
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Groceries\"\n}",
+                            "options": {
+                                "raw": {
+                                    "headerFamily": "json",
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{bearerToken}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "3656cbbf-87a3-453d-b178-e715c54c34c5",
+                            "name": "Category created successfully",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "categories"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"Groceries\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"9b484d12-56e6-5909-62e6-db1ba468e3a5\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1953-10-01T23:53:27.294Z\",\n  \"updated_at\": \"1982-11-21T16:09:07.191Z\",\n  \"deleted_at\": \"2006-12-30T10:33:53.043Z\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "e5a5714f-667f-44a2-81d5-822c90aab448",
+                            "name": "Invalid input",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "categories"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"Groceries\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "header": [],
+                            "cookie": [],
+                            "_postman_previewlanguage": "text"
+                        },
+                        {
+                            "id": "1d98397d-87e1-4053-940a-280df7ba8833",
+                            "name": "Category already exists",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "categories"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"Groceries\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Conflict",
+                            "code": 409,
+                            "header": [],
+                            "cookie": [],
+                            "_postman_previewlanguage": "text"
+                        }
+                    ],
+                    "event": [],
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    }
+                },
+                {
+                    "id": "207b5acb-0aad-4296-b135-a5b99b5c56d3",
+                    "name": "list Categories",
+                    "request": {
+                        "name": "list Categories",
+                        "description": {
+                            "content": "List all categories for the user",
+                            "type": "text/plain"
+                        },
+                        "url": {
+                            "path": [
+                                "categories"
+                            ],
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{bearerToken}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "7b7f2dee-fdd1-476c-9eb5-e3e93718a865",
+                            "name": "List of categories",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "categories"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {}
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"user_id\": \"urn:uuid:945a0868-ceaf-5079-db98-bb0e2b5a5e4c\",\n    \"name\": \"Groceries\",\n    \"created_at\": \"1986-10-22T21:54:46.756Z\",\n    \"updated_at\": \"1970-08-12T13:53:27.897Z\",\n    \"deleted_at\": \"2005-08-15T09:02:49.391Z\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"user_id\": \"urn:uuid:82eeb32f-1523-2b7f-9255-867e28b20e06\",\n    \"name\": \"Groceries\",\n    \"created_at\": \"2015-10-06T14:23:16.928Z\",\n    \"updated_at\": \"2011-11-04T18:17:38.626Z\",\n    \"deleted_at\": \"1996-05-05T20:07:37.488Z\"\n  }\n]",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        }
+                    ],
+                    "event": [],
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    }
+                },
+                {
+                    "name": "{id}",
+                    "description": "",
+                    "item": [
+                        {
+                            "id": "6af12bd3-ab8d-4c8e-98b4-9b99fec5e227",
+                            "name": "get Category By Id",
+                            "request": {
+                                "name": "get Category By Id",
+                                "description": {
+                                    "content": "Get a category by ID",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "categories",
+                                        ":id"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "type": "any",
+                                            "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
+                                            "key": "id",
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "286083a0-99e6-40e7-a36c-e9bea947ef7b",
+                                    "name": "Category details",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"9b484d12-56e6-5909-62e6-db1ba468e3a5\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1953-10-01T23:53:27.294Z\",\n  \"updated_at\": \"1982-11-21T16:09:07.191Z\",\n  \"deleted_at\": \"2006-12-30T10:33:53.043Z\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "2e53b451-8a12-4aa6-9c80-aeb70c2fe080",
+                                    "name": "Category not found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Not Found",
+                                    "code": 404,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "c80fd68b-b1c8-4663-8ed8-d38cd7e3f0c1",
+                            "name": "update Category",
+                            "request": {
+                                "name": "update Category",
+                                "description": {
+                                    "content": "Update a category",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "categories",
+                                        ":id"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "type": "any",
+                                            "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
+                                            "key": "id",
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "PUT",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"Food & Groceries\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "headerFamily": "json",
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "c0a05570-ac1e-4ecf-b0a8-f08ca9c3b18f",
+                                    "name": "Category updated successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"name\": \"Food & Groceries\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"9b484d12-56e6-5909-62e6-db1ba468e3a5\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1953-10-01T23:53:27.294Z\",\n  \"updated_at\": \"1982-11-21T16:09:07.191Z\",\n  \"deleted_at\": \"2006-12-30T10:33:53.043Z\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "4fd344f5-ad67-4927-85ef-b5f4dba381d4",
+                                    "name": "Category not found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "PUT",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"name\": \"Food & Groceries\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "headerFamily": "json",
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Not Found",
+                                    "code": 404,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "4c75627d-2ea7-4a3d-916b-f4c07ee8f2f8",
+                            "name": "delete Category",
+                            "request": {
+                                "name": "delete Category",
+                                "description": {
+                                    "content": "Delete a category",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "categories",
+                                        ":id"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "type": "any",
+                                            "value": "0394cf64-3790-38d2-2cd1-0d7090df59b7",
+                                            "key": "id",
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "(Required) ",
+                                                "type": "text/plain"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "method": "DELETE",
+                                "body": {},
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{bearerToken}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "b6c15992-4290-496f-ab59-fa1739653c1f",
+                                    "name": "Category deleted successfully",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "DELETE",
+                                        "body": {}
+                                    },
+                                    "status": "No Content",
+                                    "code": 204,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                },
+                                {
+                                    "id": "00170193-6ab9-40df-b365-5290bb7fbefe",
+                                    "name": "Category not found",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "description": {
+                                                    "content": "Added as a part of security scheme: bearer",
+                                                    "type": "text/plain"
+                                                },
+                                                "key": "Authorization",
+                                                "value": "Bearer <token>"
+                                            }
+                                        ],
+                                        "method": "DELETE",
+                                        "body": {}
+                                    },
+                                    "status": "Not Found",
+                                    "code": 404,
+                                    "header": [],
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "text"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "name": "stats",
+                            "description": "",
+                            "item": [
+                                {
+                                    "id": "f2dde644-32d9-4594-b309-aff65affe532",
+                                    "name": "get Category Stats",
+                                    "request": {
+                                        "name": "get Category Stats",
+                                        "description": {
+                                            "content": "Get usage statistics for a category",
+                                            "type": "text/plain"
+                                        },
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                ":id",
+                                                "stats"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "type": "any",
+                                                    "value": "3c94bf9c-15a9-4137-a317-9d78db0a5dbd",
+                                                    "key": "id",
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "(Required) ",
+                                                        "type": "text/plain"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {},
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": [
+                                                {
+                                                    "key": "token",
+                                                    "value": "{{bearerToken}}"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "6a38e758-9ee6-462c-b922-acfc2354370c",
+                                            "name": "Category usage statistics",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "categories",
+                                                        ":id",
+                                                        "stats"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "key": "Accept",
+                                                        "value": "application/json"
+                                                    },
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "header": [
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json"
+                                                }
+                                            ],
+                                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"adipisi\",\n  \"expense_count\": -54068104,\n  \"budget_count\": 91738685,\n  \"total_expenses\": 8339158.608326882\n}",
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "json"
+                                        },
+                                        {
+                                            "id": "5894334e-ddb7-4aba-8207-f4e4fa9296bb",
+                                            "name": "Category not found",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "categories",
+                                                        ":id",
+                                                        "stats"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "Not Found",
+                                            "code": 404,
+                                            "header": [],
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "text"
+                                        }
+                                    ],
+                                    "event": [],
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "stats",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "most-used",
+                            "description": "",
+                            "item": [
+                                {
+                                    "id": "3d6f7a4e-b4f5-4eaa-8dc0-0c080717ac87",
+                                    "name": "get Most Used Categories",
+                                    "request": {
+                                        "name": "get Most Used Categories",
+                                        "description": {
+                                            "content": "Get most used categories",
+                                            "type": "text/plain"
+                                        },
+                                        "url": {
+                                            "path": [
+                                                "categories",
+                                                "stats",
+                                                "most-used"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [
+                                                {
+                                                    "disabled": false,
+                                                    "description": {
+                                                        "content": "Maximum number of categories to return",
+                                                        "type": "text/plain"
+                                                    },
+                                                    "key": "limit",
+                                                    "value": "100"
+                                                }
+                                            ],
+                                            "variable": []
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {},
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": [
+                                                {
+                                                    "key": "token",
+                                                    "value": "{{bearerToken}}"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "0afe50f7-b0b0-48bd-8463-9a9df6e5fe1e",
+                                            "name": "List of most used categories",
+                                            "originalRequest": {
+                                                "url": {
+                                                    "path": [
+                                                        "categories",
+                                                        "stats",
+                                                        "most-used"
+                                                    ],
+                                                    "host": [
+                                                        "{{baseUrl}}"
+                                                    ],
+                                                    "query": [
+                                                        {
+                                                            "disabled": false,
+                                                            "description": {
+                                                                "content": "Maximum number of categories to return",
+                                                                "type": "text/plain"
+                                                            },
+                                                            "key": "limit",
+                                                            "value": "100"
+                                                        }
+                                                    ],
+                                                    "variable": []
+                                                },
+                                                "header": [
+                                                    {
+                                                        "key": "Accept",
+                                                        "value": "application/json"
+                                                    },
+                                                    {
+                                                        "description": {
+                                                            "content": "Added as a part of security scheme: bearer",
+                                                            "type": "text/plain"
+                                                        },
+                                                        "key": "Authorization",
+                                                        "value": "Bearer <token>"
+                                                    }
+                                                ],
+                                                "method": "GET",
+                                                "body": {}
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "header": [
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json"
+                                                }
+                                            ],
+                                            "body": "[\n  {\n    \"name\": \"magna ut reprehenderit adipisicing\",\n    \"usage_count\": 96416699,\n    \"total_amount\": -86631368.09313796\n  },\n  {\n    \"name\": \"reprehenderit nulla aliqua\",\n    \"usage_count\": -74840755,\n    \"total_amount\": -76941990.5350194\n  }\n]",
+                                            "cookie": [],
+                                            "_postman_previewlanguage": "json"
+                                        }
+                                    ],
+                                    "event": [],
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
@@ -3443,7 +5064,7 @@
         }
     ],
     "info": {
-        "_postman_id": "21ec7071-c71a-4836-a131-028cbdd95c8d",
+        "_postman_id": "472d2afd-3dce-4793-bb1d-0a70fa88fb14",
         "name": "Budget Tracking API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {
