@@ -54,6 +54,9 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 		r.Put("/user/profile", userHandler.UpdateProfile)
 		r.Put("/user/password", userHandler.UpdatePassword)
 		r.Get("/user/stats", userHandler.GetStats)
+		r.Get("/user/roles", userHandler.GetUserRole)
+		r.Put("/user/roles", userHandler.UpdateUserRole)
+		r.Get("/user/roles/list", userHandler.ListUsersByRole)
 
 		// Income routes
 		incomeHandler := handlers.NewIncomeHandler(queries)
