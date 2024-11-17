@@ -108,11 +108,11 @@ SELECT
     COALESCE(SUM(e.amount), 0) as total_expenses
 FROM categories c
 LEFT JOIN expenses e ON 
-    e.category = c.name 
+     e.category_id = c.id
     AND e.user_id = c.user_id 
     AND e.deleted_at IS NULL
 LEFT JOIN budgets b ON 
-    b.category = c.name 
+     b.category_id = c.id 
     AND b.user_id = c.user_id 
     AND b.deleted_at IS NULL
 WHERE c.id = $1 AND c.user_id = $2 AND c.deleted_at IS NULL
@@ -152,7 +152,7 @@ SELECT
     COALESCE(SUM(e.amount), 0) as total_amount
 FROM categories c
 LEFT JOIN expenses e ON 
-    e.category = c.name 
+    e.category_id = c.id 
     AND e.user_id = c.user_id 
     AND e.deleted_at IS NULL
 WHERE c.user_id = $1::UUID
