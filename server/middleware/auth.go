@@ -15,6 +15,7 @@ type AuthMiddleware struct {
 const (
 	UserIDKey contextKey = "user_id"
 	EmailKey  contextKey = "email"
+	RoleIDKey contextKey = "role_id"
 )
 
 type contextKey string
@@ -40,6 +41,7 @@ func (m *AuthMiddleware) AuthRequired(next http.Handler) http.Handler {
 
 		ctx := context.WithValue(r.Context(), UserIDKey, claims.UserID)
 		ctx = context.WithValue(ctx, EmailKey, claims.Email)
+		ctx = context.WithValue(ctx, RoleIDKey, claims.RoleIDKey)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
