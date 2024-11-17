@@ -76,6 +76,16 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 		r.Get("/expenses/monthly/total", expenseHandler.GetMonthlyExpenseTotal)
 		r.Get("/expenses/category/totals", expenseHandler.GetExpenseTotalsByCategory)
 		r.Get("/expenses/recent", expenseHandler.GetRecentExpenses)
+
+		// Category routes
+		categoryHandler := handlers.NewCategoryHandler(queries)
+		r.Post("/categories", categoryHandler.CreateCategory)
+		r.Get("/categories", categoryHandler.ListCategories)
+		r.Get("/categories/{id}", categoryHandler.GetCategory)
+		r.Put("/categories/{id}", categoryHandler.UpdateCategory)
+		r.Delete("/categories/{id}", categoryHandler.DeleteCategory)
+		r.Get("/categories/{id}/stats", categoryHandler.GetCategoryStats)
+		r.Get("/categories/stats/most-used", categoryHandler.GetMostUsedCategories)
 	})
 
 	return r
