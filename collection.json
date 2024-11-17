@@ -5,7 +5,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "150d0608-f5df-450d-9633-4e3533e41e0f",
+                    "id": "9d612909-be6e-42f6-b05a-ccf602f46eb2",
                     "name": "register User",
                     "request": {
                         "name": "register User",
@@ -44,7 +44,7 @@
                     },
                     "response": [
                         {
-                            "id": "671d04b7-80b7-4c3e-8e48-4f0758e30b26",
+                            "id": "868e9527-cf60-48ba-a5f6-f2f75cdd10f5",
                             "name": "User registered successfully",
                             "originalRequest": {
                                 "url": {
@@ -82,7 +82,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "4704e1d2-1db4-4e1a-a686-dcf015ea003c",
+                            "id": "bdeea5f4-df29-4a7e-b5cd-e9882fdf631c",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -132,7 +132,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "d9702620-ce0b-4910-81b2-e774c775678f",
+                    "id": "e8133dee-947b-4b05-8526-f0d57c8755e2",
                     "name": "login User",
                     "request": {
                         "name": "login User",
@@ -175,7 +175,7 @@
                     },
                     "response": [
                         {
-                            "id": "0f2ac55e-0b39-48d3-a08a-065371d96e88",
+                            "id": "329cbc58-f3a1-4083-bd11-16660e6a25b0",
                             "name": "Authentication successful",
                             "originalRequest": {
                                 "url": {
@@ -223,7 +223,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "d232fb67-9741-4a61-80df-b9725eedc06e",
+                            "id": "254660e6-c3ef-45b5-8869-accb4396b9d5",
                             "name": "Unauthorized - Invalid credentials",
                             "originalRequest": {
                                 "url": {
@@ -273,7 +273,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "ddc0a600-ab06-4433-93ff-0561e3d00b77",
+                    "id": "5d3a9807-7634-4ffa-b891-e7cb0f8ac74f",
                     "name": "add Income Record",
                     "request": {
                         "name": "add Income Record",
@@ -320,7 +320,7 @@
                     },
                     "response": [
                         {
-                            "id": "f9a82994-e6a0-4bd7-bfd6-5881fff23a66",
+                            "id": "a199ee1b-a5d3-4c30-8d6e-79ebddeff0b4",
                             "name": "Income record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -366,7 +366,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "6497f38c-7b30-470e-ae37-95b7c6ad6a20",
+                            "id": "2442bfc6-4764-4b0f-8d55-30bf707e157d",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -418,7 +418,7 @@
                     }
                 },
                 {
-                    "id": "ed64475e-c177-496c-a80f-cb82ae9b060d",
+                    "id": "17904195-0a6c-4593-800e-de7cf0f4e0b3",
                     "name": "get All Income Records",
                     "request": {
                         "name": "get All Income Records",
@@ -456,7 +456,7 @@
                     },
                     "response": [
                         {
-                            "id": "44dca113-372e-47f1-b3be-3147249f6868",
+                            "id": "1dc8e141-32de-48ee-a3da-f10bb17322a6",
                             "name": "A list of income records",
                             "originalRequest": {
                                 "url": {
@@ -509,7 +509,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "c9801688-cb62-4b43-913f-3c84912c9ea4",
+                            "id": "2dbb6959-5417-47b1-96d7-f99fc8022649",
                             "name": "get Income By ID",
                             "request": {
                                 "name": "get Income By ID",
@@ -529,7 +529,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "elit cillum tempor",
+                                            "value": "dolor eiusmod ullamco",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -559,7 +559,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "c405a910-f07f-4275-9fa2-d5976fa9b946",
+                                    "id": "f22002f9-0e75-4a0b-95f2-fb6fabce1b6a",
                                     "name": "Income record details",
                                     "originalRequest": {
                                         "url": {
@@ -603,7 +603,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "dac98db2-d52f-43ad-b306-90b93a15a9f7",
+                                    "id": "a78f811f-c1e1-4173-9fc2-9cfddd6d55cf",
                                     "name": "Income record not found",
                                     "originalRequest": {
                                         "url": {
@@ -643,7 +643,7 @@
                             }
                         },
                         {
-                            "id": "d6fb1948-6a26-4d02-a969-53d413409abd",
+                            "id": "a6dfe47d-2f15-4ae3-869f-b3a76707edce",
                             "name": "update Income Record",
                             "request": {
                                 "name": "update Income Record",
@@ -663,7 +663,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "elit cillum tempor",
+                                            "value": "dolor eiusmod ullamco",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -702,7 +702,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f23380fb-50d2-45ee-a7b9-cd5ac9138a9e",
+                                    "id": "c8f45f7d-0c0d-4fcb-9065-abab1f357d6e",
                                     "name": "Income record updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -749,7 +749,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "fe4fb757-8996-4b4a-b880-4d3de2afe5eb",
+                                    "id": "8e8bfdb8-f7c8-44cf-b619-5f8da4fe4e07",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -802,7 +802,7 @@
                             }
                         },
                         {
-                            "id": "dcce2286-0232-4077-ad0b-72f5275cf973",
+                            "id": "a9066e1d-46fe-4ca9-85d3-15ada3c5d989",
                             "name": "delete Income Record",
                             "request": {
                                 "name": "delete Income Record",
@@ -822,7 +822,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "elit cillum tempor",
+                                            "value": "dolor eiusmod ullamco",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -846,7 +846,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "b2ffdcbc-b31a-498d-93d4-2c1747cc7dc9",
+                                    "id": "84be936b-4d03-4abb-8e4c-8bbb4b912145",
                                     "name": "Income record deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -894,7 +894,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "1a0a4b88-34a6-49f2-9f5a-f301088c22cf",
+                    "id": "99675e18-a3b9-4e39-b587-506e27d81335",
                     "name": "add Expense Record",
                     "request": {
                         "name": "add Expense Record",
@@ -945,7 +945,7 @@
                     },
                     "response": [
                         {
-                            "id": "815b70b9-4d7a-45b8-bb2e-2a397d6dfe84",
+                            "id": "0dcac38c-fd1a-4d00-bba7-be01932c5d70",
                             "name": "Expense record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -1007,7 +1007,7 @@
                     }
                 },
                 {
-                    "id": "67b8f146-8f31-4a25-b3fa-816390dbdeae",
+                    "id": "9edc5c2a-8124-4924-ae54-70a1c6f6cd55",
                     "name": "get All Expense Records",
                     "request": {
                         "name": "get All Expense Records",
@@ -1045,7 +1045,7 @@
                     },
                     "response": [
                         {
-                            "id": "74972fa3-5120-4d9a-a6a1-6b7b3aa8248c",
+                            "id": "b42b3dc2-f690-4eca-bbaa-a8ebdea0fc59",
                             "name": "A list of expense records",
                             "originalRequest": {
                                 "url": {
@@ -1098,7 +1098,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "57387832-a3eb-4816-a708-c85edefdeb22",
+                            "id": "2cec7c9d-31c7-418e-b657-74b6aa381b57",
                             "name": "get Expense By ID",
                             "request": {
                                 "name": "get Expense By ID",
@@ -1118,7 +1118,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "f173f5ac-e47b-cd7a-7172-57dffd93a20f",
+                                            "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1148,7 +1148,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "7d74c0e0-f0b6-46d8-a94b-cbdcd7ea7a45",
+                                    "id": "930f735d-24db-4136-9366-d87640be94f5",
                                     "name": "Expense record found",
                                     "originalRequest": {
                                         "url": {
@@ -1192,7 +1192,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "721e13b7-941b-4359-af1e-432ee9113372",
+                                    "id": "64a90b98-9b87-43e3-a8ce-b07f6194f74d",
                                     "name": "Expense record not found",
                                     "originalRequest": {
                                         "url": {
@@ -1232,7 +1232,7 @@
                             }
                         },
                         {
-                            "id": "c5b1885e-5213-46b3-863b-a82515247d6e",
+                            "id": "07892da1-e5ba-44b3-9a6f-9ffc68ce0167",
                             "name": "update Expense",
                             "request": {
                                 "name": "update Expense",
@@ -1252,7 +1252,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "f173f5ac-e47b-cd7a-7172-57dffd93a20f",
+                                            "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1295,7 +1295,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "72b0dfec-62e2-45fe-8a15-452a1339c39b",
+                                    "id": "f7ad80d1-e719-49c4-803b-4751ef2c9aeb",
                                     "name": "Expense updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1358,7 +1358,7 @@
                             }
                         },
                         {
-                            "id": "7912148b-8501-4f1e-a2b7-7467c4efdfe5",
+                            "id": "3893c0b7-a166-4449-b8fb-b526c9de578e",
                             "name": "delete Expense",
                             "request": {
                                 "name": "delete Expense",
@@ -1378,7 +1378,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "f173f5ac-e47b-cd7a-7172-57dffd93a20f",
+                                            "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1402,7 +1402,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "a9d09895-2d58-4097-84e3-1709e99807c3",
+                                    "id": "2a638ceb-95da-499a-8fec-329bd00c5870",
                                     "name": "Expense deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1452,12 +1452,12 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "0dcb8d61-8a28-4bf4-be02-1e5bb0161fd4",
+                                    "id": "6c8d88e2-a5cc-4e07-8830-e740b968987a",
                                     "name": "get Expenses By Category",
                                     "request": {
                                         "name": "get Expenses By Category",
                                         "description": {
-                                            "content": "Get expenses by category within a date range",
+                                            "content": "Get expenses by category",
                                             "type": "text/plain"
                                         },
                                         "url": {
@@ -1469,30 +1469,11 @@
                                             "host": [
                                                 "{{baseUrl}}"
                                             ],
-                                            "query": [
-                                                {
-                                                    "disabled": false,
-                                                    "description": {
-                                                        "content": "(Required) ",
-                                                        "type": "text/plain"
-                                                    },
-                                                    "key": "start_date",
-                                                    "value": "1975-04-30T08:32:59.035Z"
-                                                },
-                                                {
-                                                    "disabled": false,
-                                                    "description": {
-                                                        "content": "(Required) ",
-                                                        "type": "text/plain"
-                                                    },
-                                                    "key": "end_date",
-                                                    "value": "1975-04-30T08:32:59.035Z"
-                                                }
-                                            ],
+                                            "query": [],
                                             "variable": [
                                                 {
                                                     "type": "any",
-                                                    "value": "elit cillum tempor",
+                                                    "value": "urn:uuid:a44bb1fc-eec6-d8d6-5dd5-fef25261e5c5",
                                                     "key": "category",
                                                     "disabled": false,
                                                     "description": {
@@ -1522,7 +1503,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "725cbcff-f4cc-43d4-aa4f-c9a1a1e322a4",
+                                            "id": "4adda900-97ce-47c2-aaaf-b280263b6125",
                                             "name": "List of expenses for the category",
                                             "originalRequest": {
                                                 "url": {
@@ -1534,26 +1515,7 @@
                                                     "host": [
                                                         "{{baseUrl}}"
                                                     ],
-                                                    "query": [
-                                                        {
-                                                            "disabled": false,
-                                                            "description": {
-                                                                "content": "(Required) ",
-                                                                "type": "text/plain"
-                                                            },
-                                                            "key": "start_date",
-                                                            "value": "1975-04-30T08:32:59.035Z"
-                                                        },
-                                                        {
-                                                            "disabled": false,
-                                                            "description": {
-                                                                "content": "(Required) ",
-                                                                "type": "text/plain"
-                                                            },
-                                                            "key": "end_date",
-                                                            "value": "1975-04-30T08:32:59.035Z"
-                                                        }
-                                                    ],
+                                                    "query": [],
                                                     "variable": []
                                                 },
                                                 "header": [
@@ -1598,12 +1560,12 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "974b85bc-3e47-4f18-a8a7-0675531de430",
+                                    "id": "9b59d620-a449-4996-bda5-e99de5b79106",
                                     "name": "get Expense Totals By Category",
                                     "request": {
                                         "name": "get Expense Totals By Category",
                                         "description": {
-                                            "content": "Get expense totals by category for a date range",
+                                            "content": "Get expense totals by category",
                                             "type": "text/plain"
                                         },
                                         "url": {
@@ -1615,26 +1577,7 @@
                                             "host": [
                                                 "{{baseUrl}}"
                                             ],
-                                            "query": [
-                                                {
-                                                    "disabled": false,
-                                                    "description": {
-                                                        "content": "(Required) ",
-                                                        "type": "text/plain"
-                                                    },
-                                                    "key": "start_date",
-                                                    "value": "1975-04-30T08:32:59.035Z"
-                                                },
-                                                {
-                                                    "disabled": false,
-                                                    "description": {
-                                                        "content": "(Required) ",
-                                                        "type": "text/plain"
-                                                    },
-                                                    "key": "end_date",
-                                                    "value": "1975-04-30T08:32:59.035Z"
-                                                }
-                                            ],
+                                            "query": [],
                                             "variable": []
                                         },
                                         "header": [
@@ -1657,7 +1600,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "526b79c9-c679-454a-b2cc-1e1389b5750e",
+                                            "id": "a8b70cbb-2d15-4b06-932e-2ad901303345",
                                             "name": "Expense totals by category",
                                             "originalRequest": {
                                                 "url": {
@@ -1669,26 +1612,7 @@
                                                     "host": [
                                                         "{{baseUrl}}"
                                                     ],
-                                                    "query": [
-                                                        {
-                                                            "disabled": false,
-                                                            "description": {
-                                                                "content": "(Required) ",
-                                                                "type": "text/plain"
-                                                            },
-                                                            "key": "start_date",
-                                                            "value": "1975-04-30T08:32:59.035Z"
-                                                        },
-                                                        {
-                                                            "disabled": false,
-                                                            "description": {
-                                                                "content": "(Required) ",
-                                                                "type": "text/plain"
-                                                            },
-                                                            "key": "end_date",
-                                                            "value": "1975-04-30T08:32:59.035Z"
-                                                        }
-                                                    ],
+                                                    "query": [],
                                                     "variable": []
                                                 },
                                                 "header": [
@@ -1716,7 +1640,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "[\n  {\n    \"category\": \"Lorem \",\n    \"currency\": \"occaecat magna ali\",\n    \"transaction_count\": 13902581,\n    \"total_amount\": 70681156.15319228\n  },\n  {\n    \"category\": \"nostrud quis est\",\n    \"currency\": \"cillum deserunt\",\n    \"transaction_count\": 75723536,\n    \"total_amount\": 56052465.16379166\n  }\n]",
+                                            "body": "[\n  {\n    \"category_id\": \"urn:uuid:97d4a3d4-7b7b-cb97-ac5a-ec93a8310fdd\",\n    \"category_name\": \"ad eu dolor ipsum\",\n    \"currency\": \"consectetur laborum\",\n    \"transaction_count\": 66231435,\n    \"total_amount\": 43425560.735943735\n  },\n  {\n    \"category_id\": \"460ffd97-0343-a29f-8bac-92af7d7b2ee9\",\n    \"category_name\": \"ad occaecat\",\n    \"currency\": \"cupidatat pariatur\",\n    \"transaction_count\": -71054505,\n    \"total_amount\": -63122786.3550317\n  }\n]",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -1735,7 +1659,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "5451731e-5531-442d-bd8c-2905f9a3bbe7",
+                            "id": "96643643-3341-47c1-859e-d8021b2a6592",
                             "name": "get Expenses By Date Range",
                             "request": {
                                 "name": "get Expenses By Date Range",
@@ -1759,7 +1683,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "start_date",
-                                            "value": "1975-04-30T08:32:59.035Z"
+                                            "value": "2013-02-15T17:38:52.099Z"
                                         },
                                         {
                                             "disabled": false,
@@ -1768,7 +1692,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "end_date",
-                                            "value": "1975-04-30T08:32:59.035Z"
+                                            "value": "2013-02-15T17:38:52.099Z"
                                         }
                                     ],
                                     "variable": []
@@ -1793,7 +1717,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "5675706e-390e-4fe2-a253-ae5f54f3466f",
+                                    "id": "3d7ac687-06da-49bd-b2b2-1d0da59382e0",
                                     "name": "List of expenses within date range",
                                     "originalRequest": {
                                         "url": {
@@ -1812,7 +1736,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "start_date",
-                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                    "value": "2013-02-15T17:38:52.099Z"
                                                 },
                                                 {
                                                     "disabled": false,
@@ -1821,7 +1745,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "end_date",
-                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                    "value": "2013-02-15T17:38:52.099Z"
                                                 }
                                             ],
                                             "variable": []
@@ -1868,7 +1792,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "c404bc9d-2472-4e06-9cf4-9f3ed38c757f",
+                            "id": "1165c8f0-47da-4d02-9b89-13c5538fea7d",
                             "name": "get Recent Expenses",
                             "request": {
                                 "name": "get Recent Expenses",
@@ -1892,7 +1816,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "limit",
-                                            "value": "84962062"
+                                            "value": "82877381"
                                         }
                                     ],
                                     "variable": []
@@ -1917,7 +1841,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "91b966ec-89da-4d88-8071-9116c0acffb0",
+                                    "id": "ad5b62d3-f3a7-4e61-be78-a52a09793a4c",
                                     "name": "List of recent expenses",
                                     "originalRequest": {
                                         "url": {
@@ -1936,7 +1860,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "limit",
-                                                    "value": "84962062"
+                                                    "value": "82877381"
                                                 }
                                             ],
                                             "variable": []
@@ -1987,7 +1911,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "af7870cc-9698-4a91-9dd6-631cd0de0d2c",
+                                    "id": "890ef772-8707-46fb-a3c8-9097acb706e7",
                                     "name": "get Monthly Expense Total",
                                     "request": {
                                         "name": "get Monthly Expense Total",
@@ -2012,7 +1936,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "date-time",
-                                                    "value": "1975-04-30T08:32:59.035Z"
+                                                    "value": "2013-02-15T17:38:52.099Z"
                                                 }
                                             ],
                                             "variable": []
@@ -2037,7 +1961,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "1975e1f6-e3de-464d-8f74-c226d08842f1",
+                                            "id": "aea913bc-6d8b-4aa0-b1f1-4e41a9935db4",
                                             "name": "Monthly expense total",
                                             "originalRequest": {
                                                 "url": {
@@ -2057,7 +1981,7 @@
                                                                 "type": "text/plain"
                                                             },
                                                             "key": "date-time",
-                                                            "value": "1975-04-30T08:32:59.035Z"
+                                                            "value": "2013-02-15T17:38:52.099Z"
                                                         }
                                                     ],
                                                     "variable": []
@@ -2087,7 +2011,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "{\n  \"total_amount\": 48715422.32375842,\n  \"currency\": \"irure ipsum occaecat incididunt Excepteur\"\n}",
+                                            "body": "{\n  \"total_amount\": -17010361.464999273,\n  \"currency\": \"ut veniam\"\n}",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -2108,7 +2032,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "1b2b50b0-e12b-4a93-9c8e-c765564d37a3",
+                    "id": "9aa25662-49c8-4071-a4dc-5004db2698cb",
                     "name": "add Budget Record",
                     "request": {
                         "name": "add Budget Record",
@@ -2155,7 +2079,7 @@
                     },
                     "response": [
                         {
-                            "id": "53706fb8-39a5-4659-bfce-8683ed44b7c6",
+                            "id": "8b00c9a8-fe5d-42d3-a639-a994cd5bf93b",
                             "name": "Budget created successfully",
                             "originalRequest": {
                                 "url": {
@@ -2201,7 +2125,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "7784b36d-40b4-4c94-bb3a-8c63b135ccd5",
+                            "id": "9d76361b-4986-4530-8d24-25a5d916c867",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -2253,7 +2177,7 @@
                     }
                 },
                 {
-                    "id": "6b651ecd-c4d1-4e08-a3c4-71a8f6042835",
+                    "id": "ce2ffc1e-e78e-490c-93ba-85d37a275277",
                     "name": "get All Budget Records",
                     "request": {
                         "name": "get All Budget Records",
@@ -2291,7 +2215,7 @@
                     },
                     "response": [
                         {
-                            "id": "57180b0e-c69c-414a-8fac-fed8b2779b4c",
+                            "id": "f41032c9-a2b2-4fdd-996d-bba3b53b0090",
                             "name": "A list of budgets",
                             "originalRequest": {
                                 "url": {
@@ -2340,7 +2264,7 @@
                     }
                 },
                 {
-                    "id": "be18e240-9fdf-4911-b5ca-b2bef2a628a5",
+                    "id": "36bf30ae-ae16-4800-8832-015d4f62b480",
                     "name": "update Budget Record",
                     "request": {
                         "name": "update Budget Record",
@@ -2387,7 +2311,7 @@
                     },
                     "response": [
                         {
-                            "id": "3b97d313-2b45-4cd8-b0f3-593987231cbf",
+                            "id": "887ea567-a191-46aa-ac9a-f5ca499dde11",
                             "name": "Budget updated successfully",
                             "originalRequest": {
                                 "url": {
@@ -2433,7 +2357,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "2595bea8-0585-492b-9bf9-412879d88255",
+                            "id": "48b12e8e-973a-413a-80c9-4ee629d1a52e",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -2495,7 +2419,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "5812e14f-5ade-49ef-84c1-0c12f4623561",
+                            "id": "908f5984-bb4b-488d-b0a4-7fc730d0ce20",
                             "name": "get Monthly Summary",
                             "request": {
                                 "name": "get Monthly Summary",
@@ -2534,7 +2458,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "c359506f-bcbf-4049-8bda-2c5a346e006e",
+                                    "id": "2df013de-4b94-4bc9-a761-ae4fe83a84f9",
                                     "name": "Monthly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -2590,7 +2514,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "1779a754-174f-4165-b165-f834abc61272",
+                            "id": "19f1799a-f164-4c14-8074-ed7c108d98be",
                             "name": "get Yearly Summary",
                             "request": {
                                 "name": "get Yearly Summary",
@@ -2629,7 +2553,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "dd330c1b-0cd0-430c-803c-7d11728dc026",
+                                    "id": "0c0ba42c-4432-4c85-978e-86516157dd5d",
                                     "name": "Yearly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -2687,7 +2611,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "4f597502-e595-4528-9a3a-313c39465b00",
+                    "id": "9509c59b-d392-4719-9108-546a71b12c92",
                     "name": "check Live",
                     "request": {
                         "name": "check Live",
@@ -2717,7 +2641,7 @@
                     },
                     "response": [
                         {
-                            "id": "65d83473-2896-461f-a164-b225748bbb2f",
+                            "id": "e579497d-e561-46de-8fcd-63ca162cb4ca",
                             "name": "API is live",
                             "originalRequest": {
                                 "url": {
@@ -2764,7 +2688,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "50150225-559f-4707-9548-79c2700a4b3d",
+                    "id": "8995234c-ff2b-41b1-9071-35ea6e88c939",
                     "name": "check Health",
                     "request": {
                         "name": "check Health",
@@ -2794,7 +2718,7 @@
                     },
                     "response": [
                         {
-                            "id": "cfac0730-df28-42a5-b08a-091e18ceb849",
+                            "id": "66c56ae6-c1c5-4b01-9d54-da9fa564c2d1",
                             "name": "API is healthy",
                             "originalRequest": {
                                 "url": {
@@ -2845,7 +2769,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "55cecfcf-86f6-4859-919e-22d078aa94c1",
+                            "id": "228098f1-7a75-44ac-b1ca-52c9f79dc390",
                             "name": "get User Profile",
                             "request": {
                                 "name": "get User Profile",
@@ -2884,7 +2808,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "98ffa254-1e3a-4820-b32b-d069ac9b50a5",
+                                    "id": "79583be7-0ae1-4aae-beb2-e9509d31fce8",
                                     "name": "User profile retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2928,7 +2852,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "8fe394a2-19d8-488b-9bd6-e5700cbe15c7",
+                                    "id": "8f08e953-fa6a-4920-aa3b-6113689eb819",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2968,7 +2892,7 @@
                             }
                         },
                         {
-                            "id": "55a93d66-0f69-4cea-a0e8-dbdde0ed5862",
+                            "id": "32ce6fe9-8f71-418c-b61c-2e3d1e38c2b2",
                             "name": "update User Profile",
                             "request": {
                                 "name": "update User Profile",
@@ -3020,7 +2944,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "2a5fcfa8-a66b-4629-9d2c-8660d32ed10c",
+                                    "id": "4e5ccd2e-e13d-41f7-aa75-a8bb01c12c7e",
                                     "name": "Profile updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3077,7 +3001,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "1e82ae34-882b-4a97-8bb4-31a718fcb792",
+                                    "id": "eeeeb88c-c7ba-4b2c-81ae-00e2efcd7bf3",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -3124,7 +3048,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "06c09b90-b5f2-4053-8bda-d8128ba91df2",
+                                    "id": "46b6baba-e822-411e-8248-9af555918f2f",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3183,7 +3107,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "d6234130-6c54-473f-9d10-87ee53e54fb8",
+                            "id": "741e5c30-f285-4080-894c-d2a6e462c0d1",
                             "name": "update User Password",
                             "request": {
                                 "name": "update User Password",
@@ -3231,7 +3155,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "236cb79d-a99a-441f-bec3-626f361661d3",
+                                    "id": "17cc02be-8ca1-4fd3-8d5b-a94f5edfe220",
                                     "name": "Password updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3278,7 +3202,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "62814175-daec-4f95-8e63-063191f9f5b8",
+                                    "id": "f08e6b5b-e9a5-43a3-bf22-11ca59178081",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -3325,7 +3249,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "7e39f195-5e3b-46a5-8829-01ecc975d142",
+                                    "id": "36a53e5a-220e-49bd-887a-db7eea28887c",
                                     "name": "Unauthorized or invalid current password",
                                     "originalRequest": {
                                         "url": {
@@ -3384,7 +3308,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "a3b4ceb2-d22d-4259-bdb0-8db1dd939774",
+                            "id": "c895f71c-d763-4ec0-b4a5-4c9b2f503a57",
                             "name": "get User Stats",
                             "request": {
                                 "name": "get User Stats",
@@ -3423,7 +3347,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "56fa5904-1937-4b91-a3ea-c956857c4cc2",
+                                    "id": "204ccc43-f06d-4628-ada0-5c1fbedd21eb",
                                     "name": "User statistics retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3467,7 +3391,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "4f4f9312-da85-4af6-96be-2f8a8acc48b8",
+                                    "id": "df2011e6-c521-4a9a-9248-e642d7f9fee5",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3519,7 +3443,7 @@
         }
     ],
     "info": {
-        "_postman_id": "65259840-8484-4ce4-9cd4-2a9a6fe81da2",
+        "_postman_id": "21ec7071-c71a-4836-a131-028cbdd95c8d",
         "name": "Budget Tracking API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {
