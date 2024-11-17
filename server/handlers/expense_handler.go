@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -17,11 +18,11 @@ type ExpenseHandler struct {
 }
 
 type ExpenseRequest struct {
-	Amount      float64 `json:"amount"`
-	Currency    string  `json:"currency"`
-	Category    string  `json:"category"`
-	Date        string  `json:"date"`
-	Description string  `json:"description"`
+	Amount      float64   `json:"amount"`
+	Currency    string    `json:"currency"`
+	CategoryID  uuid.UUID `json:"category_id"`
+	Date        string    `json:"date"`
+	Description string    `json:"description"`
 }
 
 func NewExpenseHandler(db *repository.Queries) *ExpenseHandler {
@@ -54,7 +55,7 @@ func (h *ExpenseHandler) CreateExpense(w http.ResponseWriter, r *http.Request) {
 		UserID:      uid,
 		Amount:      req.Amount,
 		Currency:    req.Currency,
-		Category:    req.Category,
+		CategoryID:  req.CategoryID,
 		Date:        date,
 		Description: req.Description,
 	})
@@ -116,19 +117,10 @@ func (h *ExpenseHandler) ListExpenses(w http.ResponseWriter, r *http.Request) {
 
 // GetExpensesByCategory handles GET /expenses/category/{category}
 func (h *ExpenseHandler) GetExpensesByCategory(w http.ResponseWriter, r *http.Request) {
-	category := chi.URLParam(r, "category")
-	startDate := r.URL.Query().Get("start_date")
-	endDate := r.URL.Query().Get("end_date")
-
-	start, err := time.Parse(time.RFC3339, startDate)
+	categoryID := chi.URLParam(r, "category")
+	cid, err := uuid.Parse(categoryID)
 	if err != nil {
-		http.Error(w, "Invalid start date", http.StatusBadRequest)
-		return
-	}
-
-	end, err := time.Parse(time.RFC3339, endDate)
-	if err != nil {
-		http.Error(w, "Invalid end date", http.StatusBadRequest)
+		http.Error(w, "Invalid category ID", http.StatusBadRequest)
 		return
 	}
 
@@ -140,10 +132,8 @@ func (h *ExpenseHandler) GetExpensesByCategory(w http.ResponseWriter, r *http.Re
 	}
 
 	expenses, err := h.db.GetExpensesByCategory(r.Context(), repository.GetExpensesByCategoryParams{
-		UserID:    uid,
-		Category:  category,
-		StartDate: start,
-		EndDate:   end,
+		UserID:     uid,
+		CategoryID: cid,
 	})
 	if err != nil {
 		http.Error(w, "Error fetching expenses", http.StatusInternalServerError)
@@ -225,7 +215,7 @@ func (h *ExpenseHandler) UpdateExpense(w http.ResponseWriter, r *http.Request) {
 	// Use current values if request fields are empty/zero
 	amount := currentExpense.Amount
 	currency := currentExpense.Currency
-	category := currentExpense.Category
+	categoryID := currentExpense.CategoryID
 	date := currentExpense.Date
 	description := currentExpense.Description
 
@@ -235,8 +225,8 @@ func (h *ExpenseHandler) UpdateExpense(w http.ResponseWriter, r *http.Request) {
 	if req.Currency != "" {
 		currency = req.Currency
 	}
-	if req.Category != "" {
-		category = req.Category
+	if req.CategoryID != uuid.Nil {
+		categoryID = req.CategoryID
 	}
 	if req.Date != "" {
 		parsedDate, err := time.Parse(time.RFC3339, req.Date)
@@ -254,7 +244,7 @@ func (h *ExpenseHandler) UpdateExpense(w http.ResponseWriter, r *http.Request) {
 		ID:          expenseID,
 		Amount:      amount,
 		Currency:    currency,
-		Category:    category,
+		CategoryID:  categoryID,
 		Date:        date,
 		Description: description,
 		UserID:      uid,
@@ -321,27 +311,17 @@ func (h *ExpenseHandler) GetMonthlyExpenseTotal(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	if totals == nil {
+		totals = []repository.GetMonthlyExpenseTotalRow{}
+
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(totals)
 }
 
 // GetExpenseTotalsByCategory handles GET /expenses/category/totals
 func (h *ExpenseHandler) GetExpenseTotalsByCategory(w http.ResponseWriter, r *http.Request) {
-	startDate := r.URL.Query().Get("start_date")
-	endDate := r.URL.Query().Get("end_date")
-
-	start, err := time.Parse(time.RFC3339, startDate)
-	if err != nil {
-		http.Error(w, "Invalid start date", http.StatusBadRequest)
-		return
-	}
-
-	end, err := time.Parse(time.RFC3339, endDate)
-	if err != nil {
-		http.Error(w, "Invalid end date", http.StatusBadRequest)
-		return
-	}
-
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {
@@ -349,12 +329,9 @@ func (h *ExpenseHandler) GetExpenseTotalsByCategory(w http.ResponseWriter, r *ht
 		return
 	}
 
-	totals, err := h.db.GetExpenseTotalsByCategory(r.Context(), repository.GetExpenseTotalsByCategoryParams{
-		UserID:    uid,
-		StartDate: start,
-		EndDate:   end,
-	})
+	totals, err := h.db.GetExpenseTotalsByCategory(r.Context(), uid)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, "Error fetching category totals", http.StatusInternalServerError)
 		return
 	}
