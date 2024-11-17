@@ -615,6 +615,80 @@ paths:
         "401":
           description: Unauthorized
 
+  /user/roles:
+    get:
+      description: Get user role information
+      operationId: getUserRole
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User role retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRoleResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: User role not found
+    put:
+      description: Update user role
+      operationId: updateUserRole
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRoleRequest"
+      responses:
+        "200":
+          description: User role updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRoleResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Permission denied - Admin only operation
+        "404":
+          description: User or role not found
+
+  /user/roles/list:
+    get:
+      description: List users by role
+      operationId: listUsersByRole
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: role_name
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "admin"
+      responses:
+        "200":
+          description: List of users with specified role
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserRoleListItem"
+        "401":
+          description: Unauthorized
+        "404":
+          description: No users found for specified role
   /categories:
     post:
       description: Create a new category
@@ -1174,3 +1248,39 @@ components:
         total_amount:
           type: number
           format: double
+
+    UserRoleResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        user_name:
+          type: string
+        role_id:
+          type: string
+          format: uuid
+        role_name:
+          type: string
+
+    UpdateUserRoleRequest:
+      type: object
+      properties:
+        role_id:
+          type: string
+          format: uuid
+      required:
+        - role_id
+
+    UserRoleListItem:
+      type: object
+      properties:
+        u_id:
+          type: string
+          format: uuid
+        u_name:
+          type: string
+        u_email:
+          type: string
+        role:
+          type: string
