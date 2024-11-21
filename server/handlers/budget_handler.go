@@ -299,6 +299,24 @@ func (h *BudgetHandler) GetRecurringBudgets(w http.ResponseWriter, r *http.Reque
 	json.NewEncoder(w).Encode(budgets)
 }
 
+func (h *BudgetHandler) GetOneTimeBudgets(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+	uid, err := uuid.Parse(userID)
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+
+	budgets, err := h.db.GetOneTimeBudgets(r.Context(), uid)
+	if err != nil {
+		http.Error(w, "Error getting one-time budgets", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(budgets)
+}
+
 func (h *BudgetHandler) GetBudgetsByCategory(w http.ResponseWriter, r *http.Request) {
 	categoryID := chi.URLParam(r, "categoryId")
 	cid, err := uuid.Parse(categoryID)
