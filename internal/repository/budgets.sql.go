@@ -154,37 +154,39 @@ func (q *Queries) GetBudgetByID(ctx context.Context, arg GetBudgetByIDParams) (B
 
 const getBudgetUsage = `-- name: GetBudgetUsage :one
 WITH budget_expenses AS (
-    SELECT COALESCE(SUM(amount), 0) AS total_spent
+    SELECT COALESCE(SUM(amount), 0)::float8 AS total_spent
     FROM expenses
-    WHERE user_id = $2
-      AND category_id = (SELECT category_id FROM budgets WHERE id = $1)
+    WHERE user_id = $2::uuid
+      AND category_id = (SELECT category_id FROM budgets WHERE id = $1::uuid)
       AND deleted_at IS NULL
 )
 SELECT 
     b.id, b.user_id, b.amount, b.currency, b.category_id, b.type, b.start_date, b.end_date, b.created_at, b.updated_at, b.deleted_at, -- Embed the entire budget row
+    e.total_spent::float8 AS spent_amount,
     CASE 
-        WHEN b.amount > 0 THEN (e.total_spent / b.amount * 100)
-        ELSE 0 
+        WHEN b.amount > 0 THEN (e.total_spent / b.amount * 100)::float8
+        ELSE 0.0
     END AS usage_percentage
 FROM budgets b
 CROSS JOIN budget_expenses e
-WHERE b.id = $1 
-  AND b.user_id = $2 
+WHERE b.id = $1::uuid
+  AND b.user_id = $2::uuid
   AND b.deleted_at IS NULL
 `
 
 type GetBudgetUsageParams struct {
-	ID     uuid.UUID `json:"id"`
-	UserID uuid.UUID `json:"user_id"`
+	BudgetID uuid.UUID `json:"budget_id"`
+	UserID   uuid.UUID `json:"user_id"`
 }
 
 type GetBudgetUsageRow struct {
-	Budget          Budget `json:"budget"`
-	UsagePercentage int32  `json:"usage_percentage"`
+	Budget          Budget  `json:"budget"`
+	SpentAmount     float64 `json:"spent_amount"`
+	UsagePercentage float64 `json:"usage_percentage"`
 }
 
 func (q *Queries) GetBudgetUsage(ctx context.Context, arg GetBudgetUsageParams) (GetBudgetUsageRow, error) {
-	row := q.db.QueryRow(ctx, getBudgetUsage, arg.ID, arg.UserID)
+	row := q.db.QueryRow(ctx, getBudgetUsage, arg.BudgetID, arg.UserID)
 	var i GetBudgetUsageRow
 	err := row.Scan(
 		&i.Budget.ID,
@@ -198,6 +200,7 @@ func (q *Queries) GetBudgetUsage(ctx context.Context, arg GetBudgetUsageParams) 
 		&i.Budget.CreatedAt,
 		&i.Budget.UpdatedAt,
 		&i.Budget.DeletedAt,
+		&i.SpentAmount,
 		&i.UsagePercentage,
 	)
 	return i, err
@@ -251,10 +254,10 @@ func (q *Queries) GetBudgetsByCategory(ctx context.Context, arg GetBudgetsByCate
 const getBudgetsNearLimit = `-- name: GetBudgetsNearLimit :many
 SELECT 
     b.id, b.user_id, b.amount, b.currency, b.category_id, b.type, b.start_date, b.end_date, b.created_at, b.updated_at, b.deleted_at, -- Embed the entire budget row
-    COALESCE(spent_data.spent_amount, 0) AS spent_amount,
+    COALESCE(spent_data.spent_amount, 0)::float8 AS spent_amount,
     CASE 
-        WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)
-        ELSE 0 
+        WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)::float8
+        ELSE 0.0
     END AS usage_percentage
 FROM budgets b
 LEFT JOIN (
@@ -268,30 +271,30 @@ LEFT JOIN (
 ) AS spent_data 
 ON b.category_id = spent_data.category_id 
    AND b.user_id = spent_data.user_id
-WHERE b.user_id = $1 
+WHERE b.user_id = $1::uuid
   AND b.deleted_at IS NULL
   AND b.start_date <= CURRENT_DATE
   AND (b.end_date >= CURRENT_DATE OR b.end_date IS NULL)
   AND CASE 
         WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)
         ELSE 0 
-      END >= $2
+      END >= $2::float8
 ORDER BY usage_percentage DESC
 `
 
 type GetBudgetsNearLimitParams struct {
-	UserID uuid.UUID `json:"user_id"`
-	Amount float64   `json:"amount"`
+	UserID    uuid.UUID `json:"user_id"`
+	Threshold float64   `json:"threshold"`
 }
 
 type GetBudgetsNearLimitRow struct {
-	Budget          Budget `json:"budget"`
-	SpentAmount     int64  `json:"spent_amount"`
-	UsagePercentage int32  `json:"usage_percentage"`
+	Budget          Budget  `json:"budget"`
+	SpentAmount     float64 `json:"spent_amount"`
+	UsagePercentage float64 `json:"usage_percentage"`
 }
 
 func (q *Queries) GetBudgetsNearLimit(ctx context.Context, arg GetBudgetsNearLimitParams) ([]GetBudgetsNearLimitRow, error) {
-	rows, err := q.db.Query(ctx, getBudgetsNearLimit, arg.UserID, arg.Amount)
+	rows, err := q.db.Query(ctx, getBudgetsNearLimit, arg.UserID, arg.Threshold)
 	if err != nil {
 		return nil, err
 	}

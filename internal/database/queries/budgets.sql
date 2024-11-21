@@ -53,22 +53,23 @@ ORDER BY start_date DESC;
 
 -- name: GetBudgetUsage :one
 WITH budget_expenses AS (
-    SELECT COALESCE(SUM(amount), 0) AS total_spent
+    SELECT COALESCE(SUM(amount), 0)::float8 AS total_spent
     FROM expenses
-    WHERE user_id = $2
-      AND category_id = (SELECT category_id FROM budgets WHERE id = $1)
+    WHERE user_id = sqlc.arg('user_id')::uuid
+      AND category_id = (SELECT category_id FROM budgets WHERE id = sqlc.arg('budget_id')::uuid)
       AND deleted_at IS NULL
 )
 SELECT 
     sqlc.embed(b), -- Embed the entire budget row
+    e.total_spent::float8 AS spent_amount,
     CASE 
-        WHEN b.amount > 0 THEN (e.total_spent / b.amount * 100)
-        ELSE 0 
+        WHEN b.amount > 0 THEN (e.total_spent / b.amount * 100)::float8
+        ELSE 0.0
     END AS usage_percentage
 FROM budgets b
 CROSS JOIN budget_expenses e
-WHERE b.id = $1 
-  AND b.user_id = $2 
+WHERE b.id = sqlc.arg('budget_id')::uuid
+  AND b.user_id = sqlc.arg('user_id')::uuid
   AND b.deleted_at IS NULL;
 
 -- name: GetRecurringBudgets :many
@@ -81,10 +82,10 @@ ORDER BY start_date ASC;
 -- name: GetBudgetsNearLimit :many
 SELECT 
     sqlc.embed(b), -- Embed the entire budget row
-    COALESCE(spent_data.spent_amount, 0) AS spent_amount,
+    COALESCE(spent_data.spent_amount, 0)::float8 AS spent_amount,
     CASE 
-        WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)
-        ELSE 0 
+        WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)::float8
+        ELSE 0.0
     END AS usage_percentage
 FROM budgets b
 LEFT JOIN (
@@ -98,13 +99,13 @@ LEFT JOIN (
 ) AS spent_data 
 ON b.category_id = spent_data.category_id 
    AND b.user_id = spent_data.user_id
-WHERE b.user_id = $1 
+WHERE b.user_id = sqlc.arg('user_id')::uuid
   AND b.deleted_at IS NULL
   AND b.start_date <= CURRENT_DATE
   AND (b.end_date >= CURRENT_DATE OR b.end_date IS NULL)
   AND CASE 
         WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)
         ELSE 0 
-      END >= $2
+      END >= sqlc.arg('threshold')::float8
 ORDER BY usage_percentage DESC;
 
