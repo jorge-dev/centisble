@@ -222,14 +222,14 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
 - [X] Income Management
   - [X] CRUD endpoints for income
   - [X] User-income association
-- [ ] Expense Management
-  - [ ] CRUD endpoints for expenses
-  - [ ] Expense categorization
-- [ ] Budget Management
-  - [ ] CRUD endpoints for budgets
-  - [ ] Budget limits and tracking
-  - [ ] Budget alerts
-  - [ ] Recurring/one-time budgets
+- [X] Expense Management
+  - [X] CRUD endpoints for expenses
+  - [X] Expense categorization
+- [X] Budget Management
+  - [X] CRUD endpoints for budgets
+  - [X] Budget limits and tracking
+  - [X] Budget alerts
+  - [X] Recurring/one-time budgets
 - [ ] Input Validation
   - [ ] Implement request validation
   - [ ] Data sanitation
