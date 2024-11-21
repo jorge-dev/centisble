@@ -89,6 +89,17 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 		r.Delete("/categories/{id}", categoryHandler.DeleteCategory)
 		r.Get("/categories/{id}/stats", categoryHandler.GetCategoryStats)
 		r.Get("/categories/stats/most-used", categoryHandler.GetMostUsedCategories)
+
+		// Budget routes
+		budgetHandler := handlers.NewBudgetHandler(queries)
+		r.Post("/budgets", budgetHandler.CreateBudget)
+		r.Get("/budgets", budgetHandler.ListBudgets)
+		r.Get("/budgets/{id}", budgetHandler.GetBudgetUsage)
+		r.Put("/budgets/{id}", budgetHandler.UpdateBudget)
+		r.Delete("/budgets/{id}", budgetHandler.DeleteBudget)
+		r.Get("/budgets/recurring", budgetHandler.GetRecurringBudgets)
+		r.Get("/budgets/category/{categoryId}", budgetHandler.GetBudgetsByCategory)
+		r.Get("/budgets/alerts", budgetHandler.GetBudgetsNearLimit)
 	})
 
 	return r
