@@ -327,6 +327,46 @@ func (q *Queries) GetBudgetsNearLimit(ctx context.Context, arg GetBudgetsNearLim
 	return items, nil
 }
 
+const getOneTimeBudgets = `-- name: GetOneTimeBudgets :many
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+WHERE user_id = $1 
+    AND type = 'one-time'
+    AND deleted_at IS NULL
+ORDER BY start_date ASC
+`
+
+func (q *Queries) GetOneTimeBudgets(ctx context.Context, userID uuid.UUID) ([]Budget, error) {
+	rows, err := q.db.Query(ctx, getOneTimeBudgets, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Budget
+	for rows.Next() {
+		var i Budget
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Amount,
+			&i.Currency,
+			&i.CategoryID,
+			&i.Type,
+			&i.StartDate,
+			&i.EndDate,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.DeletedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getRecurringBudgets = `-- name: GetRecurringBudgets :many
 SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
 WHERE user_id = $1 

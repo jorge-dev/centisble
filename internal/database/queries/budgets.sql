@@ -79,6 +79,13 @@ WHERE user_id = $1
     AND deleted_at IS NULL
 ORDER BY start_date ASC;
 
+-- name: GetOneTimeBudgets :many
+SELECT * FROM budgets
+WHERE user_id = $1 
+    AND type = 'one-time'
+    AND deleted_at IS NULL
+ORDER BY start_date ASC;
+
 -- name: GetBudgetsNearLimit :many
 SELECT 
     sqlc.embed(b), -- Embed the entire budget row
