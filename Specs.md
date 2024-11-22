@@ -115,7 +115,7 @@ This development plan is designed to help you build the **Budget Tracking API** 
    - Add support for creating recurring or one-time budgets, allowing users to set budgets that recur monthly or are a one-time allocation.
 
 4. **Basic Input Validation**
-   - Add validation for incoming requests (e.g., validating that amount fields are positive numbers).
+   - Add validation for incoming requests (e.g., validating that amount fields are positive numbers, dates are in the correct format, etc.).
 
 **Milestone**: All core financial management features are functional, with basic validations in place.
 
