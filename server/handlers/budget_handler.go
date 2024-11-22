@@ -14,7 +14,7 @@ import (
 )
 
 type BudgetHandler struct {
-	db *repository.Queries
+	db repository.Repository
 }
 
 type CreateBudgetRequest struct {
@@ -26,7 +26,7 @@ type CreateBudgetRequest struct {
 	EndDate    string    `json:"end_date"`
 }
 
-func NewBudgetHandler(db *repository.Queries) *BudgetHandler {
+func NewBudgetHandler(db repository.Repository) *BudgetHandler {
 	return &BudgetHandler{db: db}
 }
 
@@ -55,7 +55,6 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
-
 	budget, err := h.db.CreateBudget(r.Context(), repository.CreateBudgetParams{
 		ID:         uuid.New(),
 		UserID:     uid,
