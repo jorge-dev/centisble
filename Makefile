@@ -41,8 +41,7 @@ format: ## Format the code
 	@go fmt ./...
 
 test: ## Run the tests
-	@echo "Testing..."
-	@go test ./... -v
+	@gotestsum --format-icons octicons --format testname
 
 postman:
 	npx openapi-to-postmanv2 -s ./openApi.yaml -o collection.json -p -O parametersResolution=Example
