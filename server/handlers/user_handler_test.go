@@ -11,22 +11,86 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/repository/mocks"
 	"github.com/jorge-dev/centsible/server/middleware"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetProfile(t *testing.T) {
-	mockDB := repository.NewMockRepository()
-	handler := NewUserHandler(mockDB)
+type userHandlerTestSuite struct {
+	mockRepo *mocks.MockRepository
+	handler  *UserHandler
+	testUser struct {
+		ID        uuid.UUID
+		Name      string
+		Email     string
+		CreatedAt time.Time
+	}
+	adminRoleID   uuid.UUID
+	adminRoleName string
+}
 
-	// Add test user
-	testUserID := uuid.New()
-	mockDB.AddUser(repository.GetUserByIDRow{
-		ID:        testUserID,
-		Name:      "Test User",
-		Email:     "test@example.com",
-		CreatedAt: time.Now(),
+// Add cleanup method to the suite
+func (s *userHandlerTestSuite) cleanup() {
+	// Reset mock repository state
+	s.mockRepo.Reset()
+	// Clear test user data
+	s.testUser = struct {
+		ID        uuid.UUID
+		Name      string
+		Email     string
+		CreatedAt time.Time
+	}{}
+}
+
+func setupUserHandlerTest(t *testing.T) *userHandlerTestSuite {
+	suite := &userHandlerTestSuite{}
+
+	// Register cleanup to run after each test
+	t.Cleanup(suite.cleanup)
+
+	// Initialize mock repository
+	repo := mocks.NewMockRepository()
+	mock, ok := repo.(*mocks.MockRepository)
+	if !ok {
+		t.Fatal("could not cast to MockRepository")
+	}
+	suite.mockRepo = mock
+
+	// Initialize handler
+	suite.handler = NewUserHandler(repo)
+
+	// Set up test user data
+	suite.testUser.ID = uuid.New()
+	suite.testUser.Name = "Test User"
+	suite.testUser.Email = "test@example.com"
+	suite.testUser.CreatedAt = time.Now()
+
+	// Add test user to mock
+	suite.mockRepo.GetUserMock().AddUser(repository.GetUserByIDRow{
+		ID:        suite.testUser.ID,
+		Name:      suite.testUser.Name,
+		Email:     suite.testUser.Email,
+		CreatedAt: suite.testUser.CreatedAt,
 	})
+
+	// Set up role data
+	suite.adminRoleID = uuid.MustParse("6f8b8ad0-4c23-4f01-ac9d-7444413b21f8")
+	suite.adminRoleName = "Admin"
+
+	// Set up user role
+	suite.mockRepo.GetUserMock().SetAdmin(suite.testUser.ID.String(), true)
+	suite.mockRepo.GetUserMock().AddUserRole(repository.GetUserRoleRow{
+		UserID:   suite.testUser.ID,
+		UserName: suite.testUser.Name,
+		RoleID:   suite.adminRoleID,
+		RoleName: suite.adminRoleName,
+	})
+
+	return suite
+}
+
+func TestGetProfile(t *testing.T) {
+	suite := setupUserHandlerTest(t)
 
 	tests := []struct {
 		name       string
@@ -36,7 +100,7 @@ func TestGetProfile(t *testing.T) {
 	}{
 		{
 			name:       "Valid user ID",
-			userID:     testUserID.String(),
+			userID:     suite.testUser.ID.String(),
 			wantStatus: http.StatusOK,
 			wantBody:   true,
 		},
@@ -61,7 +125,7 @@ func TestGetProfile(t *testing.T) {
 			req = req.WithContext(ctx)
 
 			w := httptest.NewRecorder()
-			handler.GetProfile(w, req)
+			suite.handler.GetProfile(w, req)
 
 			assert.Equal(t, tt.wantStatus, w.Code)
 
@@ -69,25 +133,16 @@ func TestGetProfile(t *testing.T) {
 				var response UserResponse
 				err := json.NewDecoder(w.Body).Decode(&response)
 				assert.NoError(t, err)
-				assert.Equal(t, testUserID.String(), response.ID)
-				assert.Equal(t, "Test User", response.Name)
-				assert.Equal(t, "test@example.com", response.Email)
+				assert.Equal(t, suite.testUser.ID.String(), response.ID)
+				assert.Equal(t, suite.testUser.Name, response.Name)
+				assert.Equal(t, suite.testUser.Email, response.Email)
 			}
 		})
 	}
 }
 
 func TestUpdateProfile(t *testing.T) {
-	mockDB := repository.NewMockRepository()
-	handler := NewUserHandler(mockDB)
-
-	testUserID := uuid.New()
-	mockDB.AddUser(repository.GetUserByIDRow{
-		ID:        testUserID,
-		Name:      "Original Name",
-		Email:     "original@example.com",
-		CreatedAt: time.Now(),
-	})
+	suite := setupUserHandlerTest(t)
 
 	tests := []struct {
 		name       string
@@ -97,7 +152,7 @@ func TestUpdateProfile(t *testing.T) {
 	}{
 		{
 			name:       "Valid update",
-			userID:     testUserID.String(),
+			userID:     suite.testUser.ID.String(),
 			reqBody:    UpdateProfileRequest{Name: "New Name", Email: "new@example.com"},
 			wantStatus: http.StatusOK,
 		},
@@ -117,7 +172,7 @@ func TestUpdateProfile(t *testing.T) {
 			req = req.WithContext(ctx)
 
 			w := httptest.NewRecorder()
-			handler.UpdateProfile(w, req)
+			suite.handler.UpdateProfile(w, req)
 
 			assert.Equal(t, tt.wantStatus, w.Code)
 		})
@@ -125,15 +180,7 @@ func TestUpdateProfile(t *testing.T) {
 }
 
 func TestUpdatePassword(t *testing.T) {
-	mockDB := repository.NewMockRepository()
-	handler := NewUserHandler(mockDB)
-
-	testUserID := uuid.New()
-	testEmail := "test@example.com"
-	mockDB.AddUser(repository.GetUserByIDRow{
-		ID:    testUserID,
-		Email: testEmail,
-	})
+	suite := setupUserHandlerTest(t)
 
 	tests := []struct {
 		name       string
@@ -144,15 +191,15 @@ func TestUpdatePassword(t *testing.T) {
 	}{
 		{
 			name:       "Valid password update",
-			userID:     testUserID.String(),
-			email:      testEmail,
+			userID:     suite.testUser.ID.String(),
+			email:      suite.testUser.Email,
 			reqBody:    UpdatePasswordRequest{CurrentPassword: "password", NewPassword: "newpass"},
 			wantStatus: http.StatusOK,
 		},
 		{
 			name:       "Invalid user ID",
 			userID:     "invalid-uuid",
-			email:      testEmail,
+			email:      suite.testUser.Email,
 			reqBody:    UpdatePasswordRequest{CurrentPassword: "current", NewPassword: "newpass"},
 			wantStatus: http.StatusBadRequest,
 		},
@@ -167,7 +214,7 @@ func TestUpdatePassword(t *testing.T) {
 			req = req.WithContext(ctx)
 
 			w := httptest.NewRecorder()
-			handler.UpdatePassword(w, req)
+			suite.handler.UpdatePassword(w, req)
 
 			assert.Equal(t, tt.wantStatus, w.Code)
 		})
@@ -175,65 +222,34 @@ func TestUpdatePassword(t *testing.T) {
 }
 
 func TestGetStats(t *testing.T) {
-	mockDB := repository.NewMockRepository()
-	handler := NewUserHandler(mockDB)
-
-	testUserID := uuid.New()
-	mockDB.AddUser(repository.GetUserByIDRow{
-		ID: testUserID,
-	})
+	suite := setupUserHandlerTest(t)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/user/stats", nil)
-	ctx := context.WithValue(req.Context(), middleware.UserIDKey, testUserID.String())
+	ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUser.ID.String())
 	req = req.WithContext(ctx)
 
 	w := httptest.NewRecorder()
-	handler.GetStats(w, req)
+	suite.handler.GetStats(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	var stats repository.GetUserStatsRow
 	err := json.NewDecoder(w.Body).Decode(&stats)
 	assert.NoError(t, err)
-	assert.Equal(t, testUserID, stats.ID)
+	assert.Equal(t, suite.testUser.ID, stats.ID)
 }
 
 func TestUserRoleOperations(t *testing.T) {
-	mockDB := repository.NewMockRepository()
-	handler := NewUserHandler(mockDB)
-
-	testUserID := uuid.New()
-
-	mockDB.AddUser(repository.GetUserByIDRow{
-		ID:        testUserID,
-		Name:      "Test User",
-		Email:     "j@me.com",
-		CreatedAt: time.Now(),
-	})
-	mockDB.SetAdmin(testUserID.String(), true)
-
-	adminRoleId, _ := uuid.Parse("6f8b8ad0-4c23-4f01-ac9d-7444413b21f8")
-
-	adminRoleName := "Admin"
-
-	// userRoleId := uuid.Parse("9fecb503-be55-4adb-a0fe-526660efbf51")
-	// userRoleName := "User"
-
-	mockDB.AddUserRole(repository.GetUserRoleRow{
-		UserID:   testUserID,
-		UserName: "Test User",
-		RoleID:   adminRoleId,
-		RoleName: adminRoleName,
-	})
+	suite := setupUserHandlerTest(t)
 
 	t.Run("GetUserRole", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/api/user/role", nil)
-		ctx := context.WithValue(req.Context(), middleware.UserIDKey, testUserID.String())
-		ctx = context.WithValue(ctx, middleware.RoleIDKey, adminRoleId.String())
+		ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUser.ID.String())
+		ctx = context.WithValue(ctx, middleware.RoleIDKey, suite.adminRoleID.String())
 		req = req.WithContext(ctx)
 
 		w := httptest.NewRecorder()
-		handler.GetUserRole(w, req)
+		suite.handler.GetUserRole(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
@@ -243,19 +259,18 @@ func TestUserRoleOperations(t *testing.T) {
 		body, _ := json.Marshal(map[string]string{"role_id": roleID.String()})
 
 		req := httptest.NewRequest(http.MethodPut, "/api/user/role", bytes.NewBuffer(body))
-		ctx := context.WithValue(req.Context(), middleware.UserIDKey, testUserID.String())
+		ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUser.ID.String())
 		req = req.WithContext(ctx)
 
 		w := httptest.NewRecorder()
-		handler.UpdateUserRole(w, req)
+		suite.handler.UpdateUserRole(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 }
 
 func TestListUsersByRole(t *testing.T) {
-	mockDB := repository.NewMockRepository()
-	handler := NewUserHandler(mockDB)
+	suite := setupUserHandlerTest(t)
 
 	tests := []struct {
 		name       string
@@ -278,7 +293,7 @@ func TestListUsersByRole(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			req := httptest.NewRequest(http.MethodGet, "/api/users/role/list?role_name="+tt.roleName, nil)
 			w := httptest.NewRecorder()
-			handler.ListUsersByRole(w, req)
+			suite.handler.ListUsersByRole(w, req)
 
 			assert.Equal(t, tt.wantStatus, w.Code)
 		})
