@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -11,7 +12,7 @@ import (
 )
 
 type UserHandler struct {
-	db *repository.Queries
+	db repository.Repository
 }
 
 type UpdateProfileRequest struct {
@@ -31,7 +32,7 @@ type UserResponse struct {
 	CreatedAt string `json:"created_at"`
 }
 
-func NewUserHandler(db *repository.Queries) *UserHandler {
+func NewUserHandler(db repository.Repository) *UserHandler {
 	return &UserHandler{db: db}
 }
 
@@ -216,6 +217,7 @@ func (h *UserHandler) UpdateUserRole(w http.ResponseWriter, r *http.Request) {
 	// check if the current user is an admin
 	isAdmin, err := h.db.CheckUserIsAdmin(r.Context(), uid)
 	if err != nil {
+		log.Printf("Error checking user role: %v", err)
 		http.Error(w, "Error checking user role", http.StatusInternalServerError)
 		return
 	}
