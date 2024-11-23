@@ -13,11 +13,11 @@ import (
 )
 
 type CategoryHandler struct {
-	queries *repository.Queries
+	queries repository.Repository
 }
 
-func NewCategoryHandler(queries *repository.Queries) *CategoryHandler {
-	return &CategoryHandler{queries: queries}
+func NewCategoryHandler(db repository.Repository) *CategoryHandler {
+	return &CategoryHandler{queries: db}
 }
 
 type createCategoryRequest struct {
@@ -28,6 +28,12 @@ func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request)
 	var req createCategoryRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// check if category is empty
+	if req.Name == "" {
+		http.Error(w, "Category name has to have a value", http.StatusBadRequest)
 		return
 	}
 
