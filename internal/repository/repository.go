@@ -30,6 +30,16 @@ type Repository interface {
 	GetRecurringBudgets(ctx context.Context, userID uuid.UUID) ([]Budget, error)
 	ListBudgets(ctx context.Context, userID uuid.UUID) ([]Budget, error)
 	UpdateBudget(ctx context.Context, arg UpdateBudgetParams) (Budget, error)
+
+	// Category operations
+	CheckCategoryExists(ctx context.Context, arg CheckCategoryExistsParams) (bool, error)
+	CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error)
+	DeleteCategory(ctx context.Context, arg DeleteCategoryParams) (int64, error)
+	GetCategoryByID(ctx context.Context, arg GetCategoryByIDParams) (Category, error)
+	GetCategoryUsage(ctx context.Context, arg GetCategoryUsageParams) (GetCategoryUsageRow, error)
+	GetMostUsedCategories(ctx context.Context, arg GetMostUsedCategoriesParams) ([]GetMostUsedCategoriesRow, error)
+	ListCategories(ctx context.Context, userID uuid.UUID) ([]Category, error)
+	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (Category, error)
 }
 
 // Ensure Queries implements Repository
