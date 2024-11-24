@@ -147,7 +147,7 @@ func TestCreateExpense_EdgeCases(t *testing.T) {
 				Date:       time.Now().Format(time.RFC3339),
 			},
 			userID:     suite.testUserID.String(),
-			wantStatus: http.StatusCreated,
+			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name: "Empty currency",
@@ -157,7 +157,43 @@ func TestCreateExpense_EdgeCases(t *testing.T) {
 				Date:       time.Now().Format(time.RFC3339),
 			},
 			userID:     suite.testUserID.String(),
-			wantStatus: http.StatusCreated,
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Very long description",
+			reqBody: ExpenseRequest{
+				Amount:      100.50,
+				Currency:    "USD",
+				CategoryID:  uuid.New(),
+				Date:        time.Now().Format(time.RFC3339),
+				Description: string(make([]byte, 1001)), // Over 1000 characters
+			},
+			userID:     suite.testUserID.String(),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Invalid currency code",
+			reqBody: ExpenseRequest{
+				Amount:      100.50,
+				Currency:    "INVALID",
+				CategoryID:  uuid.New(),
+				Date:        time.Now().Format(time.RFC3339),
+				Description: "Test expense",
+			},
+			userID:     suite.testUserID.String(),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Negative amount",
+			reqBody: ExpenseRequest{
+				Amount:      -100.50,
+				Currency:    "USD",
+				CategoryID:  uuid.New(),
+				Date:        time.Now().Format(time.RFC3339),
+				Description: "Test expense",
+			},
+			userID:     suite.testUserID.String(),
+			wantStatus: http.StatusBadRequest,
 		},
 	}
 
@@ -614,6 +650,63 @@ func TestExpensesByDateRange_EdgeCases(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			url := fmt.Sprintf("/api/expenses/range?start_date=%s&end_date=%s",
+				url.QueryEscape(tt.startDate),
+				url.QueryEscape(tt.endDate))
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUserID.String())
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.GetExpensesByDateRange(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
+func TestGetExpensesByDateRange_ValidationChecks(t *testing.T) {
+	suite := setupExpenseHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		startDate  string
+		endDate    string
+		setupMock  func()
+		wantStatus int
+	}{
+		{
+			name:       "Invalid date format - start date",
+			startDate:  "2023-13-99",
+			endDate:    time.Now().Format(time.RFC3339),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Invalid date format - end date",
+			startDate:  time.Now().Format(time.RFC3339),
+			endDate:    "2023/12/31",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Range too large",
+			startDate:  time.Now().AddDate(-2, 0, 0).Format(time.RFC3339),
+			endDate:    time.Now().Format(time.RFC3339),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Same start and end date",
+			startDate:  time.Now().Format(time.RFC3339),
+			endDate:    time.Now().Format(time.RFC3339),
+			wantStatus: http.StatusOK,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.setupMock != nil {
+				tt.setupMock()
+			}
+
 			url := fmt.Sprintf("/api/expenses/range?start_date=%s&end_date=%s",
 				url.QueryEscape(tt.startDate),
 				url.QueryEscape(tt.endDate))

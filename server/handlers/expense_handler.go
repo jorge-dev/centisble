@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/bojanz/currency"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
@@ -34,6 +35,44 @@ func (h *ExpenseHandler) CreateExpense(w http.ResponseWriter, r *http.Request) {
 	var req ExpenseRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	//validate
+	if req.Amount <= 0 {
+		http.Error(w, "Amount must be greater than 0", http.StatusBadRequest)
+		return
+	}
+
+	if req.Currency == "" {
+		http.Error(w, "Currency is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.CategoryID == uuid.Nil {
+		http.Error(w, "Category ID is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.Date == "" {
+		http.Error(w, "Date is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.Description == "" {
+		http.Error(w, "Description is required", http.StatusBadRequest)
+		return
+	}
+
+	// check if description is too long
+	if len(req.Description) > 1000 {
+		http.Error(w, "Description is too long. Please keep it under 1000 characters", http.StatusBadRequest)
+		return
+	}
+
+	//check if currency is valid
+	if !currency.IsValid(req.Currency) {
+		http.Error(w, "Invalid currency", http.StatusBadRequest)
 		return
 	}
 
@@ -157,6 +196,11 @@ func (h *ExpenseHandler) GetExpensesByDateRange(w http.ResponseWriter, r *http.R
 	end, err := time.Parse(time.RFC3339, endDate)
 	if err != nil {
 		http.Error(w, "Invalid end date", http.StatusBadRequest)
+		return
+	}
+
+	if end.Sub(start) > 365*24*time.Hour {
+		http.Error(w, "Date range cannot exceed 1 year", http.StatusBadRequest)
 		return
 	}
 
@@ -374,3 +418,5 @@ func (h *ExpenseHandler) GetRecentExpenses(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(expenses)
 }
+
+// Validate if
