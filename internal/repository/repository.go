@@ -40,6 +40,18 @@ type Repository interface {
 	GetMostUsedCategories(ctx context.Context, arg GetMostUsedCategoriesParams) ([]GetMostUsedCategoriesRow, error)
 	ListCategories(ctx context.Context, userID uuid.UUID) ([]Category, error)
 	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (Category, error)
+
+	// Expense operations
+	CreateExpense(ctx context.Context, arg CreateExpenseParams) (Expense, error)
+	DeleteExpense(ctx context.Context, arg DeleteExpenseParams) (int64, error)
+	GetExpenseByID(ctx context.Context, arg GetExpenseByIDParams) (Expense, error)
+	GetExpenseTotalsByCategory(ctx context.Context, userID uuid.UUID) ([]GetExpenseTotalsByCategoryRow, error)
+	GetExpensesByCategory(ctx context.Context, arg GetExpensesByCategoryParams) ([]Expense, error)
+	GetExpensesByDateRange(ctx context.Context, arg GetExpensesByDateRangeParams) ([]Expense, error)
+	GetMonthlyExpenseTotal(ctx context.Context, arg GetMonthlyExpenseTotalParams) ([]GetMonthlyExpenseTotalRow, error)
+	GetRecentExpenses(ctx context.Context, arg GetRecentExpensesParams) ([]Expense, error)
+	ListExpenses(ctx context.Context, userID uuid.UUID) ([]Expense, error)
+	UpdateExpense(ctx context.Context, arg UpdateExpenseParams) (Expense, error)
 }
 
 // Ensure Queries implements Repository
