@@ -95,25 +95,36 @@ func TestGetProfile(t *testing.T) {
 	tests := []struct {
 		name       string
 		userID     string
+		setupCtx   func(context.Context) context.Context
 		wantStatus int
 		wantBody   bool
 	}{
 		{
 			name:       "Valid user ID",
 			userID:     suite.testUser.ID.String(),
+			setupCtx:   func(ctx context.Context) context.Context { return ctx },
 			wantStatus: http.StatusOK,
 			wantBody:   true,
 		},
 		{
 			name:       "Invalid user ID format",
 			userID:     "invalid-uuid",
+			setupCtx:   func(ctx context.Context) context.Context { return ctx },
 			wantStatus: http.StatusBadRequest,
 			wantBody:   false,
 		},
 		{
 			name:       "Non-existent user ID",
 			userID:     uuid.New().String(),
+			setupCtx:   func(ctx context.Context) context.Context { return ctx },
 			wantStatus: http.StatusNotFound,
+			wantBody:   false,
+		},
+		{
+			name:       "Missing UserID in context",
+			userID:     "",
+			setupCtx:   func(ctx context.Context) context.Context { return ctx },
+			wantStatus: http.StatusUnauthorized,
 			wantBody:   false,
 		},
 	}
@@ -121,7 +132,10 @@ func TestGetProfile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			req := httptest.NewRequest(http.MethodGet, "/api/user/profile", nil)
-			ctx := context.WithValue(req.Context(), middleware.UserIDKey, tt.userID)
+			ctx := tt.setupCtx(req.Context())
+			if tt.userID != "" {
+				ctx = context.WithValue(ctx, middleware.UserIDKey, tt.userID)
+			}
 			req = req.WithContext(ctx)
 
 			w := httptest.NewRecorder()
@@ -161,6 +175,24 @@ func TestUpdateProfile(t *testing.T) {
 			userID:     "invalid-uuid",
 			reqBody:    UpdateProfileRequest{Name: "New Name"},
 			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Empty request body",
+			userID:     suite.testUser.ID.String(),
+			reqBody:    UpdateProfileRequest{},
+			wantStatus: http.StatusOK, // Should use existing values
+		},
+		{
+			name:       "Partial update - name only",
+			userID:     suite.testUser.ID.String(),
+			reqBody:    UpdateProfileRequest{Name: "New Name"},
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Partial update - email only",
+			userID:     suite.testUser.ID.String(),
+			reqBody:    UpdateProfileRequest{Email: "newemail@example.com"},
+			wantStatus: http.StatusOK,
 		},
 	}
 
@@ -202,6 +234,20 @@ func TestUpdatePassword(t *testing.T) {
 			email:      suite.testUser.Email,
 			reqBody:    UpdatePasswordRequest{CurrentPassword: "current", NewPassword: "newpass"},
 			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Invalid current password",
+			userID:     suite.testUser.ID.String(),
+			email:      suite.testUser.Email,
+			reqBody:    UpdatePasswordRequest{CurrentPassword: "wrongpass", NewPassword: "newpass"},
+			wantStatus: http.StatusUnauthorized,
+		},
+		{
+			name:       "Missing email in context",
+			userID:     suite.testUser.ID.String(),
+			email:      "",
+			reqBody:    UpdatePasswordRequest{CurrentPassword: "password", NewPassword: "newpass"},
+			wantStatus: http.StatusUnauthorized,
 		},
 	}
 
@@ -269,6 +315,53 @@ func TestUserRoleOperations(t *testing.T) {
 	})
 }
 
+func TestUpdateUserRole(t *testing.T) {
+	suite := setupUserHandlerTest(t)
+
+	// Add a non-admin user to the mock
+	nonAdminID := uuid.New()
+	suite.mockRepo.GetUserMock().AddUser(repository.GetUserByIDRow{
+		ID:    nonAdminID,
+		Name:  "Non Admin",
+		Email: "nonadmin@example.com",
+	})
+	suite.mockRepo.GetUserMock().SetAdmin(nonAdminID.String(), false)
+
+	tests := []struct {
+		name       string
+		userID     string
+		roleID     string
+		wantStatus int
+	}{
+		{
+			name:       "Non-admin attempting update",
+			userID:     nonAdminID.String(),
+			roleID:     uuid.New().String(),
+			wantStatus: http.StatusForbidden,
+		},
+		{
+			name:       "Empty role ID",
+			userID:     suite.testUser.ID.String(),
+			roleID:     "",
+			wantStatus: http.StatusBadRequest,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			body, _ := json.Marshal(map[string]string{"role_id": tt.roleID})
+			req := httptest.NewRequest(http.MethodPut, "/api/user/role", bytes.NewBuffer(body))
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, tt.userID)
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.UpdateUserRole(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
 func TestListUsersByRole(t *testing.T) {
 	suite := setupUserHandlerTest(t)
 
@@ -279,13 +372,18 @@ func TestListUsersByRole(t *testing.T) {
 	}{
 		{
 			name:       "Valid role",
-			roleName:   "admin",
+			roleName:   "Admin",
 			wantStatus: http.StatusOK,
 		},
 		{
 			name:       "Missing role name",
 			roleName:   "",
 			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Non-existent role",
+			roleName:   "nonexistent_role",
+			wantStatus: http.StatusNotFound,
 		},
 	}
 

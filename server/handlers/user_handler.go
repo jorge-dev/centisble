@@ -135,6 +135,12 @@ func (h *UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userEmail := r.Context().Value(middleware.EmailKey).(string)
+	if userEmail == "" {
+		http.Error(w, "User email not found in context", http.StatusUnauthorized)
+		return
+	}
+
 	// Get current user to verify password
 	user, err := h.db.GetUserByEmail(r.Context(), r.Context().Value(middleware.EmailKey).(string))
 	if err != nil {
