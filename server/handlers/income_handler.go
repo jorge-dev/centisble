@@ -13,10 +13,10 @@ import (
 )
 
 type IncomeHandler struct {
-	db *repository.Queries
+	db repository.Repository
 }
 
-func NewIncomeHandler(db *repository.Queries) *IncomeHandler {
+func NewIncomeHandler(db repository.Repository) *IncomeHandler {
 	return &IncomeHandler{db: db}
 }
 
@@ -269,6 +269,7 @@ func (h *IncomeHandler) DeleteIncome(w http.ResponseWriter, r *http.Request) {
 		ID:     incomeUUID,
 		UserID: uid,
 	})
+
 	if err != nil {
 		http.Error(w, "Error deleting income record", http.StatusInternalServerError)
 		return
