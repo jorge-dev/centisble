@@ -97,6 +97,38 @@ func TestCreateBudget(t *testing.T) {
 			},
 			wantStatus: http.StatusBadRequest,
 		},
+		{
+			name: "Missing required fields",
+			reqBody: CreateBudgetRequest{
+				Amount: 1000.00,
+				// Missing other required fields
+			},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Invalid budget type",
+			reqBody: CreateBudgetRequest{
+				Amount:     1000.00,
+				Currency:   "USD",
+				CategoryID: uuid.New(),
+				Type:       "invalid-type", // Should be "recurring" or "one-time"
+				StartDate:  time.Now().Format(time.RFC3339),
+				EndDate:    time.Now().AddDate(0, 1, 0).Format(time.RFC3339),
+			},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "End date before start date",
+			reqBody: CreateBudgetRequest{
+				Amount:     1000.00,
+				Currency:   "USD",
+				CategoryID: uuid.New(),
+				Type:       "recurring",
+				StartDate:  time.Now().Format(time.RFC3339),
+				EndDate:    time.Now().AddDate(0, -1, 0).Format(time.RFC3339), // End date before start date
+			},
+			wantStatus: http.StatusBadRequest,
+		},
 	}
 
 	for _, tt := range tests {
@@ -282,7 +314,134 @@ func TestListBudgets(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-// Additional test functions can be added for:
-// - GetRecurringBudgets
-// - GetOneTimeBudgets
-// - GetBudgetsByCategory
+func TestGetRecurringBudgets(t *testing.T) {
+	suite := setupBudgetHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		setupMock  func()
+		userID     string
+		wantStatus int
+	}{
+		{
+			name:       "Valid request",
+			setupMock:  func() {},
+			userID:     suite.testUser.ID.String(),
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Invalid user ID",
+			setupMock:  func() {},
+			userID:     "invalid-uuid",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "No recurring budgets found",
+			setupMock: func() {
+				suite.mockRepo.Reset() // Clear all budgets
+			},
+			userID:     suite.testUser.ID.String(),
+			wantStatus: http.StatusOK, // Should return empty array
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setupMock()
+			req := httptest.NewRequest(http.MethodGet, "/api/budgets/recurring", nil)
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, tt.userID)
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.GetRecurringBudgets(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
+func TestGetBudgetsByCategory(t *testing.T) {
+	suite := setupBudgetHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		categoryID string
+		setupMock  func()
+		wantStatus int
+	}{
+		{
+			name:       "Valid category ID",
+			categoryID: uuid.New().String(),
+			setupMock:  func() {},
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Invalid category ID",
+			categoryID: "invalid-uuid",
+			setupMock:  func() {},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Category with no budgets",
+			categoryID: uuid.New().String(),
+			setupMock: func() {
+				suite.mockRepo.Reset() // Clear all budgets
+			},
+			wantStatus: http.StatusOK, // Should return empty array
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setupMock()
+			req := httptest.NewRequest(http.MethodGet, "/api/budgets/category/"+tt.categoryID, nil)
+			rctx := chi.NewRouteContext()
+			rctx.URLParams.Add("categoryId", tt.categoryID)
+			ctx := context.WithValue(req.Context(), chi.RouteCtxKey, rctx)
+			ctx = context.WithValue(ctx, middleware.UserIDKey, suite.testUser.ID.String())
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.GetBudgetsByCategory(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
+func TestGetOneTimeBudgets(t *testing.T) {
+	suite := setupBudgetHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		setupMock  func()
+		wantStatus int
+	}{
+		{
+			name:       "Valid request",
+			setupMock:  func() {},
+			wantStatus: http.StatusOK,
+		},
+		{
+			name: "No one-time budgets",
+			setupMock: func() {
+				suite.mockRepo.Reset() // Clear all budgets
+			},
+			wantStatus: http.StatusOK, // Should return empty array
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setupMock()
+			req := httptest.NewRequest(http.MethodGet, "/api/budgets/one-time", nil)
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUser.ID.String())
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.GetOneTimeBudgets(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}

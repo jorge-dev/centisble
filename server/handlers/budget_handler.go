@@ -37,6 +37,35 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check for zero values
+	if req.Amount <= 0 {
+		http.Error(w, "amount must be greater than zero", http.StatusBadRequest)
+		return
+	}
+	if req.Currency == "" {
+		http.Error(w, "currency is required", http.StatusBadRequest)
+		return
+	}
+	if req.CategoryID == uuid.Nil {
+		http.Error(w, "category_id is required", http.StatusBadRequest)
+		return
+	}
+
+	// Validate Type
+	if req.Type == "" {
+		http.Error(w, "type is required. Must be 'recurring' or 'one-time'", http.StatusBadRequest)
+		return
+	}
+
+	if req.StartDate == "" {
+		http.Error(w, "start_date is required", http.StatusBadRequest)
+		return
+	}
+	if req.EndDate == "" {
+		http.Error(w, "end_date is required", http.StatusBadRequest)
+		return
+	}
+
 	startDate, err := time.Parse(time.RFC3339, req.StartDate)
 	if err != nil {
 		http.Error(w, "Invalid start date format", http.StatusBadRequest)
@@ -46,6 +75,18 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 	endDate, err := time.Parse(time.RFC3339, req.EndDate)
 	if err != nil {
 		http.Error(w, "Invalid end date format", http.StatusBadRequest)
+		return
+	}
+
+	// validate end date is after start date
+	if endDate.Before(startDate) {
+		http.Error(w, "End date must be after start date", http.StatusBadRequest)
+		return
+	}
+
+	// validate budget type
+	if req.Type != "recurring" && req.Type != "one-time" {
+		http.Error(w, "Invalid budget type. Must be 'recurring' or 'one-time'", http.StatusBadRequest)
 		return
 	}
 
