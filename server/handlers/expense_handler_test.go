@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
@@ -103,6 +105,70 @@ func TestCreateExpense(t *testing.T) {
 			req := httptest.NewRequest(http.MethodPost, "/api/expenses", bytes.NewBuffer(body))
 			ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUserID.String())
 			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.CreateExpense(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
+func TestCreateExpense_EdgeCases(t *testing.T) {
+	suite := setupExpenseHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		reqBody    ExpenseRequest
+		userID     string
+		wantStatus int
+	}{
+		{
+			name:       "Empty request body",
+			reqBody:    ExpenseRequest{},
+			userID:     suite.testUserID.String(),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Missing user context",
+			reqBody: ExpenseRequest{
+				Amount:   100.50,
+				Currency: "USD",
+			},
+			userID:     "",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Zero amount",
+			reqBody: ExpenseRequest{
+				Amount:     0,
+				Currency:   "USD",
+				CategoryID: uuid.New(),
+				Date:       time.Now().Format(time.RFC3339),
+			},
+			userID:     suite.testUserID.String(),
+			wantStatus: http.StatusCreated,
+		},
+		{
+			name: "Empty currency",
+			reqBody: ExpenseRequest{
+				Amount:     100.50,
+				CategoryID: uuid.New(),
+				Date:       time.Now().Format(time.RFC3339),
+			},
+			userID:     suite.testUserID.String(),
+			wantStatus: http.StatusCreated,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			body, _ := json.Marshal(tt.reqBody)
+			req := httptest.NewRequest(http.MethodPost, "/api/expenses", bytes.NewBuffer(body))
+			if tt.userID != "" {
+				ctx := context.WithValue(req.Context(), middleware.UserIDKey, tt.userID)
+				req = req.WithContext(ctx)
+			}
 
 			w := httptest.NewRecorder()
 			suite.handler.CreateExpense(w, req)
@@ -213,6 +279,80 @@ func TestUpdateExpense(t *testing.T) {
 	}
 }
 
+func TestUpdateExpense_EdgeCases(t *testing.T) {
+	suite := setupExpenseHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		expenseID  string
+		reqBody    ExpenseRequest
+		setupMock  func()
+		wantStatus int
+	}{
+		{
+			name:      "Partial update - only amount",
+			expenseID: suite.testExpense.ID.String(),
+			reqBody: ExpenseRequest{
+				Amount: 299.99,
+			},
+			setupMock:  nil,
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:      "Update with same values",
+			expenseID: suite.testExpense.ID.String(),
+			reqBody: ExpenseRequest{
+				Amount:      suite.testExpense.Amount,
+				Currency:    suite.testExpense.Currency,
+				CategoryID:  suite.testExpense.CategoryID,
+				Date:        suite.testExpense.Date.Format(time.RFC3339),
+				Description: suite.testExpense.Description,
+			},
+			setupMock:  nil,
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:      "Update non-existent expense",
+			expenseID: uuid.New().String(),
+			reqBody: ExpenseRequest{
+				Amount: 150.00,
+			},
+			setupMock:  nil,
+			wantStatus: http.StatusNotFound,
+		},
+		{
+			name:      "Update with invalid category ID",
+			expenseID: suite.testExpense.ID.String(),
+			reqBody: ExpenseRequest{
+				CategoryID: uuid.Nil,
+			},
+			setupMock:  nil,
+			wantStatus: http.StatusOK,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.setupMock != nil {
+				tt.setupMock()
+			}
+
+			body, _ := json.Marshal(tt.reqBody)
+			req := httptest.NewRequest(http.MethodPut, "/api/expenses/{id}", bytes.NewBuffer(body))
+			rctx := chi.NewRouteContext()
+			rctx.URLParams.Add("id", tt.expenseID)
+			ctx := context.WithValue(req.Context(), chi.RouteCtxKey, rctx)
+			ctx = context.WithValue(ctx, middleware.UserIDKey, suite.testUserID.String())
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.UpdateExpense(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
 func TestDeleteExpense(t *testing.T) {
 	suite := setupExpenseHandlerTest(t)
 
@@ -302,6 +442,90 @@ func TestGetMonthlyExpenseTotal(t *testing.T) {
 	}
 }
 
+func TestGetMonthlyExpenseTotal_EdgeCases(t *testing.T) {
+	suite := setupExpenseHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		dateTime   string
+		setupMock  func()
+		wantStatus int
+		wantEmpty  bool
+	}{
+		{
+			name:       "Month with no expenses",
+			dateTime:   time.Now().AddDate(-5, 0, 0).Format(time.RFC3339),
+			setupMock:  nil,
+			wantStatus: http.StatusOK,
+			wantEmpty:  true,
+		},
+		{
+			name:       "Future month",
+			dateTime:   time.Now().AddDate(1, 0, 0).Format(time.RFC3339),
+			setupMock:  nil,
+			wantStatus: http.StatusOK,
+			wantEmpty:  true,
+		},
+		{
+			name:       "Invalid month format",
+			dateTime:   "2023-13-01T00:00:00Z",
+			wantStatus: http.StatusBadRequest,
+			wantEmpty:  false,
+		},
+		{
+			name:     "Multiple currencies in same month",
+			dateTime: time.Now().Format(time.RFC3339),
+			setupMock: func() {
+				now := time.Now()
+				suite.mockRepo.GetExpenseMock().AddExpense(repository.Expense{
+					ID:       uuid.New(),
+					UserID:   suite.testUserID,
+					Amount:   100.50,
+					Currency: "USD",
+					Date:     now,
+				})
+				suite.mockRepo.GetExpenseMock().AddExpense(repository.Expense{
+					ID:       uuid.New(),
+					UserID:   suite.testUserID,
+					Amount:   95.50,
+					Currency: "EUR",
+					Date:     now,
+				})
+			},
+			wantStatus: http.StatusOK,
+			wantEmpty:  false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.setupMock != nil {
+				tt.setupMock()
+			}
+
+			req := httptest.NewRequest(http.MethodGet, "/api/expenses/monthly/total?date-time="+tt.dateTime, nil)
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUserID.String())
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.GetMonthlyExpenseTotal(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+
+			if tt.wantStatus == http.StatusOK {
+				var totals []repository.GetMonthlyExpenseTotalRow
+				err := json.NewDecoder(w.Body).Decode(&totals)
+				assert.NoError(t, err)
+				if tt.wantEmpty {
+					assert.Empty(t, totals)
+				} else {
+					assert.NotEmpty(t, totals)
+				}
+			}
+		})
+	}
+}
+
 func TestGetExpenseTotalsByCategory(t *testing.T) {
 	suite := setupExpenseHandlerTest(t)
 
@@ -347,6 +571,58 @@ func TestGetRecentExpenses(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			suite.handler.GetRecentExpenses(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+		})
+	}
+}
+
+func TestExpensesByDateRange_EdgeCases(t *testing.T) {
+	suite := setupExpenseHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		startDate  string
+		endDate    string
+		wantStatus int
+	}{
+		{
+			name:       "Missing dates",
+			startDate:  "",
+			endDate:    "",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "End date before start date",
+			startDate:  time.Now().AddDate(0, 0, 1).Format(time.RFC3339),
+			endDate:    time.Now().Format(time.RFC3339),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Future dates",
+			startDate:  time.Now().AddDate(1, 0, 0).Format(time.RFC3339),
+			endDate:    time.Now().AddDate(2, 0, 0).Format(time.RFC3339),
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Very old dates",
+			startDate:  time.Now().AddDate(-10, 0, 0).Format(time.RFC3339),
+			endDate:    time.Now().AddDate(-9, 0, 0).Format(time.RFC3339),
+			wantStatus: http.StatusOK,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			url := fmt.Sprintf("/api/expenses/range?start_date=%s&end_date=%s",
+				url.QueryEscape(tt.startDate),
+				url.QueryEscape(tt.endDate))
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUserID.String())
+			req = req.WithContext(ctx)
+
+			w := httptest.NewRecorder()
+			suite.handler.GetExpensesByDateRange(w, req)
 
 			assert.Equal(t, tt.wantStatus, w.Code)
 		})

@@ -160,6 +160,12 @@ func (h *ExpenseHandler) GetExpensesByDateRange(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	// Ensure start date is before end date
+	if start.After(end) {
+		http.Error(w, "Start date must be before end date", http.StatusBadRequest)
+		return
+	}
+
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {
