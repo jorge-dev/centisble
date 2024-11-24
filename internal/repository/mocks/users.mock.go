@@ -94,6 +94,19 @@ func (m *UserMock) UpdateUserRole(ctx context.Context, arg repository.UpdateUser
 }
 
 func (m *UserMock) ListUsersByRole(ctx context.Context, name string) ([]repository.ListUsersByRoleRow, error) {
+	// check if the role is valid
+	roles := [7]string{"Admin", "User", "Guest", "Moderator", "Editor", "Viewer", "Manager"}
+	validRole := false
+	for _, role := range roles {
+		if role == name {
+			validRole = true
+			break
+		}
+	}
+	if !validRole {
+		return []repository.ListUsersByRoleRow{}, nil
+	}
+
 	return []repository.ListUsersByRoleRow{
 		{
 			UID:    uuid.New(),
