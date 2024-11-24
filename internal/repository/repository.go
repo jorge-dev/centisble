@@ -8,6 +8,8 @@ import (
 
 // Repository defines all database operations
 type Repository interface {
+
+	// User operations
 	GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow, error)
 	GetUserByEmail(ctx context.Context, email string) (GetUserByEmailRow, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
@@ -52,6 +54,18 @@ type Repository interface {
 	GetRecentExpenses(ctx context.Context, arg GetRecentExpensesParams) ([]Expense, error)
 	ListExpenses(ctx context.Context, userID uuid.UUID) ([]Expense, error)
 	UpdateExpense(ctx context.Context, arg UpdateExpenseParams) (Expense, error)
+
+	// Income operations
+	CreateIncome(ctx context.Context, arg CreateIncomeParams) (Income, error)
+	DeleteIncome(ctx context.Context, arg DeleteIncomeParams) (int64, error)
+	GetIncomeByDateRange(ctx context.Context, arg GetIncomeByDateRangeParams) ([]Income, error)
+	GetIncomeByID(ctx context.Context, arg GetIncomeByIDParams) (Income, error)
+	GetIncomeBySource(ctx context.Context, arg GetIncomeBySourceParams) ([]Income, error)
+	GetIncomeSummaryBySource(ctx context.Context, userID uuid.UUID) ([]GetIncomeSummaryBySourceRow, error)
+	GetMonthlyIncomeTotal(ctx context.Context, arg GetMonthlyIncomeTotalParams) (GetMonthlyIncomeTotalRow, error)
+	GetRecentIncome(ctx context.Context, arg GetRecentIncomeParams) ([]Income, error)
+	ListIncome(ctx context.Context, userID uuid.UUID) ([]Income, error)
+	UpdateIncome(ctx context.Context, arg UpdateIncomeParams) (Income, error)
 }
 
 // Ensure Queries implements Repository
