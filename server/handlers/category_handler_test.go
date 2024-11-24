@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -64,7 +65,7 @@ func TestCreateCategory(t *testing.T) {
 	tests := []struct {
 		name       string
 		userID     string
-		reqBody    createCategoryRequest
+		reqBody    interface{} // Changed to interface{} to test malformed JSON
 		wantStatus int
 	}{
 		{
@@ -85,11 +86,48 @@ func TestCreateCategory(t *testing.T) {
 			reqBody:    createCategoryRequest{Name: ""},
 			wantStatus: http.StatusBadRequest,
 		},
+		{
+			name:   "Malformed JSON request",
+			userID: suite.testUser.String(),
+			reqBody: map[string]interface{}{
+				"name":    123, // Wrong type for name
+				"invalid": "field",
+			},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Empty request body",
+			userID:     suite.testUser.String(),
+			reqBody:    nil,
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:   "Very long category name",
+			userID: suite.testUser.String(),
+			reqBody: createCategoryRequest{
+				Name: string(make([]byte, 256)), // Very long string
+			},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:   "Duplicate category name",
+			userID: suite.testUser.String(),
+			reqBody: createCategoryRequest{
+				Name: suite.testCategory.Name,
+			},
+			wantStatus: http.StatusConflict,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			body, _ := json.Marshal(tt.reqBody)
+			var body []byte
+			var err error
+			if tt.reqBody != nil {
+				body, err = json.Marshal(tt.reqBody)
+				assert.NoError(t, err)
+			}
+
 			req := httptest.NewRequest(http.MethodPost, "/api/categories", bytes.NewBuffer(body))
 			ctx := context.WithValue(req.Context(), middleware.UserIDKey, tt.userID)
 			req = req.WithContext(ctx)
@@ -155,7 +193,7 @@ func TestUpdateCategory(t *testing.T) {
 		name       string
 		categoryID string
 		userID     string
-		reqBody    updateCategoryRequest
+		reqBody    interface{}
 		wantStatus int
 	}{
 		{
@@ -172,11 +210,33 @@ func TestUpdateCategory(t *testing.T) {
 			reqBody:    updateCategoryRequest{Name: "Updated Category"},
 			wantStatus: http.StatusBadRequest,
 		},
+		{
+			name:       "Empty request body",
+			categoryID: suite.testCategory.ID.String(),
+			userID:     suite.testUser.String(),
+			reqBody:    nil,
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Wrong user ID for category",
+			categoryID: suite.testCategory.ID.String(),
+			userID:     uuid.New().String(), // Different user
+			reqBody: updateCategoryRequest{
+				Name: "Updated Name",
+			},
+			wantStatus: http.StatusNotFound,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			body, _ := json.Marshal(tt.reqBody)
+			var body []byte
+			var err error
+			if tt.reqBody != nil {
+				body, err = json.Marshal(tt.reqBody)
+				assert.NoError(t, err)
+			}
+
 			req := httptest.NewRequest(http.MethodPut, "/api/categories/"+tt.categoryID, bytes.NewBuffer(body))
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", tt.categoryID)
@@ -241,18 +301,61 @@ func TestDeleteCategory(t *testing.T) {
 func TestListCategories(t *testing.T) {
 	suite := setupCategoryHandlerTest(t)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/categories", nil)
-	ctx := context.WithValue(req.Context(), middleware.UserIDKey, suite.testUser.String())
-	req = req.WithContext(ctx)
+	tests := []struct {
+		name       string
+		userID     string
+		setupFunc  func()
+		wantStatus int
+		wantCount  int
+	}{
+		{
+			name:       "Empty category list",
+			userID:     uuid.New().String(),
+			setupFunc:  func() {},
+			wantStatus: http.StatusOK,
+			wantCount:  0,
+		},
+		{
+			name:   "Multiple categories",
+			userID: suite.testUser.String(),
+			setupFunc: func() {
+				// Add multiple categories
+				for i := 0; i < 3; i++ {
+					cat := repository.Category{
+						ID:        uuid.New(),
+						UserID:    suite.testUser,
+						Name:      fmt.Sprintf("Category %d", i),
+						CreatedAt: time.Now(),
+					}
+					suite.mockRepo.GetCategoryMock().AddCategory(cat)
+				}
+			},
+			wantStatus: http.StatusOK,
+			wantCount:  4, // 3 new + 1 existing
+		},
+	}
 
-	w := httptest.NewRecorder()
-	suite.handler.ListCategories(w, req)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setupFunc()
 
-	assert.Equal(t, http.StatusOK, w.Code)
+			req := httptest.NewRequest(http.MethodGet, "/api/categories", nil)
+			ctx := context.WithValue(req.Context(), middleware.UserIDKey, tt.userID)
+			req = req.WithContext(ctx)
 
-	var categories []repository.Category
-	err := json.NewDecoder(w.Body).Decode(&categories)
-	assert.NoError(t, err)
+			w := httptest.NewRecorder()
+			suite.handler.ListCategories(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+
+			if w.Code == http.StatusOK {
+				var categories []repository.Category
+				err := json.NewDecoder(w.Body).Decode(&categories)
+				assert.NoError(t, err)
+				assert.Equal(t, tt.wantCount, len(categories))
+			}
+		})
+	}
 }
 
 func TestGetCategoryStats(t *testing.T) {
@@ -296,7 +399,22 @@ func TestGetMostUsedCategories(t *testing.T) {
 		{
 			name:       "Invalid limit",
 			limit:      "invalid",
-			wantStatus: http.StatusOK, // Should still work with default limit
+			wantStatus: http.StatusBadRequest, // Should still work with default limit
+		},
+		{
+			name:       "Negative limit",
+			limit:      "-1",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Very large limit",
+			limit:      "1000000",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Zero limit",
+			limit:      "0",
+			wantStatus: http.StatusBadRequest,
 		},
 	}
 

@@ -37,6 +37,12 @@ func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	// check if category name is too long, the limit in db is 255 varcahracters
+	if len(req.Name) > 255 {
+		http.Error(w, "Category name is too long", http.StatusBadRequest)
+		return
+	}
+
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {
@@ -214,7 +220,20 @@ func (h *CategoryHandler) GetMostUsedCategories(w http.ResponseWriter, r *http.R
 	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
 		if parsedLimit, err := strconv.ParseInt(limitStr, 10, 32); err == nil {
 			limit = int32(parsedLimit)
+		} else {
+			http.Error(w, "Invalid limit", http.StatusBadRequest)
+			return
 		}
+	}
+
+	//check limit is not 0 not negative a
+	if limit <= 0 {
+		http.Error(w, "Limit has to be greater than 0", http.StatusBadRequest)
+		return
+	}
+	if limit > 1000 {
+		http.Error(w, "Limit has to be less than 1000", http.StatusBadRequest)
+		return
 	}
 
 	stats, err := h.queries.GetMostUsedCategories(r.Context(), repository.GetMostUsedCategoriesParams{
