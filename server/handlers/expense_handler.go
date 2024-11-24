@@ -14,7 +14,7 @@ import (
 )
 
 type ExpenseHandler struct {
-	db *repository.Queries
+	db repository.Repository
 }
 
 type ExpenseRequest struct {
@@ -25,7 +25,7 @@ type ExpenseRequest struct {
 	Description string    `json:"description"`
 }
 
-func NewExpenseHandler(db *repository.Queries) *ExpenseHandler {
+func NewExpenseHandler(db repository.Repository) *ExpenseHandler {
 	return &ExpenseHandler{db: db}
 }
 
