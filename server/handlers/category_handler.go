@@ -133,6 +133,18 @@ func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	// check if category is empty
+	if req.Name == "" {
+		http.Error(w, "name is required", http.StatusBadRequest)
+		return
+	}
+
+	// check is category name is too long, the limit in db is 255 characters
+	if len(req.Name) > 255 {
+		http.Error(w, "Category name is too long", http.StatusBadRequest)
+		return
+	}
+
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	uid, err := uuid.Parse(userID)
 	if err != nil {

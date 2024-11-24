@@ -117,6 +117,14 @@ func TestCreateCategory(t *testing.T) {
 			},
 			wantStatus: http.StatusConflict,
 		},
+		{
+			name:   "Max length category name (255 chars)",
+			userID: suite.testUser.String(),
+			reqBody: createCategoryRequest{
+				Name: string(make([]byte, 255)),
+			},
+			wantStatus: http.StatusCreated,
+		},
 	}
 
 	for _, tt := range tests {
@@ -225,6 +233,20 @@ func TestUpdateCategory(t *testing.T) {
 				Name: "Updated Name",
 			},
 			wantStatus: http.StatusNotFound,
+		},
+		{
+			name:       "Empty category name",
+			categoryID: suite.testCategory.ID.String(),
+			userID:     suite.testUser.String(),
+			reqBody:    updateCategoryRequest{Name: ""},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Very long category name",
+			categoryID: suite.testCategory.ID.String(),
+			userID:     suite.testUser.String(),
+			reqBody:    updateCategoryRequest{Name: string(make([]byte, 256))},
+			wantStatus: http.StatusBadRequest,
 		},
 	}
 
@@ -414,6 +436,16 @@ func TestGetMostUsedCategories(t *testing.T) {
 		{
 			name:       "Zero limit",
 			limit:      "0",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Exactly max limit (1000)",
+			limit:      "1000",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Just over max limit (1001)",
+			limit:      "1001",
 			wantStatus: http.StatusBadRequest,
 		},
 	}
