@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -22,14 +23,31 @@ func (s *Server) GetDB() database.Service {
 	return s.db
 }
 
+// Add this method to your Server struct
+func (s *Server) SetDB(db database.Service) {
+	s.db = db
+}
+
 func NewServer(ctx context.Context) (*http.Server, *Server) {
 	cfg := config.Get()
+
+	// Validate required configuration
+	if cfg.Port <= 0 {
+		log.Printf("Invalid port configuration: %d", cfg.Port)
+		return nil, nil
+	}
 
 	if cfg.AppEnv == "local" {
 		fmt.Println("Running in local mode")
 	}
 
-	db := database.New(ctx)
+	var db database.Service
+	if cfg.AppEnv == "test" {
+		db = newMockDB()
+	} else {
+		db = database.New(ctx)
+	}
+
 	serverImpl := &Server{
 		port: cfg.Port,
 		db:   db,
