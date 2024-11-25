@@ -45,6 +45,10 @@ func main() {
 	config.Get().PrintBannerFromFile()
 	httpServer, serverImpl := server.NewServer(ctx)
 
+	if httpServer == nil || serverImpl == nil {
+		log.Fatal("Server configuration is invalid")
+	}
+
 	// Run graceful shutdown in a separate goroutine
 	go func() {
 		gracefulShutdown(ctx, httpServer, serverImpl.GetDB())
