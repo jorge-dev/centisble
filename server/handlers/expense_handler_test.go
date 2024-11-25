@@ -588,13 +588,43 @@ func TestGetRecentExpenses(t *testing.T) {
 		wantStatus int
 	}{
 		{
-			name:       "Valid limit",
+			name:       "Default limit",
+			limit:      "",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Custom limit",
 			limit:      "5",
 			wantStatus: http.StatusOK,
 		},
 		{
 			name:       "Invalid limit",
 			limit:      "invalid",
+			wantStatus: http.StatusBadRequest, // Should still work with default limit
+		},
+		{
+			name:       "Negative limit",
+			limit:      "-1",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Very large limit",
+			limit:      "1000000",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Zero limit",
+			limit:      "0",
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name:       "Exactly max limit (1000)",
+			limit:      "1000",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "Just over max limit (1001)",
+			limit:      "1001",
 			wantStatus: http.StatusBadRequest,
 		},
 	}

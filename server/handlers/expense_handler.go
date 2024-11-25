@@ -392,10 +392,24 @@ func (h *ExpenseHandler) GetExpenseTotalsByCategory(w http.ResponseWriter, r *ht
 
 // GetRecentExpenses handles GET /expenses/recent
 func (h *ExpenseHandler) GetRecentExpenses(w http.ResponseWriter, r *http.Request) {
-	limitStr := r.URL.Query().Get("limit")
-	limit, err := strconv.ParseInt(limitStr, 10, 32)
-	if err != nil {
-		http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+	// Get limit from query params, default to 10
+	limit := int32(10)
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		if parsedLimit, err := strconv.ParseInt(limitStr, 10, 32); err == nil {
+			limit = int32(parsedLimit)
+		} else {
+			http.Error(w, "Invalid limit", http.StatusBadRequest)
+			return
+		}
+	}
+
+	//check limit is not 0 not negative a
+	if limit <= 0 {
+		http.Error(w, "Limit has to be greater than 0", http.StatusBadRequest)
+		return
+	}
+	if limit > 1000 {
+		http.Error(w, "Limit has to be less than 1000", http.StatusBadRequest)
 		return
 	}
 
