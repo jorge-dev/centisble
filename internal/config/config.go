@@ -39,6 +39,12 @@ var (
 	once   sync.Once
 )
 
+// Reset is used for testing to reset the singleton instance
+func ResetConfig() {
+	config = nil
+	once = sync.Once{}
+}
+
 // ANSI color codes
 const (
 	Reset   = "\033[0m"
@@ -80,7 +86,7 @@ func loadPort() int {
 	}
 	port, err := strconv.Atoi(portStr)
 	if err != nil {
-		log.Fatalf("Invalid PORT: %v", err)
+		return -1
 	}
 	return port
 }
