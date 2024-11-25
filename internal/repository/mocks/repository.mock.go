@@ -11,6 +11,7 @@ type MockRepository struct {
 	*CategoryMock
 	*ExpenseMock
 	*IncomeMock
+	*SummaryMock
 }
 
 // NewMockRepository creates a new composite mock repository
@@ -21,6 +22,7 @@ func NewMockRepository() repository.Repository {
 		CategoryMock: NewCategoryMock(),
 		ExpenseMock:  NewExpenseMock(),
 		IncomeMock:   NewIncomeMock(),
+		SummaryMock:  NewSummaryMock(),
 	}
 }
 
@@ -34,6 +36,7 @@ func (m *MockRepository) Reset() {
 	m.CategoryMock = NewCategoryMock()
 	m.ExpenseMock = NewExpenseMock()
 	m.IncomeMock = NewIncomeMock()
+	m.SummaryMock = NewSummaryMock()
 }
 
 // GetUserMock returns the underlying UserMock for testing helpers
@@ -59,4 +62,9 @@ func (m *MockRepository) GetExpenseMock() *ExpenseMock {
 // GetIncomeMock returns the underlying IncomeMock for testing helpers
 func (m *MockRepository) GetIncomeMock() *IncomeMock {
 	return m.IncomeMock
+}
+
+// GetSummaryMock returns the underlying SummaryMock for testing helpers
+func (m *MockRepository) GetSummaryMock() *SummaryMock {
+	return m.SummaryMock
 }

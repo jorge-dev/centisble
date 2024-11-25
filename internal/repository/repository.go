@@ -66,6 +66,10 @@ type Repository interface {
 	GetRecentIncome(ctx context.Context, arg GetRecentIncomeParams) ([]Income, error)
 	ListIncome(ctx context.Context, userID uuid.UUID) ([]Income, error)
 	UpdateIncome(ctx context.Context, arg UpdateIncomeParams) (Income, error)
+
+	// Summary operations
+	GetMonthlySummary(ctx context.Context, arg GetMonthlySummaryParams) ([]GetMonthlySummaryRow, error)
+	GetYearlySummary(ctx context.Context, arg GetYearlySummaryParams) ([]GetYearlySummaryRow, error)
 }
 
 // Ensure Queries implements Repository
