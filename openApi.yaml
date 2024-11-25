@@ -1142,9 +1142,10 @@ components:
         currency:
           type: string
           example: USD
-        category:
+        category_id:
           type: string
-          example: Groceries
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
         date:
           type: string
           format: date-time
@@ -1171,9 +1172,10 @@ components:
         currency:
           type: string
           example: USD
-        category:
+        category_id:
           type: string
-          example: Groceries
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
         date:
           type: string
           format: date-time
@@ -1191,9 +1193,10 @@ components:
         currency:
           type: string
           example: USD
-        category:
+        category_id:
           type: string
-          example: Groceries
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
         type:
           type: string
           enum: [recurring, one-time]
@@ -1226,9 +1229,10 @@ components:
         currency:
           type: string
           example: USD
-        category:
+        category_id:
           type: string
-          example: Groceries
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
         type:
           type: string
           enum: [recurring, one-time]
