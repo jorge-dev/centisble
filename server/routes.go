@@ -101,6 +101,11 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 		r.Get("/budgets/one-time", budgetHandler.GetOneTimeBudgets)
 		r.Get("/budgets/category/{categoryId}", budgetHandler.GetBudgetsByCategory)
 		r.Get("/budgets/alerts", budgetHandler.GetBudgetsNearLimit)
+
+		// Summary routes
+		summaryHandler := handlers.NewSummaryHandler(queries)
+		r.Get("/summary/monthly", summaryHandler.GetMonthlySummary)
+		r.Get("/summary/yearly", summaryHandler.GetYearlySummary)
 	})
 
 	return r
