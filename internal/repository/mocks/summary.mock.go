@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jorge-dev/centsible/internal/repository"
 )
 
@@ -50,7 +49,7 @@ func (m *SummaryMock) GetMonthlySummary(ctx context.Context, arg repository.GetM
 
 		return []repository.GetMonthlySummaryRow{
 			{
-				Currency:      pgtype.Text{String: "USD", Valid: true},
+				Currency:      "USD",
 				TotalIncome:   1000.00,
 				TotalExpenses: 500.00,
 				TotalSavings:  500.00,
@@ -85,7 +84,7 @@ func (m *SummaryMock) GetYearlySummary(ctx context.Context, arg repository.GetYe
 
 		return []repository.GetYearlySummaryRow{
 			{
-				Currency:      pgtype.Text{String: "USD", Valid: true},
+				Currency:      "USD",
 				TotalIncome:   12000.00,
 				TotalExpenses: 6000.00,
 				TotalSavings:  6000.00,

@@ -72,8 +72,8 @@ type User struct {
 	Name         string     `json:"name"`
 	Email        string     `json:"email"`
 	PasswordHash string     `json:"password_hash"`
+	RoleID       uuid.UUID  `json:"role_id"`
 	CreatedAt    time.Time  `json:"created_at"`
 	UpdatedAt    *time.Time `json:"updated_at"`
 	DeletedAt    *time.Time `json:"deleted_at"`
-	RoleID       uuid.UUID  `json:"role_id"`
 }

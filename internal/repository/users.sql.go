@@ -45,7 +45,7 @@ func (q *Queries) CheckUserIsAdmin(ctx context.Context, userID uuid.UUID) (bool,
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (id, name, email, password_hash, created_at, updated_at)
 VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role_id
+RETURNING id, name, email, password_hash, role_id, created_at, updated_at, deleted_at
 `
 
 type CreateUserParams struct {
@@ -68,10 +68,10 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Name,
 		&i.Email,
 		&i.PasswordHash,
+		&i.RoleID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
-		&i.RoleID,
 	)
 	return i, err
 }
@@ -257,7 +257,7 @@ SET
     email = $3,
     updated_at = CURRENT_TIMESTAMP
 WHERE id = $1 AND deleted_at IS NULL
-RETURNING id, name, email, password_hash, created_at, updated_at, deleted_at, role_id
+RETURNING id, name, email, password_hash, role_id, created_at, updated_at, deleted_at
 `
 
 type UpdateUserParams struct {
@@ -274,10 +274,10 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.Name,
 		&i.Email,
 		&i.PasswordHash,
+		&i.RoleID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
-		&i.RoleID,
 	)
 	return i, err
 }
