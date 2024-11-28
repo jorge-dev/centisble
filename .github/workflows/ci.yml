@@ -26,15 +26,15 @@ jobs:
 
       - name: Export environment variables
         run: |
-          echo "APP_ENV=${{ var.APP_ENV }}" >> $GITHUB_ENV
-          echo "RUN_MIGRATION=${{ var.RUN_MIGRATION }}" >> $GITHUB_ENV
+          echo "APP_ENV=${{ env.APP_ENV }}" >> $GITHUB_ENV
+          echo "RUN_MIGRATION=${{ env.RUN_MIGRATION }}" >> $GITHUB_ENV
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           echo "CENTSIBLE_DB_HOST=${{ secrets.CENTSIBLE_DB_HOST }}" >> $GITHUB_ENV
-          echo "CENTSIBLE_DB_PORT=${{ var.CENTSIBLE_DB_PORT }}" >> $GITHUB_ENV
+          echo "CENTSIBLE_DB_PORT=${{ env.CENTSIBLE_DB_PORT }}" >> $GITHUB_ENV
           echo "CENTSIBLE_DB_DATABASE=${{ secrets.CENTSIBLE_DB_DATABASE }}" >> $GITHUB_ENV
           echo "CENTSIBLE_DB_USERNAME=${{ secrets.CENTSIBLE_DB_USERNAME }}" >> $GITHUB_ENV
           echo "CENTSIBLE_DB_PASSWORD=${{ secrets.CENTSIBLE_DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "CENTSIBLE_DB_SCHEMA=${{ var.CENTSIBLE_DB_SCHEMA }}" >> $GITHUB_ENV
+          echo "CENTSIBLE_DB_SCHEMA=${{ env.CENTSIBLE_DB_SCHEMA }}" >> $GITHUB_ENV
 
       - name: Build application
         run: |
