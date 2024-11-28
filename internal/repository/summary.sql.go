@@ -10,42 +10,41 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const getMonthlySummary = `-- name: GetMonthlySummary :many
 WITH monthly_totals AS (
     SELECT 
-        i.currency,
-        COALESCE(SUM(i.amount), 0) as total_income,
-        COALESCE(SUM(e.amount), 0) as total_expenses,
-        COALESCE(SUM(i.amount) - SUM(e.amount), 0) as total_savings
+        i.currency::varchar(3) AS currency,
+        COALESCE(SUM(i.amount), 0)::float8 as total_income,
+        COALESCE(SUM(e.amount), 0)::float8 as total_expenses,
+        COALESCE(SUM(i.amount) - SUM(e.amount), 0)::float8 as total_savings
     FROM income i
     FULL OUTER JOIN expenses e ON 
         e.user_id = i.user_id 
-        AND e.currency = i.currency
+        AND e.currency = i.currency::varchar(3)
         AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month', i.date)
         AND e.deleted_at IS NULL
     WHERE i.user_id = $1
         AND i.deleted_at IS NULL
         AND DATE_TRUNC('month', i.date) = DATE_TRUNC('month', $2::TIMESTAMPTZ)
-    GROUP BY i.currency
+    GROUP BY i.currency::varchar(3)
 ),
 top_categories AS (
     SELECT 
         e.category_id,
         c.name as category_name,
-        e.currency,
+        e.currency::varchar(3),
         COUNT(*) as usage_count,
         SUM(e.amount) as total_spent,
-        ROW_NUMBER() OVER (PARTITION BY e.currency ORDER BY SUM(e.amount) DESC) as rank
+        ROW_NUMBER() OVER (PARTITION BY e.currency::varchar(3) ORDER BY SUM(e.amount) DESC) as rank
     FROM expenses e
     JOIN categories c ON e.category_id = c.id
     WHERE e.user_id = $1
         AND e.deleted_at IS NULL
         AND c.deleted_at IS NULL
         AND DATE_TRUNC('month', e.date) = DATE_TRUNC('month', $2::TIMESTAMPTZ)
-    GROUP BY e.category_id, c.name, e.currency
+    GROUP BY e.category_id, c.name, e.currency::varchar(3)
 )
 SELECT 
     mt.currency, mt.total_income, mt.total_expenses, mt.total_savings,
@@ -59,10 +58,10 @@ SELECT
     ) FILTER (WHERE tc.category_id IS NOT NULL) as top_categories
 FROM monthly_totals mt
 LEFT JOIN top_categories tc ON 
-    tc.currency = mt.currency 
+    tc.currency = mt.currency::varchar(3)
     AND tc.rank <= 5
 GROUP BY 
-    mt.currency, 
+    mt.currency::varchar(3), 
     mt.total_income, 
     mt.total_expenses, 
     mt.total_savings
@@ -74,11 +73,11 @@ type GetMonthlySummaryParams struct {
 }
 
 type GetMonthlySummaryRow struct {
-	Currency      pgtype.Text `json:"currency"`
-	TotalIncome   interface{} `json:"total_income"`
-	TotalExpenses interface{} `json:"total_expenses"`
-	TotalSavings  interface{} `json:"total_savings"`
-	TopCategories []byte      `json:"top_categories"`
+	Currency      string  `json:"currency"`
+	TotalIncome   float64 `json:"total_income"`
+	TotalExpenses float64 `json:"total_expenses"`
+	TotalSavings  float64 `json:"total_savings"`
+	TopCategories []byte  `json:"top_categories"`
 }
 
 func (q *Queries) GetMonthlySummary(ctx context.Context, arg GetMonthlySummaryParams) ([]GetMonthlySummaryRow, error) {
@@ -110,14 +109,14 @@ func (q *Queries) GetMonthlySummary(ctx context.Context, arg GetMonthlySummaryPa
 const getYearlySummary = `-- name: GetYearlySummary :many
 WITH yearly_totals AS (
     SELECT 
-        i.currency,
-        COALESCE(SUM(i.amount), 0) as total_income,
-        COALESCE(SUM(e.amount), 0) as total_expenses,
-        COALESCE(SUM(i.amount) - SUM(e.amount), 0) as total_savings
+        i.currency::varchar(3) AS currency,
+        COALESCE(SUM(i.amount), 0)::float8 as total_income,
+        COALESCE(SUM(e.amount), 0)::float8 as total_expenses,
+        COALESCE(SUM(i.amount) - SUM(e.amount), 0)::float8 as total_savings
     FROM income i
     FULL OUTER JOIN expenses e ON 
         e.user_id = i.user_id 
-        AND e.currency = i.currency
+        AND e.currency = i.currency::varchar(3)
         AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', i.date)
         AND e.deleted_at IS NULL
     WHERE i.user_id = $1
@@ -129,22 +128,22 @@ top_categories AS (
     SELECT 
         e.category_id,
         c.name as category_name,
-        e.currency,
+        e.currency::varchar(3) AS currency,
         COUNT(*) as usage_count,
         SUM(e.amount) as total_spent,
-        ROW_NUMBER() OVER (PARTITION BY e.currency ORDER BY SUM(e.amount) DESC) as rank
+        ROW_NUMBER() OVER (PARTITION BY e.currency::varchar(3) ORDER BY SUM(e.amount) DESC) as rank
     FROM expenses e
     JOIN categories c ON e.category_id = c.id
     WHERE e.user_id = $1
         AND e.deleted_at IS NULL
         AND c.deleted_at IS NULL
         AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', $2::TIMESTAMPTZ)
-    GROUP BY e.category_id, c.name, e.currency
+    GROUP BY e.category_id, c.name, e.currency::varchar(3)
 ),
 monthly_trend AS (
     SELECT 
         DATE_TRUNC('month', e.date) as month,
-        e.currency,
+        e.currency::varchar(3),
         c.name as category_name,
         SUM(e.amount) as monthly_expenses
     FROM expenses e
@@ -153,7 +152,7 @@ monthly_trend AS (
         AND e.deleted_at IS NULL
         AND c.deleted_at IS NULL
         AND DATE_TRUNC('year', e.date) = DATE_TRUNC('year', $2::TIMESTAMPTZ)
-    GROUP BY DATE_TRUNC('month', e.date), e.currency, c.name
+    GROUP BY DATE_TRUNC('month', e.date), e.currency::varchar(3), c.name
     ORDER BY month
 )
 SELECT 
@@ -175,12 +174,12 @@ SELECT
     ) FILTER (WHERE mt.month IS NOT NULL) as monthly_trend
 FROM yearly_totals yt
 LEFT JOIN top_categories tc ON 
-    tc.currency = yt.currency 
+    tc.currency = yt.currency::varchar(3)
     AND tc.rank <= 5
 LEFT JOIN monthly_trend mt ON 
-    mt.currency = yt.currency
+    mt.currency = yt.currency::varchar(3)
 GROUP BY 
-    yt.currency, 
+    yt.currency::varchar(3), 
     yt.total_income, 
     yt.total_expenses, 
     yt.total_savings
@@ -192,12 +191,12 @@ type GetYearlySummaryParams struct {
 }
 
 type GetYearlySummaryRow struct {
-	Currency      pgtype.Text `json:"currency"`
-	TotalIncome   interface{} `json:"total_income"`
-	TotalExpenses interface{} `json:"total_expenses"`
-	TotalSavings  interface{} `json:"total_savings"`
-	TopCategories []byte      `json:"top_categories"`
-	MonthlyTrend  []byte      `json:"monthly_trend"`
+	Currency      string  `json:"currency"`
+	TotalIncome   float64 `json:"total_income"`
+	TotalExpenses float64 `json:"total_expenses"`
+	TotalSavings  float64 `json:"total_savings"`
+	TopCategories []byte  `json:"top_categories"`
+	MonthlyTrend  []byte  `json:"monthly_trend"`
 }
 
 func (q *Queries) GetYearlySummary(ctx context.Context, arg GetYearlySummaryParams) ([]GetYearlySummaryRow, error) {
