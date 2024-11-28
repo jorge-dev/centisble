@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jorge-dev/centsible/internal/repository"
 	"github.com/jorge-dev/centsible/internal/repository/mocks"
 	"github.com/jorge-dev/centsible/server/middleware"
@@ -46,18 +45,18 @@ func setupSummaryHandlerTest(t *testing.T) *summaryHandlerTestSuite {
 	suite.testUser.ID = uuid.New()
 
 	// Setup mock data
-	topCategories, _ := json.Marshal([]map[string]interface{}{
+	topCategories, _ := json.Marshal([]TopCategory{
 		{
-			"category_id":   uuid.New(),
-			"category_name": "Food",
-			"usage_count":   10,
-			"total_spent":   500.00,
+			CategoryID:   uuid.New().String(),
+			CategoryName: "Food",
+			UsageCount:   10,
+			TotalSpent:   500.00,
 		},
 	})
 
 	monthlySummary := []repository.GetMonthlySummaryRow{
 		{
-			Currency:      pgtype.Text{String: "USD", Valid: true},
+			Currency:      "USD",
 			TotalIncome:   1000.00,
 			TotalExpenses: 500.00,
 			TotalSavings:  500.00,
@@ -65,17 +64,17 @@ func setupSummaryHandlerTest(t *testing.T) *summaryHandlerTestSuite {
 		},
 	}
 
-	monthlyTrend, _ := json.Marshal([]map[string]interface{}{
+	monthlyTrend, _ := json.Marshal([]MonthlyTrend{
 		{
-			"month":         time.Now().Format("2006-01-02"),
-			"category_name": "Food",
-			"amount":        500.00,
+			Month:        time.Now(),
+			CategoryName: "Food",
+			Amount:       500.00,
 		},
 	})
 
 	yearlySummary := []repository.GetYearlySummaryRow{
 		{
-			Currency:      pgtype.Text{String: "USD", Valid: true},
+			Currency:      "USD",
 			TotalIncome:   12000.00,
 			TotalExpenses: 6000.00,
 			TotalSavings:  6000.00,
@@ -111,7 +110,7 @@ func TestGetMonthlySummary(t *testing.T) {
 		{
 			name:       "Valid request - specific date",
 			userID:     suite.testUser.ID.String(),
-			date:       time.Now().Format("2006-01-02"),
+			date:       time.Now().Format(time.RFC3339),
 			wantStatus: http.StatusOK,
 			wantBody:   true,
 		},
@@ -148,11 +147,13 @@ func TestGetMonthlySummary(t *testing.T) {
 			assert.Equal(t, tt.wantStatus, w.Code)
 
 			if tt.wantBody {
-				var response []repository.GetMonthlySummaryRow
+				var response []MonthlySummaryResponse
 				err := json.NewDecoder(w.Body).Decode(&response)
 				assert.NoError(t, err)
 				assert.NotEmpty(t, response)
-				assert.Equal(t, "USD", response[0].Currency.String)
+				assert.Equal(t, "USD", response[0].Currency)
+				assert.NotEmpty(t, response[0].TopCategories)
+				assert.Equal(t, "Food", response[0].TopCategories[0].CategoryName)
 			}
 		})
 	}
@@ -178,7 +179,7 @@ func TestGetYearlySummary(t *testing.T) {
 		{
 			name:       "Valid request - specific year",
 			userID:     suite.testUser.ID.String(),
-			date:       time.Now().Format("2006-01-02"),
+			date:       time.Now().Format(time.RFC3339),
 			wantStatus: http.StatusOK,
 			wantBody:   true,
 		},
@@ -215,12 +216,15 @@ func TestGetYearlySummary(t *testing.T) {
 			assert.Equal(t, tt.wantStatus, w.Code)
 
 			if tt.wantBody {
-				var response []repository.GetYearlySummaryRow
+				var response []YearlySummaryResponse
 				err := json.NewDecoder(w.Body).Decode(&response)
 				assert.NoError(t, err)
 				assert.NotEmpty(t, response)
-				assert.Equal(t, "USD", response[0].Currency.String)
-				assert.NotNil(t, response[0].MonthlyTrend)
+				assert.Equal(t, "USD", response[0].Currency)
+				assert.NotEmpty(t, response[0].TopCategories)
+				assert.NotEmpty(t, response[0].MonthlyTrend)
+				assert.Equal(t, "Food", response[0].TopCategories[0].CategoryName)
+				assert.Equal(t, "Food", response[0].MonthlyTrend[0].CategoryName)
 			}
 		})
 	}
