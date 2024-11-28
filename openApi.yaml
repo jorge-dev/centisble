@@ -2,10 +2,10 @@ openapi: 3.1.0
 info:
   title: Budget Tracking API
   description: API for managing income, expenses, recurring and one-time budgets, and financial summaries.
-  version: 1.4.0
+  version: 1.5.0
   contact:
     name: John Doe
-    email: ""
+    email: "test@test.com"
 servers:
   - url: http://localhost:8080
     description: Local development server
@@ -644,6 +644,14 @@ paths:
       operationId: getMonthlySummary
       tags:
         - Summary
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: 2024-01-01T00:00:00Z
       security:
         - bearerAuth: []
       responses:
@@ -659,6 +667,15 @@ paths:
       operationId: getYearlySummary
       tags:
         - Summary
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1900
+            maximum: 2100
+            example: 2024
       security:
         - bearerAuth: []
       responses:
@@ -1245,66 +1262,96 @@ components:
           type: string
           format: date-time
           example: 2024-12-31T00:00:00Z
-    BudgetUpdate:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          example: 600.00
-        currency:
-          type: string
-          example: USD
-        end_date:
-          type: string
-          format: date-time
-          example: 2025-12-31T00:00:00Z
     MonthlySummary:
       type: object
       properties:
-        total_income:
-          type: number
-          format: float
-          example: 5000.00
-        total_expenses:
-          type: number
-          format: float
-          example: 3000.00
-        total_savings:
-          type: number
-          format: float
-          example: 2000.00
         currency:
           type: string
           example: USD
-        top_expense_categories:
+        total_income:
+          type: number
+          format: float
+          example: 1000.00
+        total_expenses:
+          type: number
+          format: float
+          example: 500.00
+        total_savings:
+          type: number
+          format: float
+          example: 500.00
+        top_categories:
           type: array
           items:
-            type: string
-            example: Groceries
+            type: object
+            properties:
+              category_id:
+                type: string
+                format: uuid
+                example: "123e4567-e89b-12d3-a456-426614174000"
+              category_name:
+                type: string
+                example: Food
+              usage_count:
+                type: integer
+                example: 10
+              total_spent:
+                type: number
+                format: float
+                example: 500.00
     YearlySummary:
       type: object
       properties:
-        total_income:
-          type: number
-          format: float
-          example: 60000.00
-        total_expenses:
-          type: number
-          format: float
-          example: 36000.00
-        total_savings:
-          type: number
-          format: float
-          example: 24000.00
         currency:
           type: string
           example: USD
-        top_expense_categories:
+        total_income:
+          type: number
+          format: float
+          example: 12000.00
+        total_expenses:
+          type: number
+          format: float
+          example: 6000.00
+        total_savings:
+          type: number
+          format: float
+          example: 6000.00
+        top_categories:
           type: array
           items:
-            type: string
-            example: Rent
+            type: object
+            properties:
+              category_id:
+                type: string
+                format: uuid
+                example: "123e4567-e89b-12d3-a456-426614174000"
+              category_name:
+                type: string
+                example: Food
+              usage_count:
+                type: integer
+                example: 10
+              total_spent:
+                type: number
+                format: float
+                example: 500.00
+        monthly_trend:
+          type: array
+          items:
+            type: object
+            properties:
+              month:
+                type: string
+                format: date
+                example: "2023-01-01"
+              category_name:
+                type: string
+                example: Food
+              amount:
+                type: number
+                format: float
+                example: 500.00
     UserResponse:
       type: object
       properties:
