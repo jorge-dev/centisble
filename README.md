@@ -193,29 +193,29 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
 
 ### Phase 1: Project Setup and Core Infrastructure
 
-- [x] Project Initialization
-  - [x] Set up Go module
-  - [x] Create project structure
-  - [x] Initialize Git
-- [x] Docker Environment
-  - [x] Create Dockerfile
-  - [x] Create docker-compose.yml
-  - [x] Test containerized setup
-- [ ] Database Setup
-  - [x] PostgreSQL setup
-  - [x] Create database schema
-  - [x] Implement migrations
-  - [x] Create tables:
-    - [x] users
-    - [x] income
-    - [x] expenses
-    - [x] categories
-    - [x] budgets
-- [x] User Authentication
-  - [x] Implement user registration
-  - [x] Implement user login
-  - [x] Setup JWT authentication
-  - [x] Create auth middleware
+- [X] Project Initialization
+  - [X] Set up Go module
+  - [X] Create project structure
+  - [X] Initialize Git
+- [X] Docker Environment
+  - [X] Create Dockerfile
+  - [X] Create docker-compose.yml
+  - [X] Test containerized setup
+- [X] Database Setup
+  - [X] PostgreSQL setup
+  - [X] Create database schema
+  - [X] Implement migrations
+  - [X] Create tables:
+    - [X] users
+    - [X] income
+    - [X] expenses
+    - [X] categories
+    - [X] budgets
+- [X] User Authentication
+  - [X] Implement user registration
+  - [X] Implement user login
+  - [X] Setup JWT authentication
+  - [X] Create auth middleware
 
 ### Phase 2: Income, Expense, and Budget Management
 
@@ -240,8 +240,8 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
   - [ ] Compare expenses vs limits
   - [ ] Budget adjustment endpoints
 - [ ] Financial Summaries
-  - [ ] Monthly summary endpoint
-  - [ ] Yearly summary endpoint
+  - [X] Monthly summary endpoint
+  - [X] Yearly summary endpoint
   - [ ] Currency handling
 - [ ] Reports and Insights
   - [ ] Spending trends
@@ -249,11 +249,11 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
 
 ### Phase 4: Documentation, Testing, and Security
 
-- [ ] API Documentation
-  - [ ] Swagger UI integration
-  - [ ] OpenAPI specifications
+- [X] API Documentation
+  - [X] Swagger UI integration
+  - [X] OpenAPI specifications
 - [ ] Testing
-  - [ ] Unit tests
+  - [X] Unit tests
   - [ ] Integration tests
   - [ ] Mock implementations
 - [ ] Security
