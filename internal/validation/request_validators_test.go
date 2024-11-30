@@ -12,28 +12,29 @@ type Validator interface {
 }
 
 // Update helper function to properly handle the type constraints
-func runValidationTest[T any, PT interface {
-	*T
+func runValidationTest[TypeToValidate any, ValidatorPointerType interface {
+	*TypeToValidate
 	Validator
-}](t *testing.T, tests []TestCase) {
-	for _, tt := range tests {
-		t.Run(tt.Name, func(t *testing.T) {
-			v := tt.Input.(T)
-			err := PT(&v).Validate()
-			if tt.WantErr {
-				assert.Error(t, err)
-				if tt.ExpectedErr != nil {
-					assert.Equal(t, tt.ExpectedErr, err)
+}](t *testing.T, testCases []TestCase) {
+	for _, testCase := range testCases {
+		t.Run(testCase.Name, func(t *testing.T) {
+			valueToValidate := testCase.Input.(TypeToValidate)
+			validationErr := ValidatorPointerType(&valueToValidate).Validate()
+
+			if testCase.WantErr {
+				assert.Error(t, validationErr)
+				if testCase.ExpectedErr != nil {
+					assert.Equal(t, testCase.ExpectedErr, validationErr)
 				}
 			} else {
-				assert.NoError(t, err)
+				assert.NoError(t, validationErr)
 			}
 		})
 	}
 }
 
 func TestExpenseValidationValidate(t *testing.T) {
-	tests := []TestCase{
+	testCases := []TestCase{
 		{
 			Name: "valid expense",
 			Input: ExpenseValidation{
@@ -95,20 +96,7 @@ func TestExpenseValidationValidate(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.Name, func(t *testing.T) {
-			v := tt.Input.(ExpenseValidation)
-			err := (&v).Validate()
-			if tt.WantErr {
-				assert.Error(t, err)
-				if tt.ExpectedErr != nil {
-					assert.Equal(t, tt.ExpectedErr, err)
-				}
-			} else {
-				assert.NoError(t, err)
-			}
-		})
-	}
+	runValidationTest[ExpenseValidation](t, testCases)
 }
 
 // Update test function calls to include pointer type
