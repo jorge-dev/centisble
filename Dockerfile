@@ -9,7 +9,7 @@ COPY . .
 
 RUN go build -o main cmd/api/main.go
 
-FROM alpine:latest AS prod
+FROM alpine:3.20.3 AS prod
 WORKDIR /app
 COPY --from=build /app/main /app/main
 EXPOSE ${PORT}
