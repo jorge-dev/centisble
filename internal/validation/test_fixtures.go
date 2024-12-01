@@ -13,6 +13,7 @@ var (
 
 // Test constants
 const (
+	validName   = "Test User"
 	validDate   = "2023-01-01T00:00:00Z"
 	invalidDate = "2023-13-45"
 

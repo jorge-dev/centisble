@@ -107,22 +107,23 @@ type AuthValidation struct {
 	Name     string
 	Email    string
 	Password string
+	IsLogin  bool // Add this field to distinguish between login and registration
 }
 
 func (v *AuthValidation) Validate() error {
-	// Validate name (only for registration)
-	if v.Name != "" {
+	// Validate name (required for registration, not for login)
+	if !v.IsLogin {
 		if err := (&TextValidator{
 			Text:     v.Name,
 			MinLen:   2,
 			MaxLen:   100,
-			Required: true,
+			Required: true, // Required for registration
 		}).Validate(); err != nil {
 			return err
 		}
 	}
 
-	// Validate email
+	// Email validation (always required)
 	if err := (&TextValidator{
 		Text:     v.Email,
 		MinLen:   5,
@@ -137,7 +138,7 @@ func (v *AuthValidation) Validate() error {
 		return fmt.Errorf("invalid email format")
 	}
 
-	// Validate password
+	// Validate password (always required)
 	return (&TextValidator{
 		Text:     v.Password,
 		MinLen:   6,
