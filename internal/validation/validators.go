@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bojanz/currency"
+	currencyValidator "github.com/bojanz/currency"
 	"github.com/google/uuid"
 )
 
@@ -29,7 +29,7 @@ func (m *MoneyValidator) Validate() error {
 	if m.Amount <= 0 {
 		return ErrInvalidAmount
 	}
-	if m.Currency == "" || !currency.IsValid(m.Currency) {
+	if m.Currency == "" || !currencyValidator.IsValid(m.Currency) {
 		return ErrInvalidCurrency
 	}
 	return nil

@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 	"github.com/jorge-dev/centsible/server/middleware"
 )
 
@@ -37,65 +37,30 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check for zero values
-	if req.Amount <= 0 {
-		http.Error(w, "amount must be greater than zero", http.StatusBadRequest)
-		return
-	}
-	if req.Currency == "" {
-		http.Error(w, "currency is required", http.StatusBadRequest)
-		return
-	}
-	if req.CategoryID == uuid.Nil {
-		http.Error(w, "category_id is required", http.StatusBadRequest)
-		return
+	validator := &validation.BudgetValidation{
+		Amount:     req.Amount,
+		Currency:   req.Currency,
+		CategoryID: req.CategoryID,
+		Type:       req.Type,
+		StartDate:  req.StartDate,
+		EndDate:    req.EndDate,
 	}
 
-	// Validate Type
-	if req.Type == "" {
-		http.Error(w, "type is required. Must be 'recurring' or 'one-time'", http.StatusBadRequest)
-		return
-	}
-
-	if req.StartDate == "" {
-		http.Error(w, "start_date is required", http.StatusBadRequest)
-		return
-	}
-	if req.EndDate == "" {
-		http.Error(w, "end_date is required", http.StatusBadRequest)
-		return
-	}
-
-	startDate, err := time.Parse(time.RFC3339, req.StartDate)
-	if err != nil {
-		http.Error(w, "Invalid start date format", http.StatusBadRequest)
-		return
-	}
-
-	endDate, err := time.Parse(time.RFC3339, req.EndDate)
-	if err != nil {
-		http.Error(w, "Invalid end date format", http.StatusBadRequest)
-		return
-	}
-
-	// validate end date is after start date
-	if endDate.Before(startDate) {
-		http.Error(w, "End date must be after start date", http.StatusBadRequest)
-		return
-	}
-
-	// validate budget type
-	if req.Type != "recurring" && req.Type != "one-time" {
-		http.Error(w, "Invalid budget type. Must be 'recurring' or 'one-time'", http.StatusBadRequest)
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
+
+	startDate, _ := validation.ValidateDate(req.StartDate)
+	endDate, _ := validation.ValidateDate(req.EndDate)
+
 	budget, err := h.db.CreateBudget(r.Context(), repository.CreateBudgetParams{
 		ID:         uuid.New(),
 		UserID:     uid,
@@ -118,14 +83,14 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 
 func (h *BudgetHandler) GetBudgetUsage(w http.ResponseWriter, r *http.Request) {
 	budgetID := chi.URLParam(r, "id")
-	bid, err := uuid.Parse(budgetID)
+	bid, err := validation.ValidateUUID(budgetID)
 	if err != nil {
 		http.Error(w, "Invalid budget ID", http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -147,21 +112,27 @@ func (h *BudgetHandler) GetBudgetUsage(w http.ResponseWriter, r *http.Request) {
 
 func (h *BudgetHandler) GetBudgetsNearLimit(w http.ResponseWriter, r *http.Request) {
 	alertThreshold := r.URL.Query().Get("alert_threshold")
-	log.Println(alertThreshold)
-	// Default to 80% if no threshold is provided
-	if alertThreshold == "" {
-		alertThreshold = "80"
-	}
+	threshold := 80.0 // Default value
 
-	// convert alert threshold to float
-	threshold, err := strconv.ParseFloat(alertThreshold, 64)
-	if err != nil {
-		http.Error(w, "Invalid alert threshold. Must be a number", http.StatusBadRequest)
-		return
+	if alertThreshold != "" {
+		var err error
+		threshold, err = strconv.ParseFloat(alertThreshold, 64)
+		if err != nil {
+			http.Error(w, "Invalid alert threshold. Must be a number", http.StatusBadRequest)
+			return
+		}
+
+		validator := &validation.BudgetValidation{
+			AlertThreshold: &threshold,
+		}
+		if err := validator.ValidateAlertThreshold(); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -187,7 +158,7 @@ func (h *BudgetHandler) GetBudgetsNearLimit(w http.ResponseWriter, r *http.Reque
 
 func (h *BudgetHandler) ListBudgets(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -211,20 +182,19 @@ func (h *BudgetHandler) UpdateBudget(w http.ResponseWriter, r *http.Request) {
 	}
 
 	budgetID := chi.URLParam(r, "id")
-	bid, err := uuid.Parse(budgetID)
+	bid, err := validation.ValidateUUID(budgetID)
 	if err != nil {
 		http.Error(w, "Invalid budget ID", http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
 
-	// Get current budget data
 	currentBudget, err := h.db.GetBudgetByID(r.Context(), repository.GetBudgetByIDParams{
 		ID:     bid,
 		UserID: uid,
@@ -234,54 +204,48 @@ func (h *BudgetHandler) UpdateBudget(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Use current values if request fields are empty/zero
-	amount := currentBudget.Amount
-	currency := currentBudget.Currency
-	categoryID := currentBudget.CategoryID
-	budgetType := currentBudget.Type
-	startDate := currentBudget.StartDate
-	endDate := currentBudget.EndDate
+	validator := &validation.BudgetValidation{
+		Amount:          req.Amount,
+		Currency:        req.Currency,
+		CategoryID:      req.CategoryID,
+		Type:            req.Type,
+		StartDate:       req.StartDate,
+		EndDate:         req.EndDate,
+		IsPartialUpdate: true, // Set this flag for updates
+	}
 
-	if req.Amount != 0 {
-		amount = req.Amount
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-	if req.Currency != "" {
-		currency = req.Currency
+
+	current := validation.CurrentBudget{
+		Amount:     currentBudget.Amount,
+		Currency:   currentBudget.Currency,
+		CategoryID: currentBudget.CategoryID,
+		Type:       currentBudget.Type,
+		StartDate:  currentBudget.StartDate,
+		EndDate:    currentBudget.EndDate,
 	}
-	if req.CategoryID != uuid.Nil {
-		categoryID = req.CategoryID
-	}
-	if req.Type != "" {
-		budgetType = req.Type
-	}
-	if req.StartDate != "" {
-		parsedDate, err := time.Parse(time.RFC3339, req.StartDate)
-		if err != nil {
-			http.Error(w, "Invalid start date format", http.StatusBadRequest)
-			return
-		}
-		startDate = parsedDate
-	}
-	if req.EndDate != "" {
-		parsedDate, err := time.Parse(time.RFC3339, req.EndDate)
-		if err != nil {
-			http.Error(w, "Invalid end date format", http.StatusBadRequest)
-			return
-		}
-		endDate = parsedDate
+
+	validated, err := validator.ValidatePartialUpdate(current)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	budget, err := h.db.UpdateBudget(r.Context(), repository.UpdateBudgetParams{
 		ID:         bid,
 		UserID:     uid,
-		Amount:     amount,
-		Currency:   currency,
-		CategoryID: categoryID,
-		Type:       budgetType,
-		StartDate:  startDate,
-		EndDate:    endDate,
+		Amount:     validated.Amount,
+		Currency:   validated.Currency,
+		CategoryID: validated.CategoryID,
+		Type:       validated.Type,
+		StartDate:  validated.StartDate,
+		EndDate:    validated.EndDate,
 	})
 	if err != nil {
+		log.Println(err)
 		http.Error(w, "Error updating budget", http.StatusInternalServerError)
 		return
 	}
@@ -292,14 +256,14 @@ func (h *BudgetHandler) UpdateBudget(w http.ResponseWriter, r *http.Request) {
 
 func (h *BudgetHandler) DeleteBudget(w http.ResponseWriter, r *http.Request) {
 	budgetID := chi.URLParam(r, "id")
-	bid, err := uuid.Parse(budgetID)
+	bid, err := validation.ValidateUUID(budgetID)
 	if err != nil {
 		http.Error(w, "Invalid budget ID", http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -323,7 +287,7 @@ func (h *BudgetHandler) DeleteBudget(w http.ResponseWriter, r *http.Request) {
 
 func (h *BudgetHandler) GetRecurringBudgets(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -341,7 +305,7 @@ func (h *BudgetHandler) GetRecurringBudgets(w http.ResponseWriter, r *http.Reque
 
 func (h *BudgetHandler) GetOneTimeBudgets(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -359,14 +323,14 @@ func (h *BudgetHandler) GetOneTimeBudgets(w http.ResponseWriter, r *http.Request
 
 func (h *BudgetHandler) GetBudgetsByCategory(w http.ResponseWriter, r *http.Request) {
 	categoryID := chi.URLParam(r, "categoryId")
-	cid, err := uuid.Parse(categoryID)
+	cid, err := validation.ValidateUUID(categoryID)
 	if err != nil {
 		http.Error(w, "Invalid category ID", http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
