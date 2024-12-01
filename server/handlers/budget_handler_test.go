@@ -224,28 +224,129 @@ func TestUpdateBudget(t *testing.T) {
 		budgetID   string
 		reqBody    CreateBudgetRequest
 		wantStatus int
+		setupMock  func()
 	}{
 		{
-			name:     "Valid update",
+			name:     "Valid full update",
 			budgetID: suite.testBudget.ID.String(),
 			reqBody: CreateBudgetRequest{
-				Amount:    2000.00,
-				Currency:  "EUR",
-				StartDate: time.Now().Format(time.RFC3339),
-				EndDate:   time.Now().AddDate(0, 2, 0).Format(time.RFC3339),
+				Amount:     2000.00,
+				Currency:   "EUR",
+				CategoryID: uuid.New(),
+				Type:       "recurring",
+				StartDate:  time.Now().Format(time.RFC3339),
+				EndDate:    time.Now().AddDate(0, 2, 0).Format(time.RFC3339),
 			},
 			wantStatus: http.StatusOK,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Valid partial update - amount only",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Amount: 2500.00,
+			},
+			wantStatus: http.StatusOK,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Valid partial update - start dates= only",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				StartDate: time.Now().Format(time.RFC3339),
+			},
+			wantStatus: http.StatusOK,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Valid partial update - end dates only",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				EndDate: time.Now().AddDate(0, 3, 0).Format(time.RFC3339),
+			},
+			wantStatus: http.StatusOK,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Invalid partial update - end date before start date",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				EndDate: time.Now().AddDate(0, -1, 0).Format(time.RFC3339),
+			},
+			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Valid partial update - type only",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Type: "one-time",
+			},
+			wantStatus: http.StatusOK,
+			setupMock:  func() {},
 		},
 		{
 			name:       "Invalid budget ID",
 			budgetID:   "invalid-uuid",
 			reqBody:    CreateBudgetRequest{},
 			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Invalid amount in partial update",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Amount: -100.00,
+			},
+			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Invalid currency in partial update",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Currency: "INVALID",
+			},
+			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Invalid date range in partial update",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				StartDate: time.Now().AddDate(0, 1, 0).Format(time.RFC3339),
+				EndDate:   time.Now().Format(time.RFC3339), // End date before start date
+			},
+			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Invalid budget type in partial update",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Type: "invalid-type",
+			},
+			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Budget not found",
+			budgetID: uuid.New().String(), // Non-existent budget ID
+			reqBody: CreateBudgetRequest{
+				Amount: 2000.00,
+			},
+			wantStatus: http.StatusNotFound,
+			setupMock: func() {
+				// Clear existing budgets and don't add the test budget
+				suite.mockRepo.Reset()
+			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			tt.setupMock()
+
 			body, _ := json.Marshal(tt.reqBody)
 			req := httptest.NewRequest(http.MethodPut, fmt.Sprintf("/api/budgets/%s", tt.budgetID), bytes.NewBuffer(body))
 			rctx := chi.NewRouteContext()
@@ -257,6 +358,14 @@ func TestUpdateBudget(t *testing.T) {
 			suite.handler.UpdateBudget(w, req)
 
 			assert.Equal(t, tt.wantStatus, w.Code)
+
+			// For successful updates, verify the response contains a budget
+			if tt.wantStatus == http.StatusOK {
+				var updatedBudget repository.Budget
+				err := json.NewDecoder(w.Body).Decode(&updatedBudget)
+				assert.NoError(t, err)
+				assert.NotEmpty(t, updatedBudget)
+			}
 		})
 	}
 }
