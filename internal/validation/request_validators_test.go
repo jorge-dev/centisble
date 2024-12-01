@@ -3,6 +3,7 @@ package validation
 import (
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -400,3 +401,176 @@ func TestAuthValidationValidate(t *testing.T) {
 }
 
 // test for auth validation
+
+func TestBudgetValidationValidate(t *testing.T) {
+	tests := []TestCase{
+		{
+			Name: "valid full budget",
+			Input: BudgetValidation{
+				Amount:     1000.00,
+				Currency:   validCurrency,
+				CategoryID: validUUID,
+				Type:       "recurring",
+				StartDate:  validDate,
+				EndDate:    "2024-12-31T00:00:00Z",
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid partial update - amount only",
+			Input: BudgetValidation{
+				Amount:          2000.00,
+				IsPartialUpdate: true,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid partial update - currency only",
+			Input: BudgetValidation{
+				Currency:        validCurrency,
+				IsPartialUpdate: true,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid partial update - type only",
+			Input: BudgetValidation{
+				Type:            "one-time",
+				IsPartialUpdate: true,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "invalid amount in partial update",
+			Input: BudgetValidation{
+				Amount:          -100.00,
+				IsPartialUpdate: true,
+			},
+			WantErr:     true,
+			ExpectedErr: ErrInvalidAmount,
+		},
+		{
+			Name: "invalid currency in partial update",
+			Input: BudgetValidation{
+				Currency:        invalidCurrency,
+				IsPartialUpdate: true,
+			},
+			WantErr:     true,
+			ExpectedErr: ErrInvalidCurrency,
+		},
+		{
+			Name: "invalid type in partial update",
+			Input: BudgetValidation{
+				Type:            "invalid-type",
+				IsPartialUpdate: true,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "invalid full budget - missing required fields",
+			Input: BudgetValidation{
+				Amount:   1000.00,
+				Currency: validCurrency,
+				// Missing other required fields
+			},
+			WantErr: true,
+		},
+		{
+			Name: "invalid date range",
+			Input: BudgetValidation{
+				Amount:     1000.00,
+				Currency:   validCurrency,
+				CategoryID: validUUID,
+				Type:       "recurring",
+				StartDate:  "2024-12-31T00:00:00Z",
+				EndDate:    validDate, // End date before start date
+			},
+			WantErr:     true,
+			ExpectedErr: ErrDateRange,
+		},
+	}
+
+	runValidationTest[BudgetValidation](t, tests)
+}
+
+func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
+	current := CurrentBudget{
+		Amount:     1000.00,
+		Currency:   "USD",
+		CategoryID: validUUID,
+		Type:       "recurring",
+		StartDate:  time.Now(),
+		EndDate:    time.Now().AddDate(0, 1, 0),
+	}
+
+	tests := []struct {
+		name    string
+		input   BudgetValidation
+		want    CurrentBudget
+		wantErr bool
+	}{
+		{
+			name: "valid amount update",
+			input: BudgetValidation{
+				Amount:          2000.00,
+				IsPartialUpdate: true,
+			},
+			want: CurrentBudget{
+				Amount:     2000.00,
+				Currency:   current.Currency,
+				CategoryID: current.CategoryID,
+				Type:       current.Type,
+				StartDate:  current.StartDate,
+				EndDate:    current.EndDate,
+			},
+			wantErr: false,
+		},
+		{
+			name: "valid multiple field update",
+			input: BudgetValidation{
+				Amount:          2000.00,
+				Currency:        "EUR",
+				Type:            "one-time",
+				IsPartialUpdate: true,
+			},
+			want: CurrentBudget{
+				Amount:     2000.00,
+				Currency:   "EUR",
+				CategoryID: current.CategoryID,
+				Type:       "one-time",
+				StartDate:  current.StartDate,
+				EndDate:    current.EndDate,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid date range update",
+			input: BudgetValidation{
+				StartDate:       time.Now().AddDate(0, 2, 0).Format(time.RFC3339),
+				EndDate:         time.Now().Format(time.RFC3339), // End before start
+				IsPartialUpdate: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid date format",
+			input: BudgetValidation{
+				StartDate:       "invalid-date",
+				IsPartialUpdate: true,
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.input.ValidatePartialUpdate(current)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}

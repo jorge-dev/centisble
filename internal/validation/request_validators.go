@@ -2,9 +2,11 @@ package validation
 
 import (
 	"fmt"
+	"log"
 	"strings"
+	"time"
 
-	"github.com/bojanz/currency"
+	currencyValidator "github.com/bojanz/currency"
 	"github.com/google/uuid"
 )
 
@@ -62,44 +64,184 @@ func (v *CategoryValidation) Validate() error {
 
 // BudgetValidation validates budget-related requests
 type BudgetValidation struct {
+	Amount          float64
+	Currency        string
+	CategoryID      uuid.UUID
+	Type            string
+	StartDate       string
+	EndDate         string
+	AlertThreshold  *float64
+	IsPartialUpdate bool // Add this field
+}
+
+func (v *BudgetValidation) ValidateAlertThreshold() error {
+	if v.AlertThreshold != nil {
+		if *v.AlertThreshold < 0 || *v.AlertThreshold > 100 {
+			return fmt.Errorf("alert threshold must be between 0 and 100")
+		}
+	}
+	return nil
+}
+
+func (v *BudgetValidation) Validate() error {
+	if !v.IsPartialUpdate {
+		// Full validation for new budgets
+		if err := (&MoneyValidator{Amount: v.Amount, Currency: v.Currency}).Validate(); err != nil {
+			return err
+		}
+		if v.CategoryID == uuid.Nil {
+			return ErrInvalidUUID
+		}
+		if v.Type != "recurring" && v.Type != "one-time" {
+			return fmt.Errorf("type must be either 'recurring' or 'one-time'")
+		}
+
+		start, err := ValidateDate(v.StartDate)
+		if err != nil {
+			return err
+		}
+
+		end, err := ValidateDate(v.EndDate)
+		if err != nil {
+			return err
+		}
+
+		if err := (&DateRangeValidator{
+			StartDate: start,
+			EndDate:   end,
+		}).Validate(); err != nil {
+			return err
+		}
+	} else {
+		// Partial update validation - validate amount and currency separately
+		if v.Amount != 0 {
+			if v.Amount <= 0 {
+				return ErrInvalidAmount
+			}
+		}
+		if v.Currency != "" {
+			if !currencyValidator.IsValid(v.Currency) {
+				return ErrInvalidCurrency
+			}
+		}
+		if v.CategoryID != uuid.Nil {
+			// Validate category ID if provided
+			if _, err := ValidateUUID(v.CategoryID.String()); err != nil {
+				return err
+			}
+		}
+		// Validate type if provided
+		if v.Type != "" && v.Type != "recurring" && v.Type != "one-time" {
+			return fmt.Errorf("type must be either 'recurring' or 'one-time'")
+		}
+
+		var start time.Time
+		var end time.Time
+
+		if v.StartDate != "" {
+			startDate, err := ValidateDate(v.StartDate)
+			if err != nil {
+				return err
+			}
+			start = startDate
+		}
+
+		if v.EndDate != "" {
+			endDate, err := ValidateDate(v.EndDate)
+			if err != nil {
+				return err
+			}
+			end = endDate
+		}
+		log.Println("start date", start)
+
+		if !start.IsZero() && !end.IsZero() {
+			if err := (&DateRangeValidator{
+				StartDate: start,
+				EndDate:   end,
+			}).Validate(); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	// Validate alert threshold if present
+	if err := v.ValidateAlertThreshold(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Add this new type
+type CurrentBudget struct {
 	Amount     float64
 	Currency   string
 	CategoryID uuid.UUID
 	Type       string
-	StartDate  string
-	EndDate    string
+	StartDate  time.Time
+	EndDate    time.Time
 }
 
-func (v *BudgetValidation) Validate() error {
-	// Validate money
-	if err := (&MoneyValidator{Amount: v.Amount, Currency: v.Currency}).Validate(); err != nil {
-		return err
+// Add this new method
+func (v *BudgetValidation) ValidatePartialUpdate(current CurrentBudget) (CurrentBudget, error) {
+	result := CurrentBudget{
+		Amount:     current.Amount,
+		Currency:   current.Currency,
+		CategoryID: current.CategoryID,
+		Type:       current.Type,
+		StartDate:  current.StartDate,
+		EndDate:    current.EndDate,
 	}
 
-	// Validate category
-	if v.CategoryID == uuid.Nil {
-		return ErrInvalidUUID
+	// Handle date updates, considering both current and new dates
+	var newStartDate, newEndDate time.Time
+	var err error
+
+	if v.StartDate != "" {
+		newStartDate, err = time.Parse(time.RFC3339, v.StartDate)
+		if err != nil {
+			return CurrentBudget{}, fmt.Errorf("invalid start date format")
+		}
+		result.StartDate = newStartDate
+	} else {
+		newStartDate = current.StartDate
 	}
 
-	// Validate type
-	if v.Type != "recurring" && v.Type != "one-time" {
-		return fmt.Errorf("type must be either 'recurring' or 'one-time'")
+	if v.EndDate != "" {
+		newEndDate, err = time.Parse(time.RFC3339, v.EndDate)
+		if err != nil {
+			return CurrentBudget{}, fmt.Errorf("invalid end date format")
+		}
+		result.EndDate = newEndDate
+	} else {
+		newEndDate = current.EndDate
 	}
 
-	// Validate dates
-	start, err := ValidateDate(v.StartDate)
-	if err != nil {
-		return err
-	}
-	end, err := ValidateDate(v.EndDate)
-	if err != nil {
-		return err
+	// Validate the date range using both current and new dates
+	if err := (&DateRangeValidator{
+		StartDate: newStartDate,
+		EndDate:   newEndDate,
+	}).Validate(); err != nil {
+		return CurrentBudget{}, err
 	}
 
-	return (&DateRangeValidator{
-		StartDate: start,
-		EndDate:   end,
-	}).Validate()
+	// Handle other fields
+	if v.Amount != 0 {
+		result.Amount = v.Amount
+	}
+	if v.Currency != "" {
+		result.Currency = v.Currency
+	}
+	if v.CategoryID != uuid.Nil {
+		result.CategoryID = v.CategoryID
+	}
+	if v.Type != "" {
+		result.Type = v.Type
+	}
+
+	return result, nil
 }
 
 // AuthValidation validates authentication-related requests
@@ -256,7 +398,7 @@ func (v *SummaryValidation) Validate() error {
 	}
 
 	// Validate currency if provided
-	if v.Currency != "" && !currency.IsValid(v.Currency) {
+	if v.Currency != "" && !currencyValidator.IsValid(v.Currency) {
 		return ErrInvalidCurrency
 	}
 
