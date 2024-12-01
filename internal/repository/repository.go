@@ -10,6 +10,9 @@ import (
 type Repository interface {
 
 	// User operations
+	CheckEmailExists(ctx context.Context, email string) (bool, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteUser(ctx context.Context, id uuid.UUID) (int64, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow, error)
 	GetUserByEmail(ctx context.Context, email string) (GetUserByEmailRow, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)

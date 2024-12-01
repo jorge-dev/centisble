@@ -149,3 +149,23 @@ func TestValidateDate(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateRole(t *testing.T) {
+	validRole := uuid.New()
+	tests := []struct {
+		name    string
+		roleID  string
+		wantErr bool
+	}{
+		{"valid role", validRole.String(), false},
+		{"empty role", "", true},
+		{"invalid role", "invalid-role", true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := ValidateRole(tt.roleID)
+			assert.Equal(t, tt.wantErr, err != nil)
+		})
+	}
+}

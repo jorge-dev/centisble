@@ -106,3 +106,11 @@ func ValidateDate(dateStr string) (time.Time, error) {
 	}
 	return date, nil
 }
+
+// ValidateRole validates if a role ID is valid
+func ValidateRole(roleID string) (uuid.UUID, error) {
+	if roleID == "" {
+		return uuid.Nil, fmt.Errorf("role ID is required")
+	}
+	return ValidateUUID(roleID)
+}

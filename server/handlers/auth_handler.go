@@ -8,10 +8,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/auth"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 )
 
 type AuthHandler struct {
-	db         *repository.Queries
+	db         repository.Repository
 	jwtManager *auth.JWTManager
 }
 
@@ -37,7 +38,7 @@ type AuthResponse struct {
 	User  AuthUser `json:"user"`
 }
 
-func NewAuthHandler(db *repository.Queries, jm *auth.JWTManager) *AuthHandler {
+func NewAuthHandler(db repository.Repository, jm *auth.JWTManager) *AuthHandler {
 	return &AuthHandler{
 		db:         db,
 		jwtManager: jm,
@@ -48,6 +49,29 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Validate request with IsLogin = false for registration
+	validator := &validation.AuthValidation{
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: req.Password,
+		IsLogin:  false, // This is a registration request
+	}
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Check if email already exists
+	emailExists, err := h.db.CheckEmailExists(r.Context(), req.Email)
+	if err != nil {
+		http.Error(w, "Error processing request", http.StatusInternalServerError)
+		return
+	}
+	if emailExists {
+		http.Error(w, "An account with this email already exists. Please login or use a different email.", http.StatusInternalServerError)
 		return
 	}
 
@@ -69,6 +93,12 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Error creating user: %v", err)
 		http.Error(w, "Error creating user", http.StatusInternalServerError)
+		return
+	}
+
+	// Validate role ID before generating token
+	if _, err := validation.ValidateRole(user.RoleID.String()); err != nil {
+		http.Error(w, "Invalid role assigned", http.StatusInternalServerError)
 		return
 	}
 
@@ -99,6 +129,17 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate request with IsLogin = true for login
+	validator := &validation.AuthValidation{
+		Email:    req.Email,
+		Password: req.Password,
+		IsLogin:  true, // This is a login request
+	}
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	// Get user by email
 	user, err := h.db.GetUserByEmail(r.Context(), req.Email)
 	if err != nil {
@@ -109,6 +150,12 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	// Validate password
 	if !auth.ValidatePassword(req.Password, user.PasswordHash) {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+		return
+	}
+
+	// Validate role ID before generating token
+	if _, err := validation.ValidateRole(user.RoleID.String()); err != nil {
+		http.Error(w, "Invalid role assigned", http.StatusInternalServerError)
 		return
 	}
 
