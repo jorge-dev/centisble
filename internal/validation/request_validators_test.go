@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -255,7 +256,6 @@ func TestCategoryValidationValidate(t *testing.T) {
 	runValidationTest[CategoryValidation](t, tests)
 }
 
-// Update test function calls to include pointer type
 func TestUserUpdateValidationValidate(t *testing.T) {
 	tests := []TestCase{
 		{
@@ -301,3 +301,102 @@ func TestUserUpdateValidationValidate(t *testing.T) {
 
 	runValidationTest[UserUpdateValidation](t, tests)
 }
+
+// Add AuthValidation test
+func TestAuthValidationValidate(t *testing.T) {
+	tests := []TestCase{
+		{
+			Name: "valid registration",
+			Input: AuthValidation{
+				Name:     validName,
+				Email:    validEmail,
+				Password: validPassword,
+				IsLogin:  false,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid login",
+			Input: AuthValidation{
+				Email:    validEmail,
+				Password: validPassword,
+				IsLogin:  true,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "missing name in registration",
+			Input: AuthValidation{
+				Email:    validEmail,
+				Password: validPassword,
+				IsLogin:  false,
+			},
+			WantErr:     true,
+			ExpectedErr: ErrEmptyField,
+		},
+		{
+			Name: "invalid email format",
+			Input: AuthValidation{
+				Name:     validName,
+				Email:    invalidEmail,
+				Password: validPassword,
+				IsLogin:  false,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "empty email",
+			Input: AuthValidation{
+				Name:     validName,
+				Password: validPassword,
+				IsLogin:  false,
+			},
+			WantErr:     true,
+			ExpectedErr: ErrEmptyField,
+		},
+		{
+			Name: "empty password",
+			Input: AuthValidation{
+				Name:    validName,
+				Email:   validEmail,
+				IsLogin: false,
+			},
+			WantErr:     true,
+			ExpectedErr: ErrEmptyField,
+		},
+		{
+			Name: "short password",
+			Input: AuthValidation{
+				Name:     validName,
+				Email:    validEmail,
+				Password: shortPassword,
+				IsLogin:  false,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "name too short (registration)",
+			Input: AuthValidation{
+				Name:     "A",
+				Email:    validEmail,
+				Password: validPassword,
+				IsLogin:  false,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "name too long (registration)",
+			Input: AuthValidation{
+				Name:     strings.Repeat("a", 101),
+				Email:    validEmail,
+				Password: validPassword,
+				IsLogin:  false,
+			},
+			WantErr: true,
+		},
+	}
+
+	runValidationTest[AuthValidation](t, tests)
+}
+
+// test for auth validation
