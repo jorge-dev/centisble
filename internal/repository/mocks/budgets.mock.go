@@ -36,6 +36,7 @@ func (m *BudgetMock) CreateBudget(ctx context.Context, arg repository.CreateBudg
 		EndDate:    arg.EndDate,
 		CreatedAt:  now,
 		UpdatedAt:  &now,
+		Name:       arg.Name,
 	}
 	m.budgets[budget.ID.String()] = budget
 	return budget, nil
@@ -156,6 +157,7 @@ func (m *BudgetMock) UpdateBudget(ctx context.Context, arg repository.UpdateBudg
 		budget.Type = arg.Type
 		budget.StartDate = arg.StartDate
 		budget.EndDate = arg.EndDate
+		budget.Name = arg.Name
 		budget.UpdatedAt = &now
 		m.budgets[arg.ID.String()] = budget
 		return budget, nil

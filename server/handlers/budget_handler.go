@@ -24,6 +24,7 @@ type CreateBudgetRequest struct {
 	Type       string    `json:"type"` // "recurring" or "one-time"
 	StartDate  string    `json:"start_date"`
 	EndDate    string    `json:"end_date"`
+	Name       string    `json:"name"`
 }
 
 func NewBudgetHandler(db repository.Repository) *BudgetHandler {
@@ -44,6 +45,7 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 		Type:       req.Type,
 		StartDate:  req.StartDate,
 		EndDate:    req.EndDate,
+		Name:       req.Name,
 	}
 
 	if err := validator.Validate(); err != nil {
@@ -70,6 +72,7 @@ func (h *BudgetHandler) CreateBudget(w http.ResponseWriter, r *http.Request) {
 		Type:       req.Type,
 		StartDate:  startDate,
 		EndDate:    endDate,
+		Name:       req.Name,
 	})
 	if err != nil {
 		http.Error(w, "Error creating budget", http.StatusInternalServerError)
@@ -211,6 +214,7 @@ func (h *BudgetHandler) UpdateBudget(w http.ResponseWriter, r *http.Request) {
 		Type:            req.Type,
 		StartDate:       req.StartDate,
 		EndDate:         req.EndDate,
+		Name:            req.Name,
 		IsPartialUpdate: true, // Set this flag for updates
 	}
 
@@ -243,6 +247,7 @@ func (h *BudgetHandler) UpdateBudget(w http.ResponseWriter, r *http.Request) {
 		Type:       validated.Type,
 		StartDate:  validated.StartDate,
 		EndDate:    validated.EndDate,
+		Name:       validated.Name,
 	})
 	if err != nil {
 		log.Println(err)

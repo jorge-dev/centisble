@@ -1,0 +1,2 @@
+ALTER TABLE budgets
+DROP COLUMN name;
