@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -57,6 +58,7 @@ func setupBudgetHandlerTest(t *testing.T) *budgetHandlerTestSuite {
 		StartDate:  time.Now(),
 		EndDate:    time.Now().AddDate(0, 1, 0),
 		CreatedAt:  time.Now(),
+		Name:       "Test Budget", // Add name field
 	}
 
 	// Add test budget to mock
@@ -82,6 +84,7 @@ func TestCreateBudget(t *testing.T) {
 				Type:       "recurring",
 				StartDate:  time.Now().Format(time.RFC3339),
 				EndDate:    time.Now().AddDate(0, 1, 0).Format(time.RFC3339),
+				Name:       "Monthly Groceries",
 			},
 			wantStatus: http.StatusCreated,
 		},
@@ -126,6 +129,18 @@ func TestCreateBudget(t *testing.T) {
 				Type:       "recurring",
 				StartDate:  time.Now().Format(time.RFC3339),
 				EndDate:    time.Now().AddDate(0, -1, 0).Format(time.RFC3339), // End date before start date
+			},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Missing name",
+			reqBody: CreateBudgetRequest{
+				Amount:     1000.00,
+				Currency:   "USD",
+				CategoryID: uuid.New(),
+				Type:       "recurring",
+				StartDate:  time.Now().Format(time.RFC3339),
+				EndDate:    time.Now().AddDate(0, 1, 0).Format(time.RFC3339),
 			},
 			wantStatus: http.StatusBadRequest,
 		},
@@ -325,6 +340,24 @@ func TestUpdateBudget(t *testing.T) {
 			budgetID: suite.testBudget.ID.String(),
 			reqBody: CreateBudgetRequest{
 				Type: "invalid-type",
+			},
+			wantStatus: http.StatusBadRequest,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Valid name update only",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Name: "Updated Budget Name",
+			},
+			wantStatus: http.StatusOK,
+			setupMock:  func() {},
+		},
+		{
+			name:     "Invalid name - too long",
+			budgetID: suite.testBudget.ID.String(),
+			reqBody: CreateBudgetRequest{
+				Name: strings.Repeat("a", 256), // Name too long
 			},
 			wantStatus: http.StatusBadRequest,
 			setupMock:  func() {},
