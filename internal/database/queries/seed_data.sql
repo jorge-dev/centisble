@@ -97,7 +97,7 @@ WHERE random() < 0.3;
 WITH users AS (
     SELECT id, email FROM users WHERE email IN ('john.doe@example.com', 'jane.smith@example.com', 'bob.wilson@example.com')
 )
-INSERT INTO budgets (id, user_id, category_id, amount, currency, type, start_date, end_date, created_at, updated_at)
+INSERT INTO budgets (id, user_id, category_id, amount, currency, type, start_date, end_date, name, created_at, updated_at)
 SELECT
     uuid_generate_v4(),
     u.id,
@@ -110,6 +110,7 @@ SELECT
     END,
     date_trunc('month', CURRENT_DATE),
     date_trunc('month', CURRENT_DATE) + interval '1 month' - interval '1 day',
+    c.name || ' Budget', -- Add budget name based on category
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 FROM users u
