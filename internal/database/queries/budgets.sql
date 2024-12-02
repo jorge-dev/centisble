@@ -1,11 +1,11 @@
 -- name: CreateBudget :one
 INSERT INTO budgets (
     id, user_id, amount, currency, category_id, 
-    type, start_date, end_date, created_at, updated_at
+    type, start_date, end_date, name, created_at, updated_at
 )
 VALUES (
     $1, $2, $3, $4, $5, 
-    $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    $6, $7, $8, $9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 )
 RETURNING *;
 
@@ -27,8 +27,9 @@ SET
     type = $5,
     start_date = $6,
     end_date = $7,
+    name = $8,
     updated_at = CURRENT_TIMESTAMP
-WHERE id = $1 AND user_id = $8 AND deleted_at IS NULL
+WHERE id = $1 AND user_id = $9 AND deleted_at IS NULL
 RETURNING *;
 
 -- name: DeleteBudget :execrows
