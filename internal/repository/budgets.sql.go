@@ -15,13 +15,13 @@ import (
 const createBudget = `-- name: CreateBudget :one
 INSERT INTO budgets (
     id, user_id, amount, currency, category_id, 
-    type, start_date, end_date, created_at, updated_at
+    type, start_date, end_date, name, created_at, updated_at
 )
 VALUES (
     $1, $2, $3, $4, $5, 
-    $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    $6, $7, $8, $9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 )
-RETURNING id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at
+RETURNING id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name
 `
 
 type CreateBudgetParams struct {
@@ -33,6 +33,7 @@ type CreateBudgetParams struct {
 	Type       string    `json:"type"`
 	StartDate  time.Time `json:"start_date"`
 	EndDate    time.Time `json:"end_date"`
+	Name       string    `json:"name"`
 }
 
 func (q *Queries) CreateBudget(ctx context.Context, arg CreateBudgetParams) (Budget, error) {
@@ -45,6 +46,7 @@ func (q *Queries) CreateBudget(ctx context.Context, arg CreateBudgetParams) (Bud
 		arg.Type,
 		arg.StartDate,
 		arg.EndDate,
+		arg.Name,
 	)
 	var i Budget
 	err := row.Scan(
@@ -59,6 +61,7 @@ func (q *Queries) CreateBudget(ctx context.Context, arg CreateBudgetParams) (Bud
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.Name,
 	)
 	return i, err
 }
@@ -83,7 +86,7 @@ func (q *Queries) DeleteBudget(ctx context.Context, arg DeleteBudgetParams) (int
 }
 
 const getActiveBudgets = `-- name: GetActiveBudgets :many
-SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name FROM budgets
 WHERE user_id = $1 
     AND deleted_at IS NULL
     AND start_date <= CURRENT_DATE
@@ -112,6 +115,7 @@ func (q *Queries) GetActiveBudgets(ctx context.Context, userID uuid.UUID) ([]Bud
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}
@@ -124,7 +128,7 @@ func (q *Queries) GetActiveBudgets(ctx context.Context, userID uuid.UUID) ([]Bud
 }
 
 const getBudgetByID = `-- name: GetBudgetByID :one
-SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name FROM budgets
 WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
 `
 
@@ -148,6 +152,7 @@ func (q *Queries) GetBudgetByID(ctx context.Context, arg GetBudgetByIDParams) (B
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.Name,
 	)
 	return i, err
 }
@@ -161,7 +166,7 @@ WITH budget_expenses AS (
       AND deleted_at IS NULL
 )
 SELECT 
-    b.id, b.user_id, b.amount, b.currency, b.category_id, b.type, b.start_date, b.end_date, b.created_at, b.updated_at, b.deleted_at, -- Embed the entire budget row
+    b.id, b.user_id, b.amount, b.currency, b.category_id, b.type, b.start_date, b.end_date, b.created_at, b.updated_at, b.deleted_at, b.name, -- Embed the entire budget row
     e.total_spent::float8 AS spent_amount,
     CASE 
         WHEN b.amount > 0 THEN (e.total_spent / b.amount * 100)::float8
@@ -200,6 +205,7 @@ func (q *Queries) GetBudgetUsage(ctx context.Context, arg GetBudgetUsageParams) 
 		&i.Budget.CreatedAt,
 		&i.Budget.UpdatedAt,
 		&i.Budget.DeletedAt,
+		&i.Budget.Name,
 		&i.SpentAmount,
 		&i.UsagePercentage,
 	)
@@ -207,7 +213,7 @@ func (q *Queries) GetBudgetUsage(ctx context.Context, arg GetBudgetUsageParams) 
 }
 
 const getBudgetsByCategory = `-- name: GetBudgetsByCategory :many
-SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name FROM budgets
 WHERE user_id = $1 
     AND category_id = $2 
     AND deleted_at IS NULL
@@ -240,6 +246,7 @@ func (q *Queries) GetBudgetsByCategory(ctx context.Context, arg GetBudgetsByCate
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}
@@ -253,7 +260,7 @@ func (q *Queries) GetBudgetsByCategory(ctx context.Context, arg GetBudgetsByCate
 
 const getBudgetsNearLimit = `-- name: GetBudgetsNearLimit :many
 SELECT 
-    b.id, b.user_id, b.amount, b.currency, b.category_id, b.type, b.start_date, b.end_date, b.created_at, b.updated_at, b.deleted_at, -- Embed the entire budget row
+    b.id, b.user_id, b.amount, b.currency, b.category_id, b.type, b.start_date, b.end_date, b.created_at, b.updated_at, b.deleted_at, b.name, -- Embed the entire budget row
     COALESCE(spent_data.spent_amount, 0)::float8 AS spent_amount,
     CASE 
         WHEN b.amount > 0 THEN (COALESCE(spent_data.spent_amount, 0) / b.amount * 100)::float8
@@ -314,6 +321,7 @@ func (q *Queries) GetBudgetsNearLimit(ctx context.Context, arg GetBudgetsNearLim
 			&i.Budget.CreatedAt,
 			&i.Budget.UpdatedAt,
 			&i.Budget.DeletedAt,
+			&i.Budget.Name,
 			&i.SpentAmount,
 			&i.UsagePercentage,
 		); err != nil {
@@ -328,7 +336,7 @@ func (q *Queries) GetBudgetsNearLimit(ctx context.Context, arg GetBudgetsNearLim
 }
 
 const getOneTimeBudgets = `-- name: GetOneTimeBudgets :many
-SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name FROM budgets
 WHERE user_id = $1 
     AND type = 'one-time'
     AND deleted_at IS NULL
@@ -356,6 +364,7 @@ func (q *Queries) GetOneTimeBudgets(ctx context.Context, userID uuid.UUID) ([]Bu
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}
@@ -368,7 +377,7 @@ func (q *Queries) GetOneTimeBudgets(ctx context.Context, userID uuid.UUID) ([]Bu
 }
 
 const getRecurringBudgets = `-- name: GetRecurringBudgets :many
-SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name FROM budgets
 WHERE user_id = $1 
     AND type = 'recurring'
     AND deleted_at IS NULL
@@ -396,6 +405,7 @@ func (q *Queries) GetRecurringBudgets(ctx context.Context, userID uuid.UUID) ([]
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}
@@ -408,7 +418,7 @@ func (q *Queries) GetRecurringBudgets(ctx context.Context, userID uuid.UUID) ([]
 }
 
 const listBudgets = `-- name: ListBudgets :many
-SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at FROM budgets
+SELECT id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name FROM budgets
 WHERE user_id = $1 AND deleted_at IS NULL
 ORDER BY created_at DESC
 `
@@ -434,6 +444,7 @@ func (q *Queries) ListBudgets(ctx context.Context, userID uuid.UUID) ([]Budget, 
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}
@@ -454,9 +465,10 @@ SET
     type = $5,
     start_date = $6,
     end_date = $7,
+    name = $8,
     updated_at = CURRENT_TIMESTAMP
-WHERE id = $1 AND user_id = $8 AND deleted_at IS NULL
-RETURNING id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at
+WHERE id = $1 AND user_id = $9 AND deleted_at IS NULL
+RETURNING id, user_id, amount, currency, category_id, type, start_date, end_date, created_at, updated_at, deleted_at, name
 `
 
 type UpdateBudgetParams struct {
@@ -467,6 +479,7 @@ type UpdateBudgetParams struct {
 	Type       string    `json:"type"`
 	StartDate  time.Time `json:"start_date"`
 	EndDate    time.Time `json:"end_date"`
+	Name       string    `json:"name"`
 	UserID     uuid.UUID `json:"user_id"`
 }
 
@@ -479,6 +492,7 @@ func (q *Queries) UpdateBudget(ctx context.Context, arg UpdateBudgetParams) (Bud
 		arg.Type,
 		arg.StartDate,
 		arg.EndDate,
+		arg.Name,
 		arg.UserID,
 	)
 	var i Budget
@@ -494,6 +508,7 @@ func (q *Queries) UpdateBudget(ctx context.Context, arg UpdateBudgetParams) (Bud
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.Name,
 	)
 	return i, err
 }
