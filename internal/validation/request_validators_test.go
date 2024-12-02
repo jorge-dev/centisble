@@ -413,8 +413,35 @@ func TestBudgetValidationValidate(t *testing.T) {
 				Type:       "recurring",
 				StartDate:  validDate,
 				EndDate:    "2024-12-31T00:00:00Z",
+				Name:       "Monthly Groceries",
 			},
 			WantErr: false,
+		},
+		{
+			Name: "missing name in new budget",
+			Input: BudgetValidation{
+				Amount:     1000.00,
+				Currency:   validCurrency,
+				CategoryID: validUUID,
+				Type:       "recurring",
+				StartDate:  validDate,
+				EndDate:    "2024-12-31T00:00:00Z",
+			},
+			WantErr:     true,
+			ExpectedErr: ErrEmptyField,
+		},
+		{
+			Name: "name too long",
+			Input: BudgetValidation{
+				Amount:     1000.00,
+				Currency:   validCurrency,
+				CategoryID: validUUID,
+				Type:       "recurring",
+				StartDate:  validDate,
+				EndDate:    "2024-12-31T00:00:00Z",
+				Name:       strings.Repeat("a", 256),
+			},
+			WantErr: true,
 		},
 		{
 			Name: "valid partial update - amount only",
@@ -484,6 +511,7 @@ func TestBudgetValidationValidate(t *testing.T) {
 				Type:       "recurring",
 				StartDate:  "2024-12-31T00:00:00Z",
 				EndDate:    validDate, // End date before start date
+				Name:       "Monthly Groceries",
 			},
 			WantErr:     true,
 			ExpectedErr: ErrDateRange,
@@ -501,6 +529,7 @@ func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
 		Type:       "recurring",
 		StartDate:  time.Now(),
 		EndDate:    time.Now().AddDate(0, 1, 0),
+		Name:       "Original Budget",
 	}
 
 	tests := []struct {
@@ -522,6 +551,7 @@ func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
 				Type:       current.Type,
 				StartDate:  current.StartDate,
 				EndDate:    current.EndDate,
+				Name:       current.Name,
 			},
 			wantErr: false,
 		},
@@ -540,6 +570,7 @@ func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
 				Type:       "one-time",
 				StartDate:  current.StartDate,
 				EndDate:    current.EndDate,
+				Name:       current.Name,
 			},
 			wantErr: false,
 		},
@@ -559,6 +590,23 @@ func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
 				IsPartialUpdate: true,
 			},
 			wantErr: true,
+		},
+		{
+			name: "valid name update",
+			input: BudgetValidation{
+				Name:            "Updated Budget Name",
+				IsPartialUpdate: true,
+			},
+			want: CurrentBudget{
+				Amount:     current.Amount,
+				Currency:   current.Currency,
+				CategoryID: current.CategoryID,
+				Type:       current.Type,
+				StartDate:  current.StartDate,
+				EndDate:    current.EndDate,
+				Name:       "Updated Budget Name",
+			},
+			wantErr: false,
 		},
 	}
 

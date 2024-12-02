@@ -71,7 +71,8 @@ type BudgetValidation struct {
 	StartDate       string
 	EndDate         string
 	AlertThreshold  *float64
-	IsPartialUpdate bool // Add this field
+	IsPartialUpdate bool
+	Name            string // Add name field
 }
 
 func (v *BudgetValidation) ValidateAlertThreshold() error {
@@ -85,6 +86,16 @@ func (v *BudgetValidation) ValidateAlertThreshold() error {
 
 func (v *BudgetValidation) Validate() error {
 	if !v.IsPartialUpdate {
+		// Validate name for new budgets
+		if err := (&TextValidator{
+			Text:     v.Name,
+			MinLen:   1,
+			MaxLen:   255,
+			Required: true,
+		}).Validate(); err != nil {
+			return err
+		}
+
 		// Full validation for new budgets
 		if err := (&MoneyValidator{Amount: v.Amount, Currency: v.Currency}).Validate(); err != nil {
 			return err
@@ -113,6 +124,18 @@ func (v *BudgetValidation) Validate() error {
 			return err
 		}
 	} else {
+		// Validate name if provided in partial update
+		if v.Name != "" {
+			if err := (&TextValidator{
+				Text:     v.Name,
+				MinLen:   1,
+				MaxLen:   255,
+				Required: false,
+			}).Validate(); err != nil {
+				return err
+			}
+		}
+
 		// Partial update validation - validate amount and currency separately
 		if v.Amount != 0 {
 			if v.Amount <= 0 {
@@ -182,6 +205,7 @@ type CurrentBudget struct {
 	Type       string
 	StartDate  time.Time
 	EndDate    time.Time
+	Name       string // Add name field
 }
 
 // Add this new method
@@ -193,6 +217,7 @@ func (v *BudgetValidation) ValidatePartialUpdate(current CurrentBudget) (Current
 		Type:       current.Type,
 		StartDate:  current.StartDate,
 		EndDate:    current.EndDate,
+		Name:       current.Name, // Copy existing name
 	}
 
 	// Handle date updates, considering both current and new dates
@@ -239,6 +264,11 @@ func (v *BudgetValidation) ValidatePartialUpdate(current CurrentBudget) (Current
 	}
 	if v.Type != "" {
 		result.Type = v.Type
+	}
+
+	// Handle name update
+	if v.Name != "" {
+		result.Name = v.Name
 	}
 
 	return result, nil
