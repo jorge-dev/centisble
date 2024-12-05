@@ -41,6 +41,7 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 		authHandler := handlers.NewAuthHandler(queries, &jwtManager)
 		r.Post("/register", authHandler.Register)
 		r.Post("/login", authHandler.Login)
+		r.Post("/logout", authHandler.Signout)
 	})
 
 	// Private routes

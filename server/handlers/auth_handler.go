@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/auth"
@@ -34,8 +35,8 @@ type AuthUser struct {
 }
 
 type AuthResponse struct {
-	Token string   `json:"token"`
-	User  AuthUser `json:"user"`
+	User      AuthUser       `json:"user"`
+	TokenPair auth.TokenPair `json:"tokens"`
 }
 
 func NewAuthHandler(db repository.Repository, jm *auth.JWTManager) *AuthHandler {
@@ -102,15 +103,15 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate JWT
-	token, err := h.jwtManager.GenerateToken(user.ID.String(), user.Email, user.RoleID.String())
+	// Generate JWT pair
+	tokenPair, err := h.jwtManager.GenerateTokenPair(user.ID.String(), user.Email, user.RoleID.String())
 	if err != nil {
-		http.Error(w, "Error generating token", http.StatusInternalServerError)
+		http.Error(w, "Error generating tokens", http.StatusInternalServerError)
 		return
 	}
 
 	response := AuthResponse{
-		Token: token,
+		TokenPair: *tokenPair,
 		User: AuthUser{
 			ID:    user.ID.String(),
 			Name:  user.Name,
@@ -119,6 +120,8 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.Header().Set("Cache-Control", "no-store")
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -159,15 +162,15 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate JWT
-	token, err := h.jwtManager.GenerateToken(user.ID.String(), user.Email, user.RoleID.String())
+	// Generate JWT pair
+	tokenPair, err := h.jwtManager.GenerateTokenPair(user.ID.String(), user.Email, user.RoleID.String())
 	if err != nil {
-		http.Error(w, "Error generating token", http.StatusInternalServerError)
+		http.Error(w, "Error generating tokens", http.StatusInternalServerError)
 		return
 	}
 
 	response := AuthResponse{
-		Token: token,
+		TokenPair: *tokenPair,
 		User: AuthUser{
 			ID:    user.ID.String(),
 			Name:  user.Name,
@@ -176,5 +179,30 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.Header().Set("Cache-Control", "no-store")
 	json.NewEncoder(w).Encode(response)
+}
+
+func (h *AuthHandler) Signout(w http.ResponseWriter, r *http.Request) {
+	// Get token from Authorization header
+	token := r.Header.Get("Authorization")
+	if token == "" {
+		http.Error(w, "No token provided", http.StatusBadRequest)
+		return
+	}
+
+	// Remove "Bearer " prefix if present
+	token = strings.TrimPrefix(token, "Bearer ")
+
+	// Invalidate the token
+	if err := h.jwtManager.InvalidateToken(token); err != nil {
+		http.Error(w, "Error invalidating token", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Successfully signed out",
+	})
 }

@@ -68,6 +68,29 @@ paths:
                 $ref: "#/components/schemas/AuthResponse"
         "401":
           description: Unauthorized - Invalid credentials
+  /logout:
+    post:
+      description: Logout the current user
+      operationId: logoutUser
+      tags:
+        - Authentication
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully logged out"
+        "401":
+          description: Unauthorized - Invalid or missing token
+        "400":
+          description: Bad Request - Token validation failed
   /income:
     post:
       description: Add a new income record
