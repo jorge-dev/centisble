@@ -5,7 +5,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "1f1e717e-1980-4ebb-a3fc-138198227161",
+                    "id": "ce4fbd79-4303-4159-a035-e353923e6c84",
                     "name": "register User",
                     "request": {
                         "name": "register User",
@@ -44,7 +44,7 @@
                     },
                     "response": [
                         {
-                            "id": "f95275f1-afcb-408c-bdc8-f5647a15cac5",
+                            "id": "31168071-86a4-46cf-8393-150a878ae251",
                             "name": "User registered successfully",
                             "originalRequest": {
                                 "url": {
@@ -82,7 +82,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "a40744c6-519f-400b-9a4c-be65d9b0379a",
+                            "id": "2666710b-ba68-40f6-89a2-f6e00cb9c6be",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -132,7 +132,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "9c0bd53f-5a4d-4c47-9253-72f5d5452a39",
+                    "id": "5e23a1ab-f5d8-44a1-9f3a-162646f86693",
                     "name": "login User",
                     "request": {
                         "name": "login User",
@@ -175,7 +175,7 @@
                     },
                     "response": [
                         {
-                            "id": "b39e0b7d-66cd-43df-ab62-d77bcc83424d",
+                            "id": "58d9f71b-5d1d-4ba1-961d-229ae5ef4777",
                             "name": "Authentication successful",
                             "originalRequest": {
                                 "url": {
@@ -223,7 +223,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "17c794af-9557-45a0-ac0d-4fd7cc408d38",
+                            "id": "bf9e1b1b-930e-4c87-8c1c-63e467919163",
                             "name": "Unauthorized - Invalid credentials",
                             "originalRequest": {
                                 "url": {
@@ -269,11 +269,170 @@
             ]
         },
         {
+            "name": "logout",
+            "description": "",
+            "item": [
+                {
+                    "id": "ef06432f-a04f-4f96-810b-43e134e80582",
+                    "name": "logout User",
+                    "request": {
+                        "name": "logout User",
+                        "description": {
+                            "content": "Logout the current user",
+                            "type": "text/plain"
+                        },
+                        "url": {
+                            "path": [
+                                "logout"
+                            ],
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {},
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{bearerToken}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "e53f5a74-efd2-4e20-9f1b-19b14d0f15de",
+                            "name": "Successfully logged out",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "logout"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {}
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"message\": \"Successfully logged out\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "da4630c1-0779-47a3-9cb7-729353755b76",
+                            "name": "Bad Request - Token validation failed",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "logout"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {}
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "header": [],
+                            "cookie": [],
+                            "_postman_previewlanguage": "text"
+                        },
+                        {
+                            "id": "db74c5fc-fb4d-4383-9dc2-faa76660b8c6",
+                            "name": "Unauthorized - Invalid or missing token",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "logout"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "description": {
+                                            "content": "Added as a part of security scheme: bearer",
+                                            "type": "text/plain"
+                                        },
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {}
+                            },
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [],
+                            "cookie": [],
+                            "_postman_previewlanguage": "text"
+                        }
+                    ],
+                    "event": [],
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    }
+                }
+            ]
+        },
+        {
             "name": "income",
             "description": "",
             "item": [
                 {
-                    "id": "757aaae7-ae33-42ee-90f9-449399ba6fc9",
+                    "id": "bc4c8ee3-e745-474d-97ed-d2600d895a6e",
                     "name": "add Income Record",
                     "request": {
                         "name": "add Income Record",
@@ -320,7 +479,7 @@
                     },
                     "response": [
                         {
-                            "id": "04855db6-a736-4caf-b4ff-99f429dd3156",
+                            "id": "c7816ee2-a5fe-4bd8-b702-7be7c56f4de2",
                             "name": "Income record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -366,7 +525,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "878b06e7-4b8b-48a3-a1b2-681571122dcb",
+                            "id": "b3db27ab-4586-42dc-bffd-c9fd9508b61f",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -418,7 +577,7 @@
                     }
                 },
                 {
-                    "id": "c7bb0bf7-3059-4cc8-a5e4-997b7d6585f8",
+                    "id": "dc05c93a-e316-4047-8e06-4958beb2f023",
                     "name": "get All Income Records",
                     "request": {
                         "name": "get All Income Records",
@@ -456,7 +615,7 @@
                     },
                     "response": [
                         {
-                            "id": "1664a210-7e3d-47cb-b629-278a5b782c69",
+                            "id": "3a2604a7-6826-46bb-a66c-6dd17a3ac164",
                             "name": "A list of income records",
                             "originalRequest": {
                                 "url": {
@@ -509,7 +668,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "bbe43d72-60da-490f-9dc0-718542085f47",
+                            "id": "8c104727-c8c5-4eed-873a-fa4a985fd304",
                             "name": "get Income By ID",
                             "request": {
                                 "name": "get Income By ID",
@@ -559,7 +718,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "16670c1c-dea1-4b8f-ba0b-b2ddb6437819",
+                                    "id": "5ff81225-a97d-4caa-b782-554646bbf05d",
                                     "name": "Income record details",
                                     "originalRequest": {
                                         "url": {
@@ -603,7 +762,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "ff4ab911-462f-4518-adac-88c5c6a60c56",
+                                    "id": "42c5f517-b2c4-45b9-9e0b-3cd37eba233e",
                                     "name": "Income record not found",
                                     "originalRequest": {
                                         "url": {
@@ -643,7 +802,7 @@
                             }
                         },
                         {
-                            "id": "94afdbf5-ce0e-4227-b4f3-d84bc08fdc27",
+                            "id": "988b64bd-07cd-4666-b424-27deb2225030",
                             "name": "update Income Record",
                             "request": {
                                 "name": "update Income Record",
@@ -702,7 +861,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "235d60a7-7e0d-466b-9b4f-3b47655d8095",
+                                    "id": "f0ce3ec9-c8c6-4b87-86dc-c2b50fbee77f",
                                     "name": "Income record updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -749,7 +908,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "523503dc-ea2a-4708-86d0-bcde80587204",
+                                    "id": "4933fede-46e2-4065-9d4a-3f8c4429c7d4",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -802,7 +961,7 @@
                             }
                         },
                         {
-                            "id": "b7d48a1a-63d4-444f-9723-1e0ce5d15cb2",
+                            "id": "6ae69bbd-bba3-419b-abe2-188554c566cd",
                             "name": "delete Income Record",
                             "request": {
                                 "name": "delete Income Record",
@@ -822,7 +981,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "quis ut exercitation dolor",
+                                            "value": "minim Duis esse",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -846,7 +1005,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f5969b4e-16b4-44f7-9b36-7c2c8124d39a",
+                                    "id": "1568b496-a590-44bd-9531-e491a58428f0",
                                     "name": "Income record deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -894,7 +1053,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "c9251509-e24c-48da-98c2-97157affb5a7",
+                    "id": "0325bceb-7985-4c4b-8f5b-b2e337a32fa3",
                     "name": "add Expense Record",
                     "request": {
                         "name": "add Expense Record",
@@ -945,7 +1104,7 @@
                     },
                     "response": [
                         {
-                            "id": "e6a98784-9cfa-49c7-b9dc-9a530bc6e302",
+                            "id": "80f6adba-cd9f-4436-8eb5-53777a547253",
                             "name": "Expense record created successfully",
                             "originalRequest": {
                                 "url": {
@@ -1007,7 +1166,7 @@
                     }
                 },
                 {
-                    "id": "49ea5e20-931a-475b-adf9-37e2beb7fe16",
+                    "id": "b6e1bbe6-15bc-4eec-b425-e0a5e92352aa",
                     "name": "get All Expense Records",
                     "request": {
                         "name": "get All Expense Records",
@@ -1045,7 +1204,7 @@
                     },
                     "response": [
                         {
-                            "id": "9fcb6bbf-c8cb-4467-a64a-e1590d56327d",
+                            "id": "42c8f5b1-ca08-4261-9ce0-1f95f190f20c",
                             "name": "A list of expense records",
                             "originalRequest": {
                                 "url": {
@@ -1098,7 +1257,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "d8035c31-c5d8-4b1a-bf6b-cb3c8da477e3",
+                            "id": "34f4aed3-b806-49e4-bd69-54405adf788e",
                             "name": "get Expense By ID",
                             "request": {
                                 "name": "get Expense By ID",
@@ -1148,7 +1307,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "0767a627-297e-4f49-b386-4f97c32fe479",
+                                    "id": "17ac0552-4a8c-4889-bc6d-8207a83b199d",
                                     "name": "Expense record found",
                                     "originalRequest": {
                                         "url": {
@@ -1192,7 +1351,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "d98c5476-a2e1-43f5-a648-f892d783f82d",
+                                    "id": "0d3d2be9-6cab-4076-99d8-83a9173b16f1",
                                     "name": "Expense record not found",
                                     "originalRequest": {
                                         "url": {
@@ -1232,7 +1391,7 @@
                             }
                         },
                         {
-                            "id": "6d1067c5-d156-4fc2-88e3-ab2809cc36ce",
+                            "id": "3a7dd51d-44b5-4076-82c0-0f96cf054b2e",
                             "name": "update Expense",
                             "request": {
                                 "name": "update Expense",
@@ -1252,7 +1411,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "0b31871f-e6a5-e06c-1632-94ef7daad62a",
+                                            "value": "urn:uuid:4989c134-e0cf-ef46-f134-91b5cbf28b7b",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -1295,7 +1454,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f351a42d-d395-4897-abc4-78ca1dc3dbd1",
+                                    "id": "1b6099bc-1e0e-4b81-bee1-2c0ab6a85f38",
                                     "name": "Expense updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1358,7 +1517,7 @@
                             }
                         },
                         {
-                            "id": "86a00554-51e7-4785-8685-e3529401dd3b",
+                            "id": "34de953e-faaa-43cb-8cef-9cd041cd6ccb",
                             "name": "delete Expense",
                             "request": {
                                 "name": "delete Expense",
@@ -1402,7 +1561,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "bc6f4ddd-ce3c-4cd5-9791-c900e4b1d291",
+                                    "id": "386a5b63-6016-450f-8051-be4a7f1e0e9d",
                                     "name": "Expense deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -1452,7 +1611,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "3d0485db-6294-4c55-8984-d94d3db9941b",
+                                    "id": "251fc0b0-68d3-4923-a95e-41e3fcdea191",
                                     "name": "get Expenses By Category",
                                     "request": {
                                         "name": "get Expenses By Category",
@@ -1503,7 +1662,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "d99c3754-6905-4a54-b255-af37906d393d",
+                                            "id": "44d358dc-3f95-4420-a73b-5b96b4348210",
                                             "name": "List of expenses for the category",
                                             "originalRequest": {
                                                 "url": {
@@ -1560,7 +1719,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "944d991c-679f-429d-9a4a-9ebc1824fd34",
+                                    "id": "b99cc1a8-4967-4f17-9fc8-874b2465d0a8",
                                     "name": "get Expense Totals By Category",
                                     "request": {
                                         "name": "get Expense Totals By Category",
@@ -1600,7 +1759,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "081c98ea-9f1d-4000-8e48-e7c8132ce483",
+                                            "id": "61c775e8-2710-46f6-87a5-ad66a369315c",
                                             "name": "Expense totals by category",
                                             "originalRequest": {
                                                 "url": {
@@ -1640,7 +1799,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "[\n  {\n    \"category_id\": \"urn:uuid:b37062fa-e283-b3fa-4f46-1dc0ad8f4699\",\n    \"category_name\": \"irure ipsum id\",\n    \"currency\": \"ut officia labore \",\n    \"transaction_count\": -74219660,\n    \"total_amount\": -62805560.997449875\n  },\n  {\n    \"category_id\": \"urn:uuid:0c912d12-cf3a-0465-7b63-28dd7de298c7\",\n    \"category_name\": \"in\",\n    \"currency\": \"nulla dolor id\",\n    \"transaction_count\": -71650641,\n    \"total_amount\": -51185317.38277898\n  }\n]",
+                                            "body": "[\n  {\n    \"category_id\": \"dfc7f04c-28d3-7a12-2a74-4d7c2c3ae3d0\",\n    \"category_name\": \"et elit id\",\n    \"currency\": \"proiden\",\n    \"transaction_count\": 74446937,\n    \"total_amount\": 44502714.28922838\n  },\n  {\n    \"category_id\": \"urn:uuid:0b6e7633-b012-88a0-c71e-2c4f9190d397\",\n    \"category_name\": \"veniam mollit tempor sint adipisicing\",\n    \"currency\": \"Excepteur consectetur Lorem\",\n    \"transaction_count\": -98037935,\n    \"total_amount\": 84959656.478722\n  }\n]",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -1659,7 +1818,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "939816b2-be20-4f59-a48d-f48ca944f1d2",
+                            "id": "321dd729-bc15-4b63-9bdf-7138367f3cea",
                             "name": "get Expenses By Date Range",
                             "request": {
                                 "name": "get Expenses By Date Range",
@@ -1717,7 +1876,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "ff8e2a18-a3dd-414c-80ff-b9edee981b74",
+                                    "id": "704a18fd-6858-43cd-a955-8749c02b6ddb",
                                     "name": "List of expenses within date range",
                                     "originalRequest": {
                                         "url": {
@@ -1792,7 +1951,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "3b6e1d2d-6b89-48db-b742-e0888efed10b",
+                            "id": "d7366cdc-9587-4757-a7e7-451fb39bd4ee",
                             "name": "get Recent Expenses",
                             "request": {
                                 "name": "get Recent Expenses",
@@ -1816,7 +1975,7 @@
                                                 "type": "text/plain"
                                             },
                                             "key": "limit",
-                                            "value": "17334127"
+                                            "value": "39297078"
                                         }
                                     ],
                                     "variable": []
@@ -1841,7 +2000,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "5de1fe7a-f839-4dc8-8a49-c0235aed2bd2",
+                                    "id": "c2c98ccf-7391-4b37-aaff-531956dba4e1",
                                     "name": "List of recent expenses",
                                     "originalRequest": {
                                         "url": {
@@ -1860,7 +2019,7 @@
                                                         "type": "text/plain"
                                                     },
                                                     "key": "limit",
-                                                    "value": "17334127"
+                                                    "value": "39297078"
                                                 }
                                             ],
                                             "variable": []
@@ -1911,7 +2070,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "6b90d5b7-b424-4fe3-b5a0-11068132bb8d",
+                                    "id": "46faeec4-3e80-45ee-a4f9-f0d559414704",
                                     "name": "get Monthly Expense Total",
                                     "request": {
                                         "name": "get Monthly Expense Total",
@@ -1961,7 +2120,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "5fe92380-63a0-4a2e-9a39-8aba3867fc03",
+                                            "id": "8400bbd2-c001-4dfd-9a66-a4eab5a67189",
                                             "name": "Monthly expense total",
                                             "originalRequest": {
                                                 "url": {
@@ -2011,7 +2170,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "{\n  \"total_amount\": -99890732.24728547,\n  \"currency\": \"in Ut enim \"\n}",
+                                            "body": "{\n  \"total_amount\": 77314510.67846403,\n  \"currency\": \"do\"\n}",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -2032,7 +2191,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "4d8d010f-c78e-4de5-a18c-90b6af6bac8f",
+                    "id": "250811b7-690a-4e16-b966-a8ad1fa61c15",
                     "name": "add Budget Record",
                     "request": {
                         "name": "add Budget Record",
@@ -2079,7 +2238,7 @@
                     },
                     "response": [
                         {
-                            "id": "a5d19830-3f24-47a5-8a06-bb3c05ab0258",
+                            "id": "e75a9ace-8f2c-47aa-b998-38e8316b2ca3",
                             "name": "Budget created successfully",
                             "originalRequest": {
                                 "url": {
@@ -2125,7 +2284,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "972bedf5-b61e-482e-860e-bf0f4b1d32d9",
+                            "id": "35e3a27a-0b62-48a7-affd-149b0ce02b82",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -2177,7 +2336,7 @@
                     }
                 },
                 {
-                    "id": "86b1c891-4869-486c-954b-766135555fef",
+                    "id": "5fccb48e-0750-4486-9a6f-9c190fb4c3d7",
                     "name": "list Budgets",
                     "request": {
                         "name": "list Budgets",
@@ -2215,7 +2374,7 @@
                     },
                     "response": [
                         {
-                            "id": "1ba27a91-de30-4d6a-9af6-cea38080af12",
+                            "id": "09aaa1f2-1e91-4898-856a-f09f7adc0f05",
                             "name": "A list of all budgets",
                             "originalRequest": {
                                 "url": {
@@ -2258,7 +2417,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "354a8ea7-d4d0-41e8-96f7-235f3b3ef9ef",
+                            "id": "1694c1f2-11cf-4b0d-8fb7-b5be7c49521d",
                             "name": "Unauthorized",
                             "originalRequest": {
                                 "url": {
@@ -2301,7 +2460,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "a50a3f63-5939-45d6-8201-93ed4f4dfdb6",
+                            "id": "5ee26f85-c0ba-4e58-8131-7af1b5b602fb",
                             "name": "get Budget Usage",
                             "request": {
                                 "name": "get Budget Usage",
@@ -2351,7 +2510,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "ebe44b23-9667-4b2a-a7ed-e14d87de3e79",
+                                    "id": "5fd0c7d9-4d6a-4c74-9796-cbdf2e17fbd8",
                                     "name": "Budget usage details",
                                     "originalRequest": {
                                         "url": {
@@ -2395,7 +2554,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "72212c12-c192-42c2-8b1f-65142d462ce0",
+                                    "id": "8d30448e-0f1d-48ba-821b-d737311190ac",
                                     "name": "Invalid budget ID",
                                     "originalRequest": {
                                         "url": {
@@ -2429,7 +2588,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "9d1615a2-9412-48c1-b965-d406bca6fb18",
+                                    "id": "603bf55a-af8b-439a-a8ed-859447b42bc9",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2463,7 +2622,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "b86acf27-2cc5-42ae-8081-7717f2569950",
+                                    "id": "3cb2e4ee-aa45-4a08-af98-6fd9af294d24",
                                     "name": "Budget not found",
                                     "originalRequest": {
                                         "url": {
@@ -2503,7 +2662,7 @@
                             }
                         },
                         {
-                            "id": "560b5606-1a98-4b0f-89af-cbb0412b6775",
+                            "id": "ae0963e3-b4ce-436c-a445-7854f9653112",
                             "name": "update Budget",
                             "request": {
                                 "name": "update Budget",
@@ -2566,7 +2725,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "229dffa9-48cf-4077-b552-4c84fc45241f",
+                                    "id": "34d9aec3-e00d-4d74-a293-ab55b5e71f00",
                                     "name": "Budget updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2623,7 +2782,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "368a180a-8294-4673-b587-0d85d9aa507d",
+                                    "id": "c657a8dd-a02e-4faa-b1f3-08fb2e73ed3b",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -2670,7 +2829,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "c150cb02-c028-4474-ac1b-b3d55dc07acb",
+                                    "id": "dbcdc6d4-a5f6-4c61-a734-676879ba627b",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2717,7 +2876,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "cd1f81f9-0618-42e2-b06f-1bb32a01a30d",
+                                    "id": "dccb327c-6e37-4863-9a98-e377ff084a34",
                                     "name": "Budget not found",
                                     "originalRequest": {
                                         "url": {
@@ -2770,7 +2929,7 @@
                             }
                         },
                         {
-                            "id": "098f61b2-8b3a-4198-9d43-4ca8e7cf06e5",
+                            "id": "847aa433-0ac3-4887-bda0-211c2bafb4c6",
                             "name": "delete Budget",
                             "request": {
                                 "name": "delete Budget",
@@ -2814,7 +2973,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f48f781b-9b43-4702-9f23-3519ef9af0a1",
+                                    "id": "616a38e2-76d4-4bdc-891a-38904a0fe86f",
                                     "name": "Budget deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -2848,7 +3007,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "e4c57381-8b07-43b8-918a-4d1a6b52c977",
+                                    "id": "45dd25b8-095b-4d7b-a708-a336f7e26513",
                                     "name": "Invalid budget ID",
                                     "originalRequest": {
                                         "url": {
@@ -2882,7 +3041,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "9655e54b-cb1a-4e9f-973d-b20ae65139bc",
+                                    "id": "58274c04-0ba1-46dd-af53-857e26a1885f",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -2916,7 +3075,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "42c66c62-e916-4c20-8357-3446a2838927",
+                                    "id": "3a3dad17-da53-4fda-a791-a3da0995ded4",
                                     "name": "Budget not found",
                                     "originalRequest": {
                                         "url": {
@@ -2962,7 +3121,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "d81db757-5a06-43fe-8520-e993cebcab5d",
+                            "id": "7195d51d-883e-4258-a191-2ee41e3198f2",
                             "name": "get Recurring Budgets",
                             "request": {
                                 "name": "get Recurring Budgets",
@@ -3001,7 +3160,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "11359edc-a324-4b12-af40-e298b0f9fab0",
+                                    "id": "0001d227-5dc9-411e-b107-adb6d4e33894",
                                     "name": "List of recurring budgets",
                                     "originalRequest": {
                                         "url": {
@@ -3045,7 +3204,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "616d47fc-ba31-41d7-9626-41746be459af",
+                                    "id": "9ec250de-ffbc-41c4-ac4e-87f17d91d306",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3091,7 +3250,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "c856fb1f-def0-4b87-957a-29a9795abfce",
+                            "id": "92cad55a-a912-43fd-99a5-14646b5c33a6",
                             "name": "get One Time Budgets",
                             "request": {
                                 "name": "get One Time Budgets",
@@ -3130,7 +3289,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "13a95918-a4aa-4b11-a163-4ec4f9ba1f34",
+                                    "id": "daa1d024-ce22-4ceb-9d62-6eca08f247f4",
                                     "name": "List of recurring budgets",
                                     "originalRequest": {
                                         "url": {
@@ -3174,7 +3333,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "c9568582-6470-4038-85bd-c4e264cfce67",
+                                    "id": "d23e5464-1e50-4ae5-92f3-659e3e4b9dc2",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3224,7 +3383,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "103ddb7b-f534-4d84-afa6-9c7f24ebc87d",
+                                    "id": "e2e7cde6-8f76-4f35-9c5c-0c4ffc62b7be",
                                     "name": "get Budgets By Category",
                                     "request": {
                                         "name": "get Budgets By Category",
@@ -3245,7 +3404,7 @@
                                             "variable": [
                                                 {
                                                     "type": "any",
-                                                    "value": "0b31871f-e6a5-e06c-1632-94ef7daad62a",
+                                                    "value": "urn:uuid:4989c134-e0cf-ef46-f134-91b5cbf28b7b",
                                                     "key": "categoryId",
                                                     "disabled": false,
                                                     "description": {
@@ -3275,7 +3434,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "9870666c-c1fb-4b9d-8179-eda9bf233031",
+                                            "id": "5df8d640-7597-4ad7-8027-f89d0ace5ba2",
                                             "name": "List of budgets for the category",
                                             "originalRequest": {
                                                 "url": {
@@ -3320,7 +3479,7 @@
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "57852522-0f98-4c94-af1b-c3670e30f606",
+                                            "id": "229fb260-4149-4824-a0f3-9a07b5cea357",
                                             "name": "Invalid category ID",
                                             "originalRequest": {
                                                 "url": {
@@ -3355,7 +3514,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "d1380586-d685-45d9-95d1-cb0b786b4c7c",
+                                            "id": "57e6738b-f4ca-45a9-aabe-fd1cee98f419",
                                             "name": "Unauthorized",
                                             "originalRequest": {
                                                 "url": {
@@ -3404,7 +3563,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "4eefa582-ae4e-4192-8425-0dc444ae99ed",
+                            "id": "4996e4a8-07cf-4fe3-a485-360babcb9fb5",
                             "name": "get Budgets Near Limit",
                             "request": {
                                 "name": "get Budgets Near Limit",
@@ -3453,7 +3612,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "d7b09355-e72d-478f-9a02-c45ff871fe18",
+                                    "id": "edd676d8-ace5-46fb-b935-60c29e5c6117",
                                     "name": "List of budgets near their limit",
                                     "originalRequest": {
                                         "url": {
@@ -3507,7 +3666,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "fc44b56e-b32d-4699-bbb1-368e8b547dd1",
+                                    "id": "64ccb126-56a1-42da-832a-a5ef5206c4a8",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -3569,7 +3728,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "fac39672-8912-4b5d-a79a-0ce9a095b378",
+                            "id": "a8f817a1-a720-46f2-8f79-5f74af27462d",
                             "name": "get Monthly Summary",
                             "request": {
                                 "name": "get Monthly Summary",
@@ -3618,7 +3777,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "80d14ca3-c443-42eb-bd48-9c4cae1d05ef",
+                                    "id": "02f76eaf-1dd2-4a17-83fd-54eaf5bb2695",
                                     "name": "Monthly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -3684,7 +3843,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "8cd6118b-84af-418f-b361-da90f6c9b9eb",
+                            "id": "1bf9ff76-c82f-4600-840e-55ad75cf445f",
                             "name": "get Yearly Summary",
                             "request": {
                                 "name": "get Yearly Summary",
@@ -3733,7 +3892,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "62c96057-6b47-4d2d-9dd9-e8cb9180a6dc",
+                                    "id": "cc65aceb-f30c-42e2-b387-d27965465e41",
                                     "name": "Yearly summary of income, expenses, and budgets",
                                     "originalRequest": {
                                         "url": {
@@ -3801,7 +3960,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "e6b0cc2f-fa1b-4b87-a39e-16a2e09b562f",
+                    "id": "39eecf84-0f2e-491f-8bde-9d26f183a98b",
                     "name": "check Live",
                     "request": {
                         "name": "check Live",
@@ -3831,7 +3990,7 @@
                     },
                     "response": [
                         {
-                            "id": "463f9db3-9c8d-446e-8734-c63aeebbec4b",
+                            "id": "d1a0ae84-ea3d-4ae0-9a0c-33fc38c8d242",
                             "name": "API is live",
                             "originalRequest": {
                                 "url": {
@@ -3878,7 +4037,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "7ae65fc6-080d-437b-9df7-ead366e82f83",
+                    "id": "e8ad7353-18e6-4d5c-b34f-8ace3848a2a7",
                     "name": "check Health",
                     "request": {
                         "name": "check Health",
@@ -3908,7 +4067,7 @@
                     },
                     "response": [
                         {
-                            "id": "d5574aea-bf7c-45b0-8486-35c53432272c",
+                            "id": "a4caa3f4-c119-421c-8af1-6e46f11a5c58",
                             "name": "API is healthy",
                             "originalRequest": {
                                 "url": {
@@ -3959,7 +4118,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "5be9e2f6-5eea-422a-8d3c-5512f1f49ee2",
+                            "id": "fd0b8fa9-4a2c-43fb-b911-56cb5fa6e820",
                             "name": "get User Profile",
                             "request": {
                                 "name": "get User Profile",
@@ -3998,7 +4157,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "accf4287-1d79-4da9-947a-9bf097ce33da",
+                                    "id": "fe0dda9d-042c-4e4c-8cc8-f33177d64ceb",
                                     "name": "User profile retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -4042,7 +4201,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "9ed31a17-732c-4200-bc4c-9ae6406de5e3",
+                                    "id": "43484a2c-7cb5-42e4-b92b-519c42ed5cbd",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -4082,7 +4241,7 @@
                             }
                         },
                         {
-                            "id": "d61c5d56-e0cd-4c14-b44c-d82469ee6f76",
+                            "id": "663abf7e-dcae-4a7d-b554-123c8e84fc59",
                             "name": "update User Profile",
                             "request": {
                                 "name": "update User Profile",
@@ -4134,7 +4293,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "909f4736-363d-4c31-8e92-2098a673b120",
+                                    "id": "8fa1f3ca-dda2-4fe1-9948-c63450b53974",
                                     "name": "Profile updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -4191,7 +4350,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "8205d31d-6997-4b24-9d76-a35a259e8435",
+                                    "id": "8bec6869-e0a9-427d-9ea3-7b0b9689fbc0",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -4238,7 +4397,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "9c9273de-3ecc-4f10-8d03-5e04528c0b66",
+                                    "id": "20fcaf10-8c02-4a9d-83eb-08a157f50e86",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -4297,7 +4456,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "12758f43-7121-48cf-91b7-5f82f3fb8b59",
+                            "id": "8bbdd5b1-1eab-4473-b7b6-b2084c917409",
                             "name": "update User Password",
                             "request": {
                                 "name": "update User Password",
@@ -4345,7 +4504,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "3a5e4729-de79-4742-8df4-c155e00a57dc",
+                                    "id": "450f8f6b-5ac2-43ff-a79f-f1153594b43a",
                                     "name": "Password updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -4392,7 +4551,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "4a2091d9-1cb6-480d-a00e-96651175dee6",
+                                    "id": "1c5475bb-df02-46c0-aaeb-0dee3b88b232",
                                     "name": "Invalid input",
                                     "originalRequest": {
                                         "url": {
@@ -4439,7 +4598,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "12917d16-cac5-40b5-a678-ce021444ae58",
+                                    "id": "0480839e-8ce3-4636-86f5-2d4fc2c1acb9",
                                     "name": "Unauthorized or invalid current password",
                                     "originalRequest": {
                                         "url": {
@@ -4498,7 +4657,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "ad3d1c57-f830-4065-bd8a-4ab8db314e5f",
+                            "id": "33a4a806-539b-4414-9625-447d0f121501",
                             "name": "get User Stats",
                             "request": {
                                 "name": "get User Stats",
@@ -4537,7 +4696,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "9bcadf1a-4f86-4ded-ae39-a26d601d6bce",
+                                    "id": "8785f9db-811d-46c4-9bf9-3c904160a9e2",
                                     "name": "User statistics retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -4581,7 +4740,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "dacfa784-a1f0-4b2c-9187-d7202927a968",
+                                    "id": "2145ec0d-f4a1-4e09-8a38-cb1af39d4969",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -4627,7 +4786,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "4bc7039b-71c2-406c-9c3a-a382ad4704b1",
+                            "id": "71315c4e-82d0-4fa3-a610-21eb385f7bdf",
                             "name": "get User Role",
                             "request": {
                                 "name": "get User Role",
@@ -4666,7 +4825,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f29d08d0-6a8f-4c82-ab4b-cb355252109e",
+                                    "id": "cf40234a-7055-48a8-a7c5-6f3226656454",
                                     "name": "User role retrieved successfully",
                                     "originalRequest": {
                                         "url": {
@@ -4705,12 +4864,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"user_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_name\": \"moll\",\n  \"role_id\": \"urn:uuid:f7774b37-031f-5984-9b6e-19e1999c2ea7\",\n  \"role_name\": \"elit eu\"\n}",
+                                    "body": "{\n  \"user_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_name\": \"Excepteur proident\",\n  \"role_id\": \"urn:uuid:9fa549c9-dbd8-fbe3-61b6-0e69a51813f6\",\n  \"role_name\": \"aliquip et\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "92604993-17ab-4fbf-b0e8-91c66180e5b0",
+                                    "id": "9de008f5-83f2-43e3-a8f6-38f1c66e5abd",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -4744,7 +4903,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "31cfd9fc-a5ae-4945-bf9f-d3f47ec92995",
+                                    "id": "4d8b2bc4-ade6-4a6d-9026-957f5fd508ca",
                                     "name": "User role not found",
                                     "originalRequest": {
                                         "url": {
@@ -4784,7 +4943,7 @@
                             }
                         },
                         {
-                            "id": "312ddd09-4e29-4820-8c20-8763a9441884",
+                            "id": "a33acaa2-4275-40ed-afd0-a7331329e2e2",
                             "name": "update User Role",
                             "request": {
                                 "name": "update User Role",
@@ -4836,7 +4995,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "df8ac739-f95f-4c4b-a737-644c5bec1cff",
+                                    "id": "588769d8-8a08-4bda-9cbf-f91275a10ccd",
                                     "name": "User role updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -4888,12 +5047,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"user_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_name\": \"moll\",\n  \"role_id\": \"urn:uuid:f7774b37-031f-5984-9b6e-19e1999c2ea7\",\n  \"role_name\": \"elit eu\"\n}",
+                                    "body": "{\n  \"user_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_name\": \"Excepteur proident\",\n  \"role_id\": \"urn:uuid:9fa549c9-dbd8-fbe3-61b6-0e69a51813f6\",\n  \"role_name\": \"aliquip et\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "8b37805c-a3c2-468d-b0d1-3661b75855ad",
+                                    "id": "646be7cc-e395-473a-8c4d-1a37bebc4f0a",
                                     "name": "Unauthorized",
                                     "originalRequest": {
                                         "url": {
@@ -4940,7 +5099,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "e45b0adc-d274-4b5b-8acb-a5dc22f63331",
+                                    "id": "dc2d8903-85be-4e2e-ad6a-6470bcc827a7",
                                     "name": "Permission denied - Admin only operation",
                                     "originalRequest": {
                                         "url": {
@@ -4987,7 +5146,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "e8476854-e4c1-4979-88cd-b4029eef5033",
+                                    "id": "36d73c69-eba4-4426-970f-ac392ae27f93",
                                     "name": "User or role not found",
                                     "originalRequest": {
                                         "url": {
@@ -5044,7 +5203,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "39e1ce9a-07af-43e8-bd02-12225c5cbb12",
+                                    "id": "dd7bdd26-fff7-474b-94ab-e3d0f27d044d",
                                     "name": "list Users By Role",
                                     "request": {
                                         "name": "list Users By Role",
@@ -5094,7 +5253,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "0f647a29-9a50-4fdb-ba84-649b02d0aac0",
+                                            "id": "9a9dde82-4db1-470f-8fa0-4fef26f56b87",
                                             "name": "List of users with specified role",
                                             "originalRequest": {
                                                 "url": {
@@ -5149,7 +5308,7 @@
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "3772cb7a-722b-4f01-8422-40ad7190204a",
+                                            "id": "cbdeabe1-8e1f-496c-a3e8-bb9ee4269941",
                                             "name": "Unauthorized",
                                             "originalRequest": {
                                                 "url": {
@@ -5194,7 +5353,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "08f7fa34-4cce-4f94-912f-2a3d42b81c46",
+                                            "id": "4f7278a8-ef07-4b3c-a198-929aadc6455c",
                                             "name": "No users found for specified role",
                                             "originalRequest": {
                                                 "url": {
@@ -5255,7 +5414,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "be9d44bb-993e-4c23-b89c-16efbfc1fbed",
+                    "id": "0ee6c25a-3050-4a45-9624-38977731640f",
                     "name": "create Category",
                     "request": {
                         "name": "create Category",
@@ -5306,7 +5465,7 @@
                     },
                     "response": [
                         {
-                            "id": "95678714-8534-41ab-ba74-95c4d133a190",
+                            "id": "5706e4b8-4b60-46dc-b7c9-fcc08f3dc98e",
                             "name": "Category created successfully",
                             "originalRequest": {
                                 "url": {
@@ -5357,12 +5516,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"urn:uuid:137ee65e-1df4-df90-d64c-13227f38dbdb\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1947-10-04T16:04:03.713Z\",\n  \"updated_at\": \"2009-02-03T13:40:39.014Z\",\n  \"deleted_at\": \"1992-01-25T15:19:12.859Z\"\n}",
+                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"f1a63b30-8ade-fc33-6a79-09067e5183c2\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1989-09-29T10:41:51.543Z\",\n  \"updated_at\": \"1947-06-12T02:33:08.257Z\",\n  \"deleted_at\": \"1996-08-13T10:39:44.566Z\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "0f563b3d-93d4-4ee8-b419-006da9538869",
+                            "id": "7a4a240c-2d91-475d-a282-1bdbe10238ad",
                             "name": "Invalid input",
                             "originalRequest": {
                                 "url": {
@@ -5408,7 +5567,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "68caf0d6-e143-4267-a32f-2477620141bd",
+                            "id": "0b168c4f-33aa-4137-91f2-f7b9f8b15dd7",
                             "name": "Category already exists",
                             "originalRequest": {
                                 "url": {
@@ -5460,7 +5619,7 @@
                     }
                 },
                 {
-                    "id": "ce51be99-53f6-4975-8152-2816939b9d74",
+                    "id": "bf86a885-128e-4fe1-b23a-dbc9da3041df",
                     "name": "list Categories",
                     "request": {
                         "name": "list Categories",
@@ -5498,7 +5657,7 @@
                     },
                     "response": [
                         {
-                            "id": "0e7ec051-af44-456f-8dde-9bf21a00bef7",
+                            "id": "fad0fa6d-c190-47f4-85c6-3a3524cf2093",
                             "name": "List of categories",
                             "originalRequest": {
                                 "url": {
@@ -5536,7 +5695,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"user_id\": \"urn:uuid:b775197e-bc2e-b8e7-3644-8d533fbc5e93\",\n    \"name\": \"Groceries\",\n    \"created_at\": \"1978-06-10T00:03:43.843Z\",\n    \"updated_at\": \"1972-07-27T21:02:30.593Z\",\n    \"deleted_at\": \"1994-12-01T16:36:53.214Z\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"user_id\": \"abdc374c-4111-2ab1-3560-4488762dd9bc\",\n    \"name\": \"Groceries\",\n    \"created_at\": \"1993-01-17T09:04:35.439Z\",\n    \"updated_at\": \"1954-01-13T03:15:34.669Z\",\n    \"deleted_at\": \"1959-01-04T06:58:32.547Z\"\n  }\n]",
+                            "body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"user_id\": \"5b37f076-0cc2-987c-c945-279067d18719\",\n    \"name\": \"Groceries\",\n    \"created_at\": \"1980-03-13T14:25:10.787Z\",\n    \"updated_at\": \"1973-11-22T00:00:45.774Z\",\n    \"deleted_at\": \"1968-04-26T02:10:40.851Z\"\n  },\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"user_id\": \"ab4a1d4f-20b5-67b1-6aee-0e499b36e3d7\",\n    \"name\": \"Groceries\",\n    \"created_at\": \"2023-02-21T17:12:38.139Z\",\n    \"updated_at\": \"2010-01-28T23:00:32.573Z\",\n    \"deleted_at\": \"1990-09-29T20:27:52.230Z\"\n  }\n]",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -5551,7 +5710,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "0c7c116a-777b-4d29-8cc0-860b5e49533c",
+                            "id": "5ca2de87-2088-4811-8fd6-18b65ed1cc1a",
                             "name": "get Category By Id",
                             "request": {
                                 "name": "get Category By Id",
@@ -5601,7 +5760,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "bed715da-63a4-491f-bcc1-606d8d84ff1f",
+                                    "id": "0da01a07-06e1-4b46-bfbf-a26c7fa22c3e",
                                     "name": "Category details",
                                     "originalRequest": {
                                         "url": {
@@ -5640,12 +5799,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"urn:uuid:137ee65e-1df4-df90-d64c-13227f38dbdb\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1947-10-04T16:04:03.713Z\",\n  \"updated_at\": \"2009-02-03T13:40:39.014Z\",\n  \"deleted_at\": \"1992-01-25T15:19:12.859Z\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"f1a63b30-8ade-fc33-6a79-09067e5183c2\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1989-09-29T10:41:51.543Z\",\n  \"updated_at\": \"1947-06-12T02:33:08.257Z\",\n  \"deleted_at\": \"1996-08-13T10:39:44.566Z\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "d836ff4d-ffbe-4d08-83af-e646a9881d40",
+                                    "id": "74ed1070-94df-4142-820b-c56800c61519",
                                     "name": "Category not found",
                                     "originalRequest": {
                                         "url": {
@@ -5685,7 +5844,7 @@
                             }
                         },
                         {
-                            "id": "3a077a2d-9a89-4693-bc29-610a0dd71380",
+                            "id": "27c82e3d-c576-4294-9650-6f456c2ead12",
                             "name": "update Category",
                             "request": {
                                 "name": "update Category",
@@ -5748,7 +5907,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "7b63ac9c-3b6d-42de-ad3e-2b2f93f2c9c1",
+                                    "id": "8cfb9d62-4dc4-4bab-8ce1-f5bea0c9ef06",
                                     "name": "Category updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -5800,12 +5959,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"urn:uuid:137ee65e-1df4-df90-d64c-13227f38dbdb\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1947-10-04T16:04:03.713Z\",\n  \"updated_at\": \"2009-02-03T13:40:39.014Z\",\n  \"deleted_at\": \"1992-01-25T15:19:12.859Z\"\n}",
+                                    "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"user_id\": \"f1a63b30-8ade-fc33-6a79-09067e5183c2\",\n  \"name\": \"Groceries\",\n  \"created_at\": \"1989-09-29T10:41:51.543Z\",\n  \"updated_at\": \"1947-06-12T02:33:08.257Z\",\n  \"deleted_at\": \"1996-08-13T10:39:44.566Z\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "79600514-2fd6-4250-a9ab-b046e3696ff7",
+                                    "id": "c1dd4d03-1b5d-4dc5-88e5-0944e7305e63",
                                     "name": "Category not found",
                                     "originalRequest": {
                                         "url": {
@@ -5858,7 +6017,7 @@
                             }
                         },
                         {
-                            "id": "e8a3c5db-a4aa-4cb3-9f74-637e41350b16",
+                            "id": "4e440bae-4891-44c5-9361-a61a45cc48a0",
                             "name": "delete Category",
                             "request": {
                                 "name": "delete Category",
@@ -5878,7 +6037,7 @@
                                     "variable": [
                                         {
                                             "type": "any",
-                                            "value": "0b31871f-e6a5-e06c-1632-94ef7daad62a",
+                                            "value": "urn:uuid:4989c134-e0cf-ef46-f134-91b5cbf28b7b",
                                             "key": "id",
                                             "disabled": false,
                                             "description": {
@@ -5902,7 +6061,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "99ca59c6-5d12-40d7-84b8-5f912be655dd",
+                                    "id": "24a72447-c7b2-402b-a43e-d822cadaee04",
                                     "name": "Category deleted successfully",
                                     "originalRequest": {
                                         "url": {
@@ -5936,7 +6095,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "c679e1f8-aa0e-44e7-b873-96b81375cf6b",
+                                    "id": "82c9f2f4-4f9a-44c3-8643-4a425812c7c1",
                                     "name": "Category not found",
                                     "originalRequest": {
                                         "url": {
@@ -5980,7 +6139,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "18de3e99-def7-4130-b67b-3a441db9cb68",
+                                    "id": "fc2d4db7-66cb-4be7-8020-244fc88413c5",
                                     "name": "get Category Stats",
                                     "request": {
                                         "name": "get Category Stats",
@@ -6031,7 +6190,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "b99c9b5d-eddd-4e35-9e4c-f6e9125867af",
+                                            "id": "a7965b48-3735-4f77-b659-06d46f5ddbda",
                                             "name": "Category usage statistics",
                                             "originalRequest": {
                                                 "url": {
@@ -6071,12 +6230,12 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"qui adipisicing amet labore\",\n  \"expense_count\": -26759065,\n  \"budget_count\": -9096768,\n  \"total_expenses\": -85125949.85362303\n}",
+                                            "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"dolor in nisi\",\n  \"expense_count\": -14415256,\n  \"budget_count\": -45141578,\n  \"total_expenses\": 44346271.11025584\n}",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "00f87445-2529-496f-8bcf-75e1353f1b11",
+                                            "id": "1ceec0c7-52cd-4ece-b535-f6bfcac9376b",
                                             "name": "Category not found",
                                             "originalRequest": {
                                                 "url": {
@@ -6129,7 +6288,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "a7e75fb5-df65-40b0-a9e0-ff6232b8eedb",
+                                    "id": "525d0f86-0058-45eb-af54-448ab763f059",
                                     "name": "get Most Used Categories",
                                     "request": {
                                         "name": "get Most Used Categories",
@@ -6179,7 +6338,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "cf257570-b6ab-4a78-8a4f-9579a5a85233",
+                                            "id": "53dc1606-440a-4a86-b50b-76e5cf3ee2f1",
                                             "name": "List of most used categories",
                                             "originalRequest": {
                                                 "url": {
@@ -6229,7 +6388,7 @@
                                                     "value": "application/json"
                                                 }
                                             ],
-                                            "body": "[\n  {\n    \"name\": \"ut tempor proident voluptate\",\n    \"usage_count\": -47403989,\n    \"total_amount\": -95388153.92368644\n  },\n  {\n    \"name\": \"ullamco reprehenderit culpa pariatur\",\n    \"usage_count\": -86147711,\n    \"total_amount\": 16853328.724991456\n  }\n]",
+                                            "body": "[\n  {\n    \"name\": \"enim ipsum dolor\",\n    \"usage_count\": 66729432,\n    \"total_amount\": -46466713.02400174\n  },\n  {\n    \"name\": \"conse\",\n    \"usage_count\": -42787907,\n    \"total_amount\": -92982985.28288388\n  }\n]",
                                             "cookie": [],
                                             "_postman_previewlanguage": "json"
                                         }
@@ -6254,7 +6413,7 @@
         }
     ],
     "info": {
-        "_postman_id": "d7c03097-2d9c-4347-9a4a-6072759075d6",
+        "_postman_id": "53788e53-3743-48b4-9f88-486295c8370a",
         "name": "Budget Tracking API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {
