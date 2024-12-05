@@ -32,6 +32,7 @@ type JWTManager struct {
 	secretKey []byte
 	blacklist map[string]time.Time // Simple in-memory blacklist
 	sessions  map[string]time.Time // Track last activity for each user
+	timeout   time.Duration        // Add this field
 }
 
 func NewJWTManager(secretKey string) *JWTManager {
@@ -39,7 +40,13 @@ func NewJWTManager(secretKey string) *JWTManager {
 		secretKey: []byte(secretKey),
 		blacklist: make(map[string]time.Time),
 		sessions:  make(map[string]time.Time),
+		timeout:   InactivityTimeout, // Set default timeout
 	}
+}
+
+// Add this method for testing
+func (m *JWTManager) SetTimeout(duration time.Duration) {
+	m.timeout = duration
 }
 
 func (m *JWTManager) GenerateTokenPair(userID, email, roleID string) (*TokenPair, error) {
@@ -193,7 +200,7 @@ func (m *JWTManager) ValidateToken(tokenString string) (*JWTClaims, error) {
 	// Check for session timeout if it's an access token
 	if contains(claims.Audience, claimAudience) {
 		lastActivity, exists := m.sessions[claims.UserID]
-		if !exists || time.Since(lastActivity) > InactivityTimeout {
+		if !exists || time.Since(lastActivity) > m.timeout { // Use m.timeout instead of InactivityTimeout
 			delete(m.sessions, claims.UserID) // Clear the session
 			return nil, fmt.Errorf("session expired due to inactivity")
 		}

@@ -1,10 +1,14 @@
 package middleware
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/jorge-dev/centsible/internal/auth"
 )
 
@@ -27,13 +31,14 @@ func TestAuthRequired(t *testing.T) {
 		name           string
 		setupAuth      func() string
 		expectedStatus int
+		expectedError  string
 		checkContext   bool
 	}{
 		{
 			name: "Valid token",
 			setupAuth: func() string {
-				token, _ := jwtManager.GenerateToken("123", "test@example.com", "user")
-				return "Bearer " + token
+				tokenPair, _ := jwtManager.GenerateTokenPair("123", "test@example.com", "user")
+				return "Bearer " + tokenPair.AccessToken
 			},
 			expectedStatus: http.StatusOK,
 			checkContext:   true,
@@ -44,24 +49,67 @@ func TestAuthRequired(t *testing.T) {
 				return ""
 			},
 			expectedStatus: http.StatusUnauthorized,
+			expectedError:  "Authorization header required",
 			checkContext:   false,
 		},
+
 		{
 			name: "Invalid token format",
 			setupAuth: func() string {
 				return "Bearer invalid.token.format"
 			},
 			expectedStatus: http.StatusUnauthorized,
+			expectedError:  "Invalid token",
 			checkContext:   false,
 		},
+
+		{
+			name: "Expired token",
+			setupAuth: func() string {
+				claims := auth.JWTClaims{
+					UserID:    "123",
+					Email:     "test@example.com",
+					RoleIDKey: "user",
+					RegisteredClaims: jwt.RegisteredClaims{
+						ExpiresAt: jwt.NewNumericDate(time.Now().Add(-time.Hour)),
+						IssuedAt:  jwt.NewNumericDate(time.Now().Add(-2 * time.Hour)),
+						Issuer:    "centisble-auth",
+						Audience:  []string{"centisble-api"},
+					},
+				}
+				token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+				tokenString, _ := token.SignedString([]byte("test-secret"))
+				return "Bearer " + tokenString
+			},
+			expectedStatus: http.StatusUnauthorized,
+			expectedError:  "Access token has expired, please refresh",
+			checkContext:   false,
+		},
+
 		{
 			name: "Token without Bearer prefix",
 			setupAuth: func() string {
-				token, _ := jwtManager.GenerateToken("123", "test@example.com", "user")
-				return token
+				tokenPair, _ := jwtManager.GenerateTokenPair("123", "test@example.com", "user")
+				return tokenPair.AccessToken
 			},
 			expectedStatus: http.StatusOK,
 			checkContext:   true,
+		},
+
+		{
+			name: "Inactive session",
+			setupAuth: func() string {
+				tokenPair, _ := jwtManager.GenerateTokenPair("123", "test@example.com", "user")
+				jwtManager.SetTimeout(10 * time.Millisecond) // Set very short timeout for testing
+
+				// Force session expiration by manipulating the session time
+				jwtManager.UpdateActivity("123")
+				time.Sleep(20 * time.Millisecond) // Wait just longer than timeout
+				return "Bearer " + tokenPair.AccessToken
+			},
+			expectedStatus: http.StatusUnauthorized,
+			expectedError:  "Session expired, please login again",
+			checkContext:   false,
 		},
 	}
 
@@ -98,6 +146,16 @@ func TestAuthRequired(t *testing.T) {
 					rr.Code, tt.expectedStatus)
 			}
 
+			if tt.expectedError != "" {
+				var response map[string]string
+				if err := json.NewDecoder(rr.Body).Decode(&response); err != nil {
+					t.Fatalf("Failed to decode response body: %v", err)
+				}
+				if message, exists := response["message"]; !exists || !contains(message, tt.expectedError) {
+					t.Errorf("Expected error message containing %q, got %q", tt.expectedError, message)
+				}
+			}
+
 			// Verify context values for successful cases
 			if tt.checkContext && tt.expectedStatus == http.StatusOK {
 				if contextUserID != "123" {
@@ -112,6 +170,11 @@ func TestAuthRequired(t *testing.T) {
 			}
 		})
 	}
+}
+
+// Helper function to check if a string contains another string
+func contains(s, substr string) bool {
+	return strings.Contains(s, substr)
 }
 
 func TestContextKeys(t *testing.T) {

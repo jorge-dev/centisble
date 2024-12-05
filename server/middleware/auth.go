@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -26,18 +27,45 @@ func NewAuthMiddleware(jwtManager *auth.JWTManager) *AuthMiddleware {
 
 func (m *AuthMiddleware) AuthRequired(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
-			http.Error(w, "Authorization header required", http.StatusUnauthorized)
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error":   "unauthorized",
+				"message": "Authorization header required",
+			})
 			return
 		}
 
 		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 		claims, err := m.jwtManager.ValidateToken(tokenString)
 		if err != nil {
-			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			w.WriteHeader(http.StatusUnauthorized)
+
+			switch {
+			case strings.Contains(err.Error(), "inactivity"):
+				json.NewEncoder(w).Encode(map[string]string{
+					"error":   "session_expired",
+					"message": "Session expired, please login again",
+				})
+			case strings.Contains(err.Error(), "expired"):
+				json.NewEncoder(w).Encode(map[string]string{
+					"error":   "token_expired",
+					"message": "Access token has expired, please refresh",
+				})
+			default:
+				json.NewEncoder(w).Encode(map[string]string{
+					"error":   "invalid_token",
+					"message": "Invalid token",
+				})
+			}
 			return
 		}
+
+		// Update user's last activity
+		m.jwtManager.UpdateActivity(claims.UserID)
 
 		ctx := context.WithValue(r.Context(), UserIDKey, claims.UserID)
 		ctx = context.WithValue(ctx, EmailKey, claims.Email)
