@@ -30,6 +30,7 @@ type authHandlerTestSuite struct {
 		PasswordHash string
 		CreatedAt    time.Time
 	}
+	validTokenPair *auth.TokenPair
 }
 
 func (s *authHandlerTestSuite) cleanup() {
@@ -43,6 +44,7 @@ func (s *authHandlerTestSuite) cleanup() {
 		PasswordHash string
 		CreatedAt    time.Time
 	}{}
+	s.validTokenPair = nil
 }
 
 func setupAuthHandlerTest(t *testing.T) *authHandlerTestSuite {
@@ -161,7 +163,8 @@ func TestRegister(t *testing.T) {
 				var response AuthResponse
 				err := json.NewDecoder(w.Body).Decode(&response)
 				assert.NoError(t, err)
-				assert.NotEmpty(t, response.Token)
+				assert.NotEmpty(t, response.TokenPair.AccessToken)
+				assert.NotEmpty(t, response.TokenPair.RefreshToken)
 				assert.NotEmpty(t, response.User.ID)
 				assert.Equal(t, tt.reqBody.Name, response.User.Name)
 				assert.Equal(t, tt.reqBody.Email, response.User.Email)
@@ -245,8 +248,66 @@ func TestLogin(t *testing.T) {
 				var response AuthResponse
 				err := json.NewDecoder(w.Body).Decode(&response)
 				assert.NoError(t, err)
-				assert.NotEmpty(t, response.Token)
+				assert.NotEmpty(t, response.TokenPair.AccessToken)
+				assert.NotEmpty(t, response.TokenPair.RefreshToken)
 				assert.Equal(t, suite.testUser.Email, response.User.Email)
+			}
+		})
+	}
+}
+
+func TestSignout(t *testing.T) {
+	suite := setupAuthHandlerTest(t)
+
+	tests := []struct {
+		name       string
+		setupAuth  func() string
+		wantStatus int
+	}{
+		{
+			name: "Valid token",
+			setupAuth: func() string {
+				tokenPair, _ := suite.jwtManager.GenerateTokenPair(
+					suite.testUser.ID.String(),
+					suite.testUser.Email,
+					suite.testUser.RoleID.String(),
+				)
+				return "Bearer " + tokenPair.AccessToken
+			},
+			wantStatus: http.StatusOK,
+		},
+		{
+			name: "No token provided",
+			setupAuth: func() string {
+				return ""
+			},
+			wantStatus: http.StatusBadRequest,
+		},
+		{
+			name: "Invalid token",
+			setupAuth: func() string {
+				return "Bearer invalid.token.here"
+			},
+			wantStatus: http.StatusInternalServerError,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/signout", nil)
+			if auth := tt.setupAuth(); auth != "" {
+				req.Header.Set("Authorization", auth)
+			}
+			w := httptest.NewRecorder()
+
+			suite.handler.Signout(w, req)
+
+			assert.Equal(t, tt.wantStatus, w.Code)
+			if tt.wantStatus == http.StatusOK {
+				var response map[string]string
+				err := json.NewDecoder(w.Body).Decode(&response)
+				assert.NoError(t, err)
+				assert.Equal(t, "Successfully signed out", response["message"])
 			}
 		})
 	}
