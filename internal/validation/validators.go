@@ -25,6 +25,10 @@ type MoneyValidator struct {
 	Currency string
 }
 
+const (
+	CategoryNameMaxLength = 255
+)
+
 func (m *MoneyValidator) Validate() error {
 	if m.Amount <= 0 {
 		return ErrInvalidAmount
