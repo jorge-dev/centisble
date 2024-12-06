@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 	"github.com/jorge-dev/centsible/server/middleware"
 )
 
@@ -31,24 +32,22 @@ func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// check if category is empty
-	if req.Name == "" {
-		http.Error(w, "Category name has to have a value", http.StatusBadRequest)
-		return
+	validator := &validation.CategoryValidation{
+		Name: req.Name,
 	}
 
-	// check if category name is too long, the limit in db is 255 varcahracters
-	if len(req.Name) > 255 {
-		http.Error(w, "Category name is too long", http.StatusBadRequest)
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
+
 	exists, err := h.queries.CheckCategoryExists(r.Context(), repository.CheckCategoryExistsParams{
 		UserID: uid,
 		Name:   req.Name,
@@ -76,20 +75,22 @@ func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *CategoryHandler) GetCategory(w http.ResponseWriter, r *http.Request) {
-	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	categoryID := chi.URLParam(r, "id")
+	cid, err := validation.ValidateUUID(categoryID)
 	if err != nil {
 		http.Error(w, "Invalid category ID", http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
+
 	category, err := h.queries.GetCategoryByID(r.Context(), repository.GetCategoryByIDParams{
-		ID:     id,
+		ID:     cid,
 		UserID: uid,
 	})
 	if err != nil {
@@ -121,7 +122,8 @@ type updateCategoryRequest struct {
 }
 
 func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request) {
-	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	categoryID := chi.URLParam(r, "id")
+	cid, err := validation.ValidateUUID(categoryID)
 	if err != nil {
 		http.Error(w, "Invalid category ID", http.StatusBadRequest)
 		return
@@ -133,26 +135,24 @@ func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// check if category is empty
-	if req.Name == "" {
-		http.Error(w, "name is required", http.StatusBadRequest)
-		return
+	validator := &validation.CategoryValidation{
+		Name: req.Name,
 	}
 
-	// check is category name is too long, the limit in db is 255 characters
-	if len(req.Name) > 255 {
-		http.Error(w, "Category name is too long", http.StatusBadRequest)
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
+
 	category, err := h.queries.UpdateCategory(r.Context(), repository.UpdateCategoryParams{
-		ID:     id,
+		ID:     cid,
 		Name:   req.Name,
 		UserID: uid,
 	})
@@ -221,31 +221,28 @@ func (h *CategoryHandler) GetCategoryStats(w http.ResponseWriter, r *http.Reques
 
 func (h *CategoryHandler) GetMostUsedCategories(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
 
-	// Get limit from query params, default to 10
-	limit := int32(10)
-	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
-		if parsedLimit, err := strconv.ParseInt(limitStr, 10, 32); err == nil {
-			limit = int32(parsedLimit)
-		} else {
-			http.Error(w, "Invalid limit", http.StatusBadRequest)
+	limitStr := r.URL.Query().Get("limit")
+	limit := int32(10) // default value
+	if limitStr != "" {
+		parsedLimit, err := strconv.ParseInt(limitStr, 10, 32)
+		if err != nil {
+			http.Error(w, "Invalid limit value", http.StatusBadRequest)
 			return
 		}
-	}
-
-	//check limit is not 0 not negative a
-	if limit <= 0 {
-		http.Error(w, "Limit has to be greater than 0", http.StatusBadRequest)
-		return
-	}
-	if limit > 1000 {
-		http.Error(w, "Limit has to be less than 1000", http.StatusBadRequest)
-		return
+		limit = int32(parsedLimit)
+		validator := &validation.PaginationValidator{
+			Limit: limit,
+		}
+		if err := validator.Validate(); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 	}
 
 	stats, err := h.queries.GetMostUsedCategories(r.Context(), repository.GetMostUsedCategoriesParams{
