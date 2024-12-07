@@ -437,6 +437,62 @@ func (v *UserUpdateValidation) Validate() error {
 	return nil
 }
 
+type UserProfileValidation struct {
+	Name  string
+	Email string
+}
+
+func (v *UserProfileValidation) Validate() error {
+	if v.Name != "" {
+		if err := (&TextValidator{
+			Text:     v.Name,
+			MinLen:   UserNameMinLength,
+			MaxLen:   UserNameMaxLength,
+			Required: false,
+		}).Validate(); err != nil {
+			return err
+		}
+	}
+
+	if v.Email != "" {
+		if err := (&TextValidator{
+			Text:     v.Email,
+			MinLen:   EmailMinLength,
+			MaxLen:   EmailMaxLength,
+			Required: false,
+		}).Validate(); err != nil {
+			return err
+		}
+		if !strings.Contains(v.Email, "@") {
+			return fmt.Errorf("invalid email format")
+		}
+	}
+
+	return nil
+}
+
+type PasswordUpdateValidation struct {
+	CurrentPassword string
+	NewPassword     string
+}
+
+func (v *PasswordUpdateValidation) Validate() error {
+	if v.CurrentPassword == "" {
+		return fmt.Errorf("current password is required")
+	}
+
+	if v.NewPassword == "" {
+		return fmt.Errorf("new password is required")
+	}
+
+	return (&TextValidator{
+		Text:     v.NewPassword,
+		MinLen:   PasswordMinLength,
+		MaxLen:   PasswordMaxLength,
+		Required: true,
+	}).Validate()
+}
+
 // IncomeValidation validates income-related requests
 type IncomeValidation struct {
 	Amount      float64

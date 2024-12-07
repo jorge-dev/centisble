@@ -28,6 +28,12 @@ type MoneyValidator struct {
 
 const (
 	CategoryNameMaxLength = 255
+	UserNameMaxLength     = 100
+	UserNameMinLength     = 2
+	EmailMaxLength        = 255
+	EmailMinLength        = 5
+	PasswordMaxLength     = 100
+	PasswordMinLength     = 6
 )
 
 func (m *MoneyValidator) Validate() error {

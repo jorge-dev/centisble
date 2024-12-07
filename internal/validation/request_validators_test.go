@@ -42,6 +42,7 @@ var (
 	validDateUTC   = time.Now().UTC().Format(time.RFC3339)
 	futureDateUTC  = time.Now().UTC().AddDate(0, 1, 0).Format(time.RFC3339)
 	invalidDateUTC = "2023-13-32T25:61:61Z" // intentionally invalid
+	shortName      = "J"                    // for testing name length validation
 )
 
 func TestExpenseValidationValidate(t *testing.T) {
@@ -976,4 +977,94 @@ func TestIncomeValidation_ValidatePartialUpdate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestUserProfileValidation(t *testing.T) {
+	tests := []TestCase{
+		{
+			Name: "valid profile update - all fields",
+			Input: UserProfileValidation{
+				Name:  validName,
+				Email: validEmail,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid profile update - only name",
+			Input: UserProfileValidation{
+				Name: validName,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid profile update - only email",
+			Input: UserProfileValidation{
+				Email: validEmail,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "invalid name - too short",
+			Input: UserProfileValidation{
+				Name: shortName,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "invalid email format",
+			Input: UserProfileValidation{
+				Email: invalidEmail,
+			},
+			WantErr: true,
+		},
+		{
+			Name:    "empty update - valid",
+			Input:   UserProfileValidation{},
+			WantErr: false,
+		},
+	}
+
+	runValidationTest[UserProfileValidation](t, tests)
+}
+
+func TestPasswordUpdateValidation(t *testing.T) {
+	tests := []TestCase{
+		{
+			Name: "valid password update",
+			Input: PasswordUpdateValidation{
+				CurrentPassword: validPassword,
+				NewPassword:     "newpassword123",
+			},
+			WantErr: false,
+		},
+		{
+			Name: "missing current password",
+			Input: PasswordUpdateValidation{
+				NewPassword: validPassword,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "missing new password",
+			Input: PasswordUpdateValidation{
+				CurrentPassword: validPassword,
+			},
+			WantErr: true,
+		},
+		{
+			Name: "new password too short",
+			Input: PasswordUpdateValidation{
+				CurrentPassword: validPassword,
+				NewPassword:     shortPassword,
+			},
+			WantErr: true,
+		},
+		{
+			Name:    "both passwords missing",
+			Input:   PasswordUpdateValidation{},
+			WantErr: true,
+		},
+	}
+
+	runValidationTest[PasswordUpdateValidation](t, tests)
 }
