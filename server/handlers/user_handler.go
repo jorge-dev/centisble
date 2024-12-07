@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/auth"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 	"github.com/jorge-dev/centsible/server/middleware"
 )
 
@@ -74,8 +75,18 @@ func (h *UserHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	validator := &validation.UserProfileValidation{
+		Name:  req.Name,
+		Email: req.Email,
+	}
+
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -128,8 +139,18 @@ func (h *UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	validator := &validation.PasswordUpdateValidation{
+		CurrentPassword: req.CurrentPassword,
+		NewPassword:     req.NewPassword,
+	}
+
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
