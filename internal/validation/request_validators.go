@@ -482,6 +482,72 @@ func (v *IncomeValidation) Validate() error {
 	return nil
 }
 
+type CurrentIncome struct {
+	Amount      float64
+	Currency    string
+	Source      string
+	Date        time.Time
+	Description string
+}
+
+func (v *IncomeValidation) ValidatePartialUpdate(current CurrentIncome) (CurrentIncome, error) {
+	result := CurrentIncome{
+		Amount:      current.Amount,
+		Currency:    current.Currency,
+		Source:      current.Source,
+		Date:        current.Date,
+		Description: current.Description,
+	}
+
+	if v.Amount != 0 {
+		if v.Amount <= 0 {
+			return CurrentIncome{}, ErrInvalidAmount
+		}
+		result.Amount = v.Amount
+	}
+
+	if v.Currency != "" {
+		if !currencyValidator.IsValid(v.Currency) {
+			return CurrentIncome{}, ErrInvalidCurrency
+		}
+		result.Currency = v.Currency
+	}
+
+	if v.Source != "" {
+		if err := (&TextValidator{
+			Text:     v.Source,
+			MinLen:   1,
+			MaxLen:   255,
+			Required: true,
+		}).Validate(); err != nil {
+			return CurrentIncome{}, err
+		}
+		result.Source = v.Source
+	}
+
+	if v.Date != "" {
+		date, err := ValidateDate(v.Date)
+		if err != nil {
+			return CurrentIncome{}, err
+		}
+		result.Date = date
+	}
+
+	if v.Description != "" {
+		if err := (&TextValidator{
+			Text:     v.Description,
+			MinLen:   0,
+			MaxLen:   1000,
+			Required: false,
+		}).Validate(); err != nil {
+			return CurrentIncome{}, err
+		}
+		result.Description = v.Description
+	}
+
+	return result, nil
+}
+
 // SummaryValidation validates summary-related requests
 type SummaryValidation struct {
 	Date     string

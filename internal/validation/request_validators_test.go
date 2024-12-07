@@ -809,3 +809,156 @@ func TestExpenseValidation_ValidatePartialUpdate(t *testing.T) {
 		})
 	}
 }
+
+func TestIncomeValidation_ValidatePartialUpdate(t *testing.T) {
+	now := time.Now().UTC()
+	testUpdateDate := now.Add(24 * time.Hour)
+
+	current := CurrentIncome{
+		Amount:      100.00,
+		Currency:    "USD",
+		Source:      "Salary",
+		Date:        now,
+		Description: "Original income",
+	}
+
+	tests := []struct {
+		name    string
+		update  IncomeValidation
+		want    CurrentIncome
+		wantErr bool
+	}{
+		{
+			name: "valid amount update",
+			update: IncomeValidation{
+				Amount: 200.00,
+			},
+			want: CurrentIncome{
+				Amount:      200.00,
+				Currency:    current.Currency,
+				Source:      current.Source,
+				Date:        current.Date,
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid amount update",
+			update: IncomeValidation{
+				Amount: -50.00,
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid currency update",
+			update: IncomeValidation{
+				Currency: "EUR",
+			},
+			want: CurrentIncome{
+				Amount:      current.Amount,
+				Currency:    "EUR",
+				Source:      current.Source,
+				Date:        current.Date,
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid currency update",
+			update: IncomeValidation{
+				Currency: "XXX",
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid source update",
+			update: IncomeValidation{
+				Source: "Freelance",
+			},
+			want: CurrentIncome{
+				Amount:      current.Amount,
+				Currency:    current.Currency,
+				Source:      "Freelance",
+				Date:        current.Date,
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "valid date update",
+			update: IncomeValidation{
+				Date: testUpdateDate.Format(time.RFC3339),
+			},
+			want: CurrentIncome{
+				Amount:      current.Amount,
+				Currency:    current.Currency,
+				Source:      current.Source,
+				Date:        testUpdateDate.Truncate(time.Second),
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid date update",
+			update: IncomeValidation{
+				Date: "invalid-date",
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid description update",
+			update: IncomeValidation{
+				Description: "Updated description",
+			},
+			want: CurrentIncome{
+				Amount:      current.Amount,
+				Currency:    current.Currency,
+				Source:      current.Source,
+				Date:        current.Date,
+				Description: "Updated description",
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid description update (too long)",
+			update: IncomeValidation{
+				Description: strings.Repeat("a", 1001),
+			},
+			wantErr: true,
+		},
+		{
+			name: "multiple field update",
+			update: IncomeValidation{
+				Amount:      150.00,
+				Currency:    "EUR",
+				Description: "Multiple update",
+			},
+			want: CurrentIncome{
+				Amount:      150.00,
+				Currency:    "EUR",
+				Source:      current.Source,
+				Date:        current.Date,
+				Description: "Multiple update",
+			},
+			wantErr: false,
+		},
+		{
+			name:    "no changes",
+			update:  IncomeValidation{},
+			want:    current,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.update.ValidatePartialUpdate(current)
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.want, got)
+			}
+		})
+	}
+}

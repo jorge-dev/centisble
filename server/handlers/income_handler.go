@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 	"github.com/jorge-dev/centsible/server/middleware"
 )
 
@@ -31,35 +31,20 @@ type CreateIncomeRequest struct {
 func (h *IncomeHandler) CreateIncome(w http.ResponseWriter, r *http.Request) {
 	var req CreateIncomeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		log.Printf("Error decoding request body: %v", err.Error())
-		errMsg := "Invalid request body: "
-		switch {
-		case err.Error() == "EOF":
-			errMsg += "request body is empty"
-		case err.Error() == "unexpected end of JSON input":
-			errMsg += "incomplete JSON data"
-		default:
-			errMsg += "malformed JSON - " + err.Error()
-		}
-		http.Error(w, errMsg, http.StatusBadRequest)
+		http.Error(w, "Invalid request body: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// Validate required fields
-	if req.Amount <= 0 {
-		http.Error(w, "Invalid request body: amount must be greater than 0", http.StatusBadRequest)
-		return
+	validator := validation.IncomeValidation{
+		Amount:      req.Amount,
+		Currency:    req.Currency,
+		Source:      req.Source,
+		Date:        req.Date.Format(time.RFC3339),
+		Description: req.Description,
 	}
-	if req.Currency == "" {
-		http.Error(w, "Invalid request body: currency is required", http.StatusBadRequest)
-		return
-	}
-	if req.Source == "" {
-		http.Error(w, "Invalid request body: source is required", http.StatusBadRequest)
-		return
-	}
-	if req.Date.IsZero() {
-		http.Error(w, "Invalid request body: date is required", http.StatusBadRequest)
+
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -153,32 +138,31 @@ func (h *IncomeHandler) GetIncomeByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *IncomeHandler) UpdateIncome(w http.ResponseWriter, r *http.Request) {
-	var req map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		errMsg := "Invalid request body: "
-		switch {
-		case err.Error() == "EOF":
-			errMsg += "request body is empty"
-		case err.Error() == "unexpected end of JSON input":
-			errMsg += "incomplete JSON data"
-		default:
-			errMsg += "malformed JSON - " + err.Error()
-		}
-		http.Error(w, errMsg, http.StatusBadRequest)
+	var req CreateIncomeRequest
+	userID, ok := r.Context().Value(middleware.UserIDKey).(string)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusUnauthorized)
+		return
+	}
+	uid, err := uuid.Parse(userID)
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
 
-	if len(req) == 0 {
-		http.Error(w, "Invalid request body: at least one field must be provided for update", http.StatusBadRequest)
-		return
-	}
-
-	// Get existing income record first
-	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, _ := uuid.Parse(userID)
 	incomeID := chi.URLParam(r, "id")
-	incomeUUID, _ := uuid.Parse(incomeID)
+	incomeUUID, err := uuid.Parse(incomeID)
+	if err != nil {
+		http.Error(w, "Invalid income ID", http.StatusBadRequest)
+		return
+	}
 
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Get current income
 	currentIncome, err := h.db.GetIncomeByID(r.Context(), repository.GetIncomeByIDParams{
 		ID:     incomeUUID,
 		UserID: uid,
@@ -188,9 +172,7 @@ func (h *IncomeHandler) UpdateIncome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updateParams := repository.UpdateIncomeParams{
-		ID:          incomeUUID,
-		UserID:      uid,
+	current := validation.CurrentIncome{
 		Amount:      currentIncome.Amount,
 		Currency:    currentIncome.Currency,
 		Source:      currentIncome.Source,
@@ -198,45 +180,29 @@ func (h *IncomeHandler) UpdateIncome(w http.ResponseWriter, r *http.Request) {
 		Description: currentIncome.Description,
 	}
 
-	// Only validate and update fields that are present in the request
-	if amount, ok := req["amount"].(float64); ok {
-		if amount <= 0 {
-			http.Error(w, "Invalid request body: amount must be greater than 0", http.StatusBadRequest)
-			return
-		}
-		updateParams.Amount = amount
+	validator := validation.IncomeValidation{
+		Amount:      req.Amount,
+		Currency:    req.Currency,
+		Source:      req.Source,
+		Date:        req.Date.Format(time.RFC3339),
+		Description: req.Description,
 	}
 
-	if currency, ok := req["currency"].(string); ok {
-		if currency == "" {
-			http.Error(w, "Invalid request body: currency cannot be empty", http.StatusBadRequest)
-			return
-		}
-		updateParams.Currency = currency
+	updatedIncome, err := validator.ValidatePartialUpdate(current)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	if source, ok := req["source"].(string); ok {
-		if source == "" {
-			http.Error(w, "Invalid request body: source cannot be empty", http.StatusBadRequest)
-			return
-		}
-		updateParams.Source = source
-	}
-
-	if dateStr, ok := req["date"].(string); ok {
-		date, err := time.Parse(time.RFC3339, dateStr)
-		if err != nil {
-			http.Error(w, "Invalid request body: invalid date format", http.StatusBadRequest)
-			return
-		}
-		updateParams.Date = date
-	}
-
-	if description, ok := req["description"].(string); ok {
-		updateParams.Description = description
-	}
-
-	income, err := h.db.UpdateIncome(r.Context(), updateParams)
+	income, err := h.db.UpdateIncome(r.Context(), repository.UpdateIncomeParams{
+		ID:          incomeUUID,
+		UserID:      uid,
+		Amount:      updatedIncome.Amount,
+		Currency:    updatedIncome.Currency,
+		Source:      updatedIncome.Source,
+		Date:        updatedIncome.Date,
+		Description: updatedIncome.Description,
+	})
 	if err != nil {
 		http.Error(w, "Error updating income record", http.StatusInternalServerError)
 		return
@@ -244,6 +210,21 @@ func (h *IncomeHandler) UpdateIncome(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(income)
+}
+
+// Helper functions for type conversion
+func getString(m map[string]interface{}, key string) string {
+	if val, ok := m[key].(string); ok {
+		return val
+	}
+	return ""
+}
+
+func getFloat64(m map[string]interface{}, key string) float64 {
+	if val, ok := m[key].(float64); ok {
+		return val
+	}
+	return 0
 }
 
 func (h *IncomeHandler) DeleteIncome(w http.ResponseWriter, r *http.Request) {
