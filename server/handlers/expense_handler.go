@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/bojanz/currency"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 	"github.com/jorge-dev/centsible/server/middleware"
 )
 
@@ -38,56 +38,27 @@ func (h *ExpenseHandler) CreateExpense(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//validate
-	if req.Amount <= 0 {
-		http.Error(w, "Amount must be greater than 0", http.StatusBadRequest)
-		return
+	validator := &validation.ExpenseValidation{
+		Amount:      req.Amount,
+		Currency:    req.Currency,
+		CategoryID:  req.CategoryID,
+		Description: req.Description,
+		Date:        req.Date,
 	}
 
-	if req.Currency == "" {
-		http.Error(w, "Currency is required", http.StatusBadRequest)
-		return
-	}
-
-	if req.CategoryID == uuid.Nil {
-		http.Error(w, "Category ID is required", http.StatusBadRequest)
-		return
-	}
-
-	if req.Date == "" {
-		http.Error(w, "Date is required", http.StatusBadRequest)
-		return
-	}
-
-	if req.Description == "" {
-		http.Error(w, "Description is required", http.StatusBadRequest)
-		return
-	}
-
-	// check if description is too long
-	if len(req.Description) > 1000 {
-		http.Error(w, "Description is too long. Please keep it under 1000 characters", http.StatusBadRequest)
-		return
-	}
-
-	//check if currency is valid
-	if !currency.IsValid(req.Currency) {
-		http.Error(w, "Invalid currency", http.StatusBadRequest)
-		return
-	}
-
-	date, err := time.Parse(time.RFC3339, req.Date)
-	if err != nil {
-		http.Error(w, "Invalid date format", http.StatusBadRequest)
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
+
+	date, _ := validation.ValidateDate(req.Date) // Already validated by ExpenseValidation
 
 	expense, err := h.db.CreateExpense(r.Context(), repository.CreateExpenseParams{
 		ID:          uuid.New(),
@@ -187,31 +158,21 @@ func (h *ExpenseHandler) GetExpensesByDateRange(w http.ResponseWriter, r *http.R
 	startDate := r.URL.Query().Get("start_date")
 	endDate := r.URL.Query().Get("end_date")
 
-	start, err := time.Parse(time.RFC3339, startDate)
-	if err != nil {
-		http.Error(w, "Invalid start date", http.StatusBadRequest)
+	validator := &validation.DateRangeQueryValidation{
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	end, err := time.Parse(time.RFC3339, endDate)
-	if err != nil {
-		http.Error(w, "Invalid end date", http.StatusBadRequest)
-		return
-	}
-
-	if end.Sub(start) > 365*24*time.Hour {
-		http.Error(w, "Date range cannot exceed 1 year", http.StatusBadRequest)
-		return
-	}
-
-	// Ensure start date is before end date
-	if start.After(end) {
-		http.Error(w, "Start date must be before end date", http.StatusBadRequest)
-		return
-	}
+	start, _ := validation.ValidateDate(startDate) // Already validated
+	end, _ := validation.ValidateDate(endDate)     // Already validated
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -239,14 +200,14 @@ func (h *ExpenseHandler) UpdateExpense(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := chi.URLParam(r, "id")
-	expenseID, err := uuid.Parse(id)
+	expenseID, err := validation.ValidateUUID(id)
 	if err != nil {
 		http.Error(w, "Invalid expense ID", http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -262,41 +223,38 @@ func (h *ExpenseHandler) UpdateExpense(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Use current values if request fields are empty/zero
-	amount := currentExpense.Amount
-	currency := currentExpense.Currency
-	categoryID := currentExpense.CategoryID
-	date := currentExpense.Date
-	description := currentExpense.Description
+	// Set up current state
+	current := validation.CurrentExpense{
+		Amount:      currentExpense.Amount,
+		Currency:    currentExpense.Currency,
+		CategoryID:  currentExpense.CategoryID,
+		Date:        currentExpense.Date,
+		Description: currentExpense.Description,
+	}
 
-	if req.Amount != 0 {
-		amount = req.Amount
+	// Validate only provided fields (partial update)
+	validator := &validation.ExpenseValidation{
+		Amount:          req.Amount,
+		Currency:        req.Currency,
+		CategoryID:      req.CategoryID,
+		Description:     req.Description,
+		Date:            req.Date,
+		IsPartialUpdate: true,
 	}
-	if req.Currency != "" {
-		currency = req.Currency
-	}
-	if req.CategoryID != uuid.Nil {
-		categoryID = req.CategoryID
-	}
-	if req.Date != "" {
-		parsedDate, err := time.Parse(time.RFC3339, req.Date)
-		if err != nil {
-			http.Error(w, "Invalid date format", http.StatusBadRequest)
-			return
-		}
-		date = parsedDate
-	}
-	if req.Description != "" {
-		description = req.Description
+
+	validated, err := validator.ValidatePartialUpdate(current)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	expense, err := h.db.UpdateExpense(r.Context(), repository.UpdateExpenseParams{
 		ID:          expenseID,
-		Amount:      amount,
-		Currency:    currency,
-		CategoryID:  categoryID,
-		Date:        date,
-		Description: description,
+		Amount:      validated.Amount,
+		Currency:    validated.Currency,
+		CategoryID:  validated.CategoryID,
+		Date:        validated.Date,
+		Description: validated.Description,
 		UserID:      uid,
 	})
 	if err != nil {
@@ -392,29 +350,49 @@ func (h *ExpenseHandler) GetExpenseTotalsByCategory(w http.ResponseWriter, r *ht
 
 // GetRecentExpenses handles GET /expenses/recent
 func (h *ExpenseHandler) GetRecentExpenses(w http.ResponseWriter, r *http.Request) {
-	// Get limit from query params, default to 10
-	limit := int32(10)
-	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
-		if parsedLimit, err := strconv.ParseInt(limitStr, 10, 32); err == nil {
-			limit = int32(parsedLimit)
-		} else {
-			http.Error(w, "Invalid limit", http.StatusBadRequest)
+	limitStr := r.URL.Query().Get("limit")
+	limit := int32(10) // default
+	if limitStr != "" {
+		parsedLimit, err := strconv.ParseInt(limitStr, 10, 32)
+		if err != nil {
+			http.Error(w, "Invalid limit value", http.StatusBadRequest)
 			return
 		}
-	}
+		limit = int32(parsedLimit)
 
-	//check limit is not 0 not negative a
-	if limit <= 0 {
-		http.Error(w, "Limit has to be greater than 0", http.StatusBadRequest)
+	}
+	validator := &validation.PaginationValidator{
+		Limit: limit,
+	}
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if limit > 1000 {
-		http.Error(w, "Limit has to be less than 1000", http.StatusBadRequest)
+
+	// limit := int32(10) // default value
+	// if limitStr != "" {
+	// 	parsedLimit, err := strconv.ParseInt(limitStr, 10, 32)
+	// 	if err != nil {
+	// 		http.Error(w, "Invalid limit value", http.StatusBadRequest)
+	// 		return
+	// 	}
+	// 	limit = int32(parsedLimit)
+	// 	validator := &validation.PaginationValidator{
+	// 		Limit: limit,
+	// 	}
+	// 	if err := validator.Validate(); err != nil {
+	// 		http.Error(w, err.Error(), http.StatusBadRequest)
+	// 		return
+	// 	}
+	// }
+
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	userID := r.Context().Value(middleware.UserIDKey).(string)
-	uid, err := uuid.Parse(userID)
+	uid, err := validation.ValidateUUID(userID)
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
@@ -422,7 +400,7 @@ func (h *ExpenseHandler) GetRecentExpenses(w http.ResponseWriter, r *http.Reques
 
 	expenses, err := h.db.GetRecentExpenses(r.Context(), repository.GetRecentExpensesParams{
 		UserID: uid,
-		Limit:  int32(limit),
+		Limit:  limit,
 	})
 	if err != nil {
 		http.Error(w, "Error fetching recent expenses", http.StatusInternalServerError)
@@ -432,5 +410,3 @@ func (h *ExpenseHandler) GetRecentExpenses(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(expenses)
 }
-
-// Validate if

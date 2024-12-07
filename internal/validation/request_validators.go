@@ -12,11 +12,12 @@ import (
 
 // ExpenseValidation validates expense-related requests
 type ExpenseValidation struct {
-	Amount      float64
-	Currency    string
-	CategoryID  uuid.UUID
-	Description string
-	Date        string
+	Amount          float64
+	Currency        string
+	CategoryID      uuid.UUID
+	Description     string
+	Date            string
+	IsPartialUpdate bool
 }
 
 func (v *ExpenseValidation) Validate() error {
@@ -46,6 +47,72 @@ func (v *ExpenseValidation) Validate() error {
 	}
 
 	return nil
+}
+
+// Add this new type
+type CurrentExpense struct {
+	Amount      float64
+	Currency    string
+	CategoryID  uuid.UUID
+	Date        time.Time
+	Description string
+}
+
+// Add this new method
+func (v *ExpenseValidation) ValidatePartialUpdate(current CurrentExpense) (CurrentExpense, error) {
+	result := CurrentExpense{
+		Amount:      current.Amount,
+		Currency:    current.Currency,
+		CategoryID:  current.CategoryID,
+		Date:        current.Date,
+		Description: current.Description,
+	}
+
+	if !v.IsPartialUpdate {
+		return CurrentExpense{}, fmt.Errorf("not a partial update")
+	}
+
+	// Handle individual field updates
+	if v.Amount != 0 {
+		if v.Amount <= 0 {
+			return CurrentExpense{}, ErrInvalidAmount
+		}
+		result.Amount = v.Amount
+
+	}
+
+	if v.Currency != "" {
+		if !currencyValidator.IsValid(v.Currency) {
+			return CurrentExpense{}, ErrInvalidCurrency
+		}
+		result.Currency = v.Currency
+	}
+
+	if v.CategoryID != uuid.Nil {
+		result.CategoryID = v.CategoryID
+	}
+
+	if v.Date != "" {
+		date, err := ValidateDate(v.Date)
+		if err != nil {
+			return CurrentExpense{}, err
+		}
+		result.Date = date
+	}
+
+	if v.Description != "" {
+		if err := (&TextValidator{
+			Text:     v.Description,
+			MinLen:   1,
+			MaxLen:   1000,
+			Required: true,
+		}).Validate(); err != nil {
+			return CurrentExpense{}, err
+		}
+		result.Description = v.Description
+	}
+
+	return result, nil
 }
 
 // CategoryValidation validates category-related requests

@@ -724,6 +724,12 @@ func TestGetExpensesByDateRange_ValidationChecks(t *testing.T) {
 			wantStatus: http.StatusBadRequest,
 		},
 		{
+			name:       "End date before start date",
+			startDate:  time.Now().AddDate(0, 0, 1).Format(time.RFC3339),
+			endDate:    time.Now().Format(time.RFC3339),
+			wantStatus: http.StatusBadRequest,
+		},
+		{
 			name:       "Same start and end date",
 			startDate:  time.Now().Format(time.RFC3339),
 			endDate:    time.Now().Format(time.RFC3339),

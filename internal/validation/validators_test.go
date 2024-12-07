@@ -43,6 +43,7 @@ func TestDateRangeValidatorValidate(t *testing.T) {
 		{"zero dates", time.Time{}, time.Time{}, ErrInvalidDate},
 		{"end before start", now, now.Add(-24 * time.Hour), ErrDateRange},
 		{"same date", now, now, nil},
+		{"more than 1 year", now, now.Add(366 * 24 * time.Hour), ErrDateRangeYear},
 	}
 
 	for _, tt := range tests {

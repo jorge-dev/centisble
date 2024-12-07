@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,6 +36,14 @@ func runValidationTest[TypeToValidate any, ValidatorPointerType interface {
 	}
 }
 
+// Add at the top of file with other test fixtures:
+var (
+	// ...existing fixtures...
+	validDateUTC   = time.Now().UTC().Format(time.RFC3339)
+	futureDateUTC  = time.Now().UTC().AddDate(0, 1, 0).Format(time.RFC3339)
+	invalidDateUTC = "2023-13-32T25:61:61Z" // intentionally invalid
+)
+
 func TestExpenseValidationValidate(t *testing.T) {
 	testCases := []TestCase{
 		{
@@ -44,7 +53,7 @@ func TestExpenseValidationValidate(t *testing.T) {
 				Currency:    validCurrency,
 				CategoryID:  validUUID,
 				Description: validDescription,
-				Date:        validDate,
+				Date:        validDateUTC,
 			},
 			WantErr: false,
 		},
@@ -196,8 +205,8 @@ func TestDateRangeQueryValidationValidate(t *testing.T) {
 		{
 			Name: "valid query",
 			Input: DateRangeQueryValidation{
-				StartDate: validDate,
-				EndDate:   "2023-12-31T00:00:00Z",
+				StartDate: validDateUTC,
+				EndDate:   futureDateUTC,
 				Limit:     100,
 			},
 			WantErr: false,
@@ -412,7 +421,7 @@ func TestBudgetValidationValidate(t *testing.T) {
 				CategoryID: validUUID,
 				Type:       "recurring",
 				StartDate:  validDate,
-				EndDate:    "2024-12-31T00:00:00Z",
+				EndDate:    "2023-12-31T00:00:00Z",
 				Name:       "Monthly Groceries",
 			},
 			WantErr: false,
@@ -522,13 +531,16 @@ func TestBudgetValidationValidate(t *testing.T) {
 }
 
 func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
+	now := time.Now().UTC()
+	future := now.AddDate(0, 1, 0)
+
 	current := CurrentBudget{
 		Amount:     1000.00,
 		Currency:   "USD",
 		CategoryID: validUUID,
 		Type:       "recurring",
-		StartDate:  time.Now(),
-		EndDate:    time.Now().AddDate(0, 1, 0),
+		StartDate:  now,
+		EndDate:    future,
 		Name:       "Original Budget",
 	}
 
@@ -577,8 +589,8 @@ func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
 		{
 			name: "invalid date range update",
 			input: BudgetValidation{
-				StartDate:       time.Now().AddDate(0, 2, 0).Format(time.RFC3339),
-				EndDate:         time.Now().Format(time.RFC3339), // End before start
+				StartDate:       now.AddDate(0, 2, 0).Format(time.RFC3339),
+				EndDate:         now.Format(time.RFC3339), // End before start
 				IsPartialUpdate: true,
 			},
 			wantErr: true,
@@ -619,6 +631,181 @@ func TestBudgetValidationValidatePartialUpdate(t *testing.T) {
 			}
 			assert.NoError(t, err)
 			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+// ...existing code...
+
+func TestExpenseValidation_ValidatePartialUpdate(t *testing.T) {
+	now := time.Now().UTC()
+	testCategoryId := uuid.New()
+	testUpdateDate := now.Add(24 * time.Hour)
+	current := CurrentExpense{
+		Amount:      100.00,
+		Currency:    "USD",
+		CategoryID:  uuid.New(),
+		Date:        now,
+		Description: "Original expense",
+	}
+
+	tests := []struct {
+		name    string
+		update  ExpenseValidation
+		want    CurrentExpense
+		wantErr bool
+	}{
+		{
+			name: "valid amount update",
+			update: ExpenseValidation{
+				Amount:          200.00,
+				IsPartialUpdate: true,
+			},
+			want: CurrentExpense{
+				Amount:      200.00,
+				Currency:    current.Currency,
+				CategoryID:  current.CategoryID,
+				Date:        current.Date,
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid amount update",
+			update: ExpenseValidation{
+				Amount:          -50.00,
+				IsPartialUpdate: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid currency update",
+			update: ExpenseValidation{
+				Currency:        "EUR",
+				IsPartialUpdate: true,
+			},
+			want: CurrentExpense{
+				Amount:      current.Amount,
+				Currency:    "EUR",
+				CategoryID:  current.CategoryID,
+				Date:        current.Date,
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid currency update",
+			update: ExpenseValidation{
+				Currency:        "XXX",
+				IsPartialUpdate: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid category update",
+			update: ExpenseValidation{
+				CategoryID:      testCategoryId,
+				IsPartialUpdate: true,
+			},
+			want: CurrentExpense{
+				Amount:      current.Amount,
+				Currency:    current.Currency,
+				CategoryID:  testCategoryId,
+				Date:        current.Date,
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "valid date update",
+			update: ExpenseValidation{
+				Date:            testUpdateDate.Format(time.RFC3339),
+				IsPartialUpdate: true,
+			},
+			want: CurrentExpense{
+				Amount:      current.Amount,
+				Currency:    current.Currency,
+				CategoryID:  current.CategoryID,
+				Date:        testUpdateDate.Truncate(time.Second),
+				Description: current.Description,
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid date update",
+			update: ExpenseValidation{
+				Date:            "invalid-date",
+				IsPartialUpdate: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid description update",
+			update: ExpenseValidation{
+				Description:     "Updated description",
+				IsPartialUpdate: true,
+			},
+			want: CurrentExpense{
+				Amount:      current.Amount,
+				Currency:    current.Currency,
+				CategoryID:  current.CategoryID,
+				Date:        current.Date,
+				Description: "Updated description",
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid description update (too long)",
+			update: ExpenseValidation{
+				Description:     strings.Repeat("a", 1001),
+				IsPartialUpdate: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "multiple field update",
+			update: ExpenseValidation{
+				Amount:          150.00,
+				Currency:        "EUR",
+				Description:     "Multiple update",
+				IsPartialUpdate: true,
+			},
+			want: CurrentExpense{
+				Amount:      150.00,
+				Currency:    "EUR",
+				CategoryID:  current.CategoryID,
+				Date:        current.Date,
+				Description: "Multiple update",
+			},
+			wantErr: false,
+		},
+		{
+			name: "no changes",
+			update: ExpenseValidation{
+				IsPartialUpdate: true,
+			},
+			want:    current,
+			wantErr: false,
+		},
+		{
+			name: "not partial update",
+			update: ExpenseValidation{
+				Amount:          200.00,
+				IsPartialUpdate: false,
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.update.ValidatePartialUpdate(current)
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.want, got)
+			}
 		})
 	}
 }
