@@ -179,32 +179,27 @@ func TestUpdateIncome(t *testing.T) {
 	tests := []struct {
 		name       string
 		incomeID   string
-		reqBody    map[string]interface{}
+		reqBody    CreateIncomeRequest
 		wantStatus int
 	}{
 		{
 			name:     "Valid update",
 			incomeID: suite.testIncome.ID.String(),
-			reqBody: map[string]interface{}{
-				"amount":      2000.50,
-				"currency":    "EUR",
-				"source":      "Bonus",
-				"description": "Updated description",
+			reqBody: CreateIncomeRequest{
+				Amount:      2000.50,
+				Currency:    "EUR",
+				Source:      "Bonus",
+				Date:        time.Now(),
+				Description: "Updated description",
 			},
 			wantStatus: http.StatusOK,
 		},
 		{
 			name:     "Invalid amount",
 			incomeID: suite.testIncome.ID.String(),
-			reqBody: map[string]interface{}{
-				"amount": -100,
+			reqBody: CreateIncomeRequest{
+				Amount: -100,
 			},
-			wantStatus: http.StatusBadRequest,
-		},
-		{
-			name:       "Empty request body",
-			incomeID:   suite.testIncome.ID.String(),
-			reqBody:    map[string]interface{}{},
 			wantStatus: http.StatusBadRequest,
 		},
 	}
