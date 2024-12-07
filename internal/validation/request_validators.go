@@ -550,14 +550,22 @@ func (v *IncomeValidation) ValidatePartialUpdate(current CurrentIncome) (Current
 
 // SummaryValidation validates summary-related requests
 type SummaryValidation struct {
-	Date     string
-	Currency string
+	Date       string
+	Currency   string
+	ParsedDate time.Time // Add this field
 }
 
 func (v *SummaryValidation) Validate() error {
-	// Validate date
-	if _, err := ValidateDate(v.Date); err != nil {
-		return err
+	// Default to current date if empty
+	if v.Date == "" {
+		v.ParsedDate = time.Now()
+	} else {
+		// Parse date
+		date, err := ValidateDate(v.Date)
+		if err != nil {
+			return err
+		}
+		v.ParsedDate = date
 	}
 
 	// Validate currency if provided

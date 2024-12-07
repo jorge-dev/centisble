@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/validation"
 	"github.com/jorge-dev/centsible/server/middleware"
 )
 
@@ -59,18 +60,22 @@ func (h *SummaryHandler) GetMonthlySummary(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// Parse date from query params, default to current month if not provided
+	// Get date from query params
 	dateStr := r.URL.Query().Get("date")
-	var date time.Time
-	if dateStr == "" {
-		date = time.Now()
-	} else {
-		date, err = time.Parse(time.RFC3339, dateStr)
-		if err != nil {
-			http.Error(w, "Invalid date format. Use YYYY-MM-DD", http.StatusBadRequest)
-			return
-		}
+
+	// Create validation struct
+	validator := &validation.SummaryValidation{
+		Date: dateStr,
 	}
+
+	// Validate input
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	date := validator.ParsedDate
+
 	log.Printf("date: %v", date)
 	log.Printf("userId: %v", uid)
 
@@ -117,18 +122,21 @@ func (h *SummaryHandler) GetYearlySummary(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// Parse date from query params, default to current year if not provided
+	// Get date from query params
 	dateStr := r.URL.Query().Get("date")
-	var date time.Time
-	if dateStr == "" {
-		date = time.Now()
-	} else {
-		date, err = time.Parse(time.RFC3339, dateStr)
-		if err != nil {
-			http.Error(w, "Invalid date format. Use YYYY-MM-DD", http.StatusBadRequest)
-			return
-		}
+
+	// Create validation struct
+	validator := &validation.SummaryValidation{
+		Date: dateStr,
 	}
+
+	// Validate input
+	if err := validator.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	date := validator.ParsedDate
 
 	log.Printf("date: %s", date)
 	log.Printf("userId: %s", uid)
