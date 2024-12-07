@@ -169,9 +169,17 @@ func TestIncomeValidationValidate(t *testing.T) {
 func TestSummaryValidationValidate(t *testing.T) {
 	tests := []TestCase{
 		{
-			Name: "valid summary",
+			Name: "valid summary with date",
 			Input: SummaryValidation{
 				Date:     validDate,
+				Currency: validCurrency,
+			},
+			WantErr: false,
+		},
+		{
+			Name: "valid summary without date (defaults to current date)",
+			Input: SummaryValidation{
+				Date:     "",
 				Currency: validCurrency,
 			},
 			WantErr: false,
@@ -194,8 +202,15 @@ func TestSummaryValidationValidate(t *testing.T) {
 			WantErr:     true,
 			ExpectedErr: ErrInvalidCurrency,
 		},
+		{
+			Name: "empty currency (valid)",
+			Input: SummaryValidation{
+				Date: validDate,
+				// Currency is optional
+			},
+			WantErr: false,
+		},
 	}
-
 	runValidationTest[SummaryValidation](t, tests)
 }
 
