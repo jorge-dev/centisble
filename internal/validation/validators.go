@@ -17,6 +17,7 @@ var (
 	ErrInvalidDate     = fmt.Errorf("invalid date format")
 	ErrDateRange       = fmt.Errorf("end date must be after start date")
 	ErrInvalidLimit    = fmt.Errorf("limit must be between 1 and 1000")
+	ErrDateRangeYear   = fmt.Errorf("date range must not exceed 1 year")
 )
 
 // MoneyValidator validates amount and currency
@@ -51,6 +52,11 @@ func (d *DateRangeValidator) Validate() error {
 	}
 	if d.EndDate.Before(d.StartDate) {
 		return ErrDateRange
+	}
+	// Check if the date range is not more than 1 year
+	if d.EndDate.Sub(d.StartDate) > 365*24*time.Hour {
+		return ErrDateRangeYear
+
 	}
 	return nil
 }
