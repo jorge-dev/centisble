@@ -27,7 +27,7 @@ services:
 
   psql_centsible:
     container_name: psql_centsible
-    image: postgres:latest
+    image: postgres:17.2
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${CENTSIBLE_DB_DATABASE}
