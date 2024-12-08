@@ -15,7 +15,7 @@ VALUES
     (uuid_generate_v4(), 'Bob Wilson', 'bob.wilson@example.com', 
      '$2a$10$YZjEaHHtUBD/4RniGrx7ZO5TQShEBurJmc4Yz9Un.RFS4rP1W1hjm', 
      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 
-     (SELECT id FROM role_ids WHERE name = 'User'));
+     (SELECT id FROM role_ids WHERE name = 'Viewer'));
 
 -- name: SeedCategories :exec
 WITH users AS (
