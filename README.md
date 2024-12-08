@@ -230,22 +230,22 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
   - [X] Budget limits and tracking
   - [X] Budget alerts
   - [X] Recurring/one-time budgets
-- [ ] Input Validation
-  - [ ] Implement request validation
-  - [ ] Data sanitation
+- [X] Input Validation
+  - [X] Implement request validation
+  - [X] Data sanitation
+  - [X] Currency handling
 
 ### Phase 3: Budget Tracking and Summaries
 
-- [ ] Budget Tracking
-  - [ ] Compare expenses vs limits
-  - [ ] Budget adjustment endpoints
-- [ ] Financial Summaries
+- [X] Budget Tracking
+  - [X] Compare expenses vs limits
+  - [X] Budget adjustment endpoints
+- [X] Financial Summaries
   - [X] Monthly summary endpoint
   - [X] Yearly summary endpoint
-  - [ ] Currency handling
-- [ ] Reports and Insights
-  - [ ] Spending trends
-  - [ ] Budget progress tracking
+- [X] Reports and Insights
+  - [X] Spending trends
+  - [X] Budget progress tracking
 
 ### Phase 4: Documentation, Testing, and Security
 
@@ -264,7 +264,7 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
 ### Phase 5: Deployment and Monitoring
 
 - [ ] CI/CD Pipeline
-  - [ ] GitHub Actions setup
+  - [X] GitHub Actions setup
   - [ ] Docker registry integration
 - [ ] Cloud Deployment
   - [ ] Cloud provider setup
