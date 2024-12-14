@@ -230,32 +230,32 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
   - [X] Budget limits and tracking
   - [X] Budget alerts
   - [X] Recurring/one-time budgets
-- [ ] Input Validation
-  - [ ] Implement request validation
-  - [ ] Data sanitation
+- [X] Input Validation
+  - [X] Implement request validation
+  - [x] Data sanitation
 
 ### Phase 3: Budget Tracking and Summaries
 
-- [ ] Budget Tracking
-  - [ ] Compare expenses vs limits
-  - [ ] Budget adjustment endpoints
-- [ ] Financial Summaries
+- [X] Budget Tracking
+  - [X] Compare expenses vs limits
+  - [X] Budget adjustment endpoints
+- [X] Financial Summaries
   - [X] Monthly summary endpoint
   - [X] Yearly summary endpoint
-  - [ ] Currency handling
-- [ ] Reports and Insights
-  - [ ] Spending trends
-  - [ ] Budget progress tracking
+  - [X] Currency handling
+- [X] Reports and Insights
+  - [X] Spending trends
+  - [X] Budget progress tracking
 
 ### Phase 4: Documentation, Testing, and Security
 
 - [X] API Documentation
   - [X] Swagger UI integration
   - [X] OpenAPI specifications
-- [ ] Testing
+- [X] Testing
   - [X] Unit tests
-  - [ ] Integration tests
-  - [ ] Mock implementations
+  - [X] Integration tests
+  - [X] Mock implementations
 - [ ] Security
   - [ ] Rate limiting
   - [ ] Security headers
