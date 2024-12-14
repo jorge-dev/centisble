@@ -12,6 +12,7 @@ import (
 	"github.com/jorge-dev/centsible/internal/repository"
 	"github.com/jorge-dev/centsible/server/handlers"
 	customMiddleware "github.com/jorge-dev/centsible/server/middleware"
+	"golang.org/x/time/rate"
 )
 
 func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env string) http.Handler {
@@ -22,8 +23,14 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 
 	r.Use(middleware.Recoverer)
 
+	// Create rate limiters with different configurations
+	publicRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(10), 20) // 10 requests per second, burst size 20
+	authRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(5), 10)    // 5 requests per second, burst size 10
+	privateRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(2), 5)  // 2 requests per second, burst size 5
+
 	// Public routes
 	r.Group(func(r chi.Router) {
+		r.Use(publicRateLimiter.Limit)
 		r.Get("/live", s.liveCheck)
 		r.Get("/health", s.healthHandler)
 
@@ -38,6 +45,7 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 
 	// Auth routes
 	r.Group(func(r chi.Router) {
+		r.Use(authRateLimiter.Limit)
 		authHandler := handlers.NewAuthHandler(queries, &jwtManager)
 		r.Post("/register", authHandler.Register)
 		r.Post("/login", authHandler.Login)
@@ -46,6 +54,7 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 
 	// Private routes
 	r.Group(func(r chi.Router) {
+		r.Use(privateRateLimiter.Limit)
 		authMiddleware := customMiddleware.NewAuthMiddleware(&jwtManager)
 		r.Use(authMiddleware.AuthRequired)
 
