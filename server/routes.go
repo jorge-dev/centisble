@@ -19,6 +19,12 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 
 	queries := repository.New(conn)
 	r := chi.NewRouter()
+
+	// Add security headers middleware first
+	securityHeaders := customMiddleware.NewSecurityHeaders()
+	r.Use(securityHeaders.Handler)
+
+	// Add other middleware
 	r.Use(middleware.Logger)
 
 	r.Use(middleware.Recoverer)
