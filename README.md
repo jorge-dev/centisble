@@ -256,10 +256,10 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
   - [X] Unit tests
   - [X] Integration tests
   - [X] Mock implementations
-- [ ] Security
-  - [ ] Rate limiting
-  - [ ] Security headers
-  - [ ] Input validation security
+- [X] Security
+  - [X] Rate limiting
+  - [X] Security headers
+  - [X] Input validation security
 
 ### Phase 5: Deployment and Monitoring
 
