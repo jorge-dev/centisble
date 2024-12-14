@@ -47,6 +47,12 @@ paths:
           description: User registered successfully
         "400":
           description: Invalid input
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /login:
     post:
       description: Authenticate user and return JWT token
@@ -68,6 +74,12 @@ paths:
                 $ref: "#/components/schemas/AuthResponse"
         "401":
           description: Unauthorized - Invalid credentials
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /logout:
     post:
       description: Logout the current user
@@ -91,6 +103,12 @@ paths:
           description: Unauthorized - Invalid or missing token
         "400":
           description: Bad Request - Token validation failed
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /income:
     post:
       description: Add a new income record
@@ -110,6 +128,12 @@ paths:
           description: Income record created successfully
         "400":
           description: Invalid input
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     get:
       description: Get all income records
       operationId: getAllIncomeRecords
@@ -126,6 +150,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/IncomeRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /income/{id}:
     get:
       description: Get an income record by ID
@@ -151,6 +181,12 @@ paths:
                 $ref: "#/components/schemas/IncomeRecordResponse"
         "404":
           description: Income record not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     put:
       description: Update an existing income record
       operationId: updateIncomeRecord
@@ -177,6 +213,12 @@ paths:
           description: Income record updated successfully
         "400":
           description: Invalid input
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     delete:
       description: Delete an income record
       operationId: deleteIncomeRecord
@@ -193,6 +235,12 @@ paths:
       responses:
         "204":
           description: Income record deleted successfully
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses:
     post:
       description: Add a new expense record
@@ -214,6 +262,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ExpenseRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     get:
       description: Get all expense records
       operationId: getAllExpenseRecords
@@ -230,6 +284,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExpenseRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses/{id}:
     get:
       description: Get an expense record by ID
@@ -255,6 +315,12 @@ paths:
                 $ref: "#/components/schemas/ExpenseRecordResponse"
         "404":
           description: Expense record not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     put:
       description: Update an expense record
       operationId: updateExpense
@@ -282,6 +348,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ExpenseRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     delete:
       description: Delete an expense record
       operationId: deleteExpense
@@ -300,6 +372,12 @@ paths:
       responses:
         "204":
           description: Expense deleted successfully
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses/category/{category}:
     get:
       description: Get expenses by category
@@ -325,6 +403,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExpenseRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses/range:
     get:
       description: Get expenses within a date range
@@ -357,6 +441,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExpenseRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses/recent:
     get:
       description: Get recent expenses
@@ -381,6 +471,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExpenseRecordResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses/monthly/total:
     get:
       description: Get monthly expense total
@@ -410,6 +506,12 @@ paths:
                     format: float
                   currency:
                     type: string
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /expenses/category/totals:
     get:
       description: Get expense totals by category
@@ -440,6 +542,12 @@ paths:
                     total_amount:
                       type: number
                       format: float
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /budgets:
     post:
       description: Create a new budget
@@ -459,6 +567,12 @@ paths:
           description: Budget created successfully
         "400":
           description: Invalid input
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     get:
       description: List all budgets for the user
       operationId: listBudgets
@@ -477,6 +591,12 @@ paths:
                   $ref: "#/components/schemas/BudgetRecordResponse"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /budgets/{id}:
     get:
       description: Get budget usage details by ID
@@ -506,6 +626,12 @@ paths:
           description: Unauthorized
         "404":
           description: Budget not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     put:
       description: Update an existing budget
       operationId: updateBudget
@@ -540,6 +666,12 @@ paths:
           description: Unauthorized
         "404":
           description: Budget not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     delete:
       description: Delete a budget
       operationId: deleteBudget
@@ -564,6 +696,12 @@ paths:
           description: Unauthorized
         "404":
           description: Budget not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /budgets/recurring:
     get:
@@ -584,6 +722,12 @@ paths:
                   $ref: "#/components/schemas/BudgetRecordResponse"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /budgets/one-time:
     get:
@@ -604,6 +748,12 @@ paths:
                   $ref: "#/components/schemas/BudgetRecordResponse"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /budgets/category/{categoryId}:
     get:
@@ -633,6 +783,12 @@ paths:
           description: Invalid category ID
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /budgets/alerts:
     get:
@@ -661,6 +817,12 @@ paths:
                   $ref: "#/components/schemas/BudgetAlertResponse"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /summary/monthly:
     get:
       description: Get a monthly financial summary
@@ -684,6 +846,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MonthlySummary"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /summary/yearly:
     get:
       description: Get a yearly financial summary
@@ -708,6 +876,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/YearlySummary"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /live:
     get:
       description: Check if the API is live
@@ -731,6 +905,12 @@ paths:
                   version:
                     type: string
                     example: "1.0.0"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /health:
     get:
       description: Check the health of the API
@@ -751,6 +931,12 @@ paths:
                   message:
                     type: string
                     example: "API is healthy"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /user/profile:
     get:
       description: Get user profile information
@@ -768,6 +954,12 @@ paths:
                 $ref: "#/components/schemas/UserResponse"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     put:
       description: Update user profile information
       operationId: updateUserProfile
@@ -792,6 +984,12 @@ paths:
           description: Unauthorized
         "400":
           description: Invalid input
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /user/password:
     put:
@@ -814,6 +1012,12 @@ paths:
           description: Unauthorized or invalid current password
         "400":
           description: Invalid input
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /user/stats:
     get:
@@ -832,6 +1036,12 @@ paths:
                 $ref: "#/components/schemas/UserStats"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /user/roles:
     get:
@@ -852,6 +1062,12 @@ paths:
           description: Unauthorized
         "404":
           description: User role not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     put:
       description: Update user role
       operationId: updateUserRole
@@ -878,6 +1094,12 @@ paths:
           description: Permission denied - Admin only operation
         "404":
           description: User or role not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /user/roles/list:
     get:
@@ -908,6 +1130,12 @@ paths:
           description: Unauthorized
         "404":
           description: No users found for specified role
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
   /categories:
     post:
       description: Create a new category
@@ -933,6 +1161,12 @@ paths:
           description: Invalid input
         "409":
           description: Category already exists
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     get:
       description: List all categories for the user
       operationId: listCategories
@@ -949,6 +1183,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CategoryResponse"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /categories/{id}:
     get:
@@ -975,6 +1215,12 @@ paths:
                 $ref: "#/components/schemas/CategoryResponse"
         "404":
           description: Category not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     put:
       description: Update a category
       operationId: updateCategory
@@ -1005,6 +1251,12 @@ paths:
                 $ref: "#/components/schemas/CategoryResponse"
         "404":
           description: Category not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
     delete:
       description: Delete a category
       operationId: deleteCategory
@@ -1024,6 +1276,12 @@ paths:
           description: Category deleted successfully
         "404":
           description: Category not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /categories/{id}/stats:
     get:
@@ -1050,6 +1308,12 @@ paths:
                 $ref: "#/components/schemas/CategoryStats"
         "404":
           description: Category not found
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
   /categories/stats/most-used:
     get:
@@ -1077,6 +1341,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CategoryUsageStats"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
 
 components:
   securitySchemes:
@@ -1574,3 +1844,9 @@ components:
           format: float
           example: 75.5
           description: Current usage percentage of the budget
+    RateLimitError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Too many requests, please try again later."

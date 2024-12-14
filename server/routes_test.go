@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/jorge-dev/centsible/internal/auth"
 )
 
@@ -143,5 +146,139 @@ func TestWriteJSON(t *testing.T) {
 				t.Errorf("Failed to decode response: %v", err)
 			}
 		})
+	}
+}
+
+func TestPublicRoutesRateLimiting(t *testing.T) {
+	s := &Server{
+		port: 8080,
+		db:   &mockDB{healthStatus: true},
+	}
+
+	jwtManager := auth.NewJWTManager("test-secret")
+	handler := s.RegisterRoutes(nil, *jwtManager, "local")
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	// Test rate limiting on /live endpoint
+	for i := 0; i < 55; i++ {
+		resp, err := http.Get(server.URL + "/live")
+		if err != nil {
+			t.Fatalf("Request failed: %v", err)
+		}
+		defer resp.Body.Close()
+
+		if i < 50 {
+			if resp.StatusCode != http.StatusOK {
+				t.Errorf("Request %d: expected %d, got %d", i, http.StatusOK, resp.StatusCode)
+			}
+		} else {
+			if resp.StatusCode != http.StatusTooManyRequests {
+				t.Errorf("Request %d: expected %d, got %d", i, http.StatusTooManyRequests, resp.StatusCode)
+			}
+		}
+	}
+}
+
+func TestAuthRoutesRateLimiting(t *testing.T) {
+	s := &Server{
+		port: 8080,
+		db:   &mockDB{healthStatus: true},
+	}
+
+	jwtManager := auth.NewJWTManager("test-secret")
+	handler := s.RegisterRoutes(nil, *jwtManager, "local")
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	// Test rate limiting on /login endpoint
+	for i := 0; i < 35; i++ {
+		loginBody := strings.NewReader(`{"email": "test@test.com", "password": "test123"}`)
+		resp, err := http.Post(server.URL+"/login", "application/json", loginBody)
+		if err != nil {
+			t.Fatalf("Request failed: %v", err)
+		}
+		defer resp.Body.Close()
+
+		if i < 30 {
+			if resp.StatusCode == http.StatusTooManyRequests {
+				t.Errorf("Request %d: unexpected rate limit", i)
+			}
+		} else {
+			if resp.StatusCode != http.StatusTooManyRequests {
+				t.Errorf("Request %d: expected rate limit, got status %d", i, resp.StatusCode)
+			}
+		}
+	}
+}
+
+func TestPrivateRoutesRateLimiting(t *testing.T) {
+	s := &Server{
+		port: 8080,
+		db:   &mockDB{healthStatus: true},
+	}
+
+	jwtManager := auth.NewJWTManager("test-secret")
+	token, _ := jwtManager.GenerateToken(uuid.New().String(), "test@email.com", uuid.New().String())
+	handler := s.RegisterRoutes(nil, *jwtManager, "test")
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	client := &http.Client{}
+
+	// Test rate limiting on /user/profile endpoint
+	for i := 0; i < 20; i++ {
+		req, err := http.NewRequest("GET", server.URL+"/user/profile", nil)
+		if err != nil {
+			t.Fatalf("Failed to create request: %v", err)
+		}
+		req.Header.Set("Authorization", "Bearer "+token)
+
+		resp, err := client.Do(req)
+		if err != nil {
+			t.Fatalf("Request failed: %v", err)
+		}
+		defer resp.Body.Close()
+
+		if i < 15 {
+			if resp.StatusCode == http.StatusTooManyRequests {
+				t.Errorf("Request %d: unexpected rate limit", i)
+			}
+		} else {
+			if resp.StatusCode != http.StatusTooManyRequests {
+				t.Errorf("Request %d: expected rate limit, got status %d", i, resp.StatusCode)
+			}
+		}
+	}
+}
+
+func TestRateLimitReset(t *testing.T) {
+	s := &Server{
+		port: 8080,
+		db:   &mockDB{healthStatus: true},
+	}
+
+	jwtManager := auth.NewJWTManager("test-secret")
+	handler := s.RegisterRoutes(nil, *jwtManager, "local")
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	// Make initial requests to trigger rate limit
+	for i := 0; i < 25; i++ {
+		http.Get(server.URL + "/live")
+	}
+
+	// Wait for rate limit to reset
+	time.Sleep(1 * time.Second)
+
+	// Try another request
+	resp, err := http.Get(server.URL + "/live")
+	if err != nil {
+		t.Fatalf("Request failed: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusTooManyRequests {
+		t.Error("Rate limit should have reset after waiting")
 	}
 }
