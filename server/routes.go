@@ -24,9 +24,9 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 	r.Use(middleware.Recoverer)
 
 	// Create rate limiters with different configurations
-	publicRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(10), 20) // 10 requests per second, burst size 20
-	authRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(5), 10)    // 5 requests per second, burst size 10
-	privateRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(2), 5)  // 2 requests per second, burst size 5
+	publicRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(30), 50)  // 10 requests per second, burst size 20
+	authRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(20), 30)    // 5 requests per second, burst size 10
+	privateRateLimiter := customMiddleware.NewRateLimiter(rate.Limit(10), 15) // 2 requests per second, burst size 5
 
 	// Public routes
 	r.Group(func(r chi.Router) {

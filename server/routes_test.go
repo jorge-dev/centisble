@@ -161,14 +161,14 @@ func TestPublicRoutesRateLimiting(t *testing.T) {
 	defer server.Close()
 
 	// Test rate limiting on /live endpoint
-	for i := 0; i < 25; i++ {
+	for i := 0; i < 55; i++ {
 		resp, err := http.Get(server.URL + "/live")
 		if err != nil {
 			t.Fatalf("Request failed: %v", err)
 		}
 		defer resp.Body.Close()
 
-		if i < 20 {
+		if i < 50 {
 			if resp.StatusCode != http.StatusOK {
 				t.Errorf("Request %d: expected %d, got %d", i, http.StatusOK, resp.StatusCode)
 			}
@@ -192,7 +192,7 @@ func TestAuthRoutesRateLimiting(t *testing.T) {
 	defer server.Close()
 
 	// Test rate limiting on /login endpoint
-	for i := 0; i < 15; i++ {
+	for i := 0; i < 35; i++ {
 		loginBody := strings.NewReader(`{"email": "test@test.com", "password": "test123"}`)
 		resp, err := http.Post(server.URL+"/login", "application/json", loginBody)
 		if err != nil {
@@ -200,7 +200,7 @@ func TestAuthRoutesRateLimiting(t *testing.T) {
 		}
 		defer resp.Body.Close()
 
-		if i < 10 {
+		if i < 30 {
 			if resp.StatusCode == http.StatusTooManyRequests {
 				t.Errorf("Request %d: unexpected rate limit", i)
 			}
@@ -227,7 +227,7 @@ func TestPrivateRoutesRateLimiting(t *testing.T) {
 	client := &http.Client{}
 
 	// Test rate limiting on /user/profile endpoint
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		req, err := http.NewRequest("GET", server.URL+"/user/profile", nil)
 		if err != nil {
 			t.Fatalf("Failed to create request: %v", err)
@@ -240,7 +240,7 @@ func TestPrivateRoutesRateLimiting(t *testing.T) {
 		}
 		defer resp.Body.Close()
 
-		if i < 5 {
+		if i < 15 {
 			if resp.StatusCode == http.StatusTooManyRequests {
 				t.Errorf("Request %d: unexpected rate limit", i)
 			}
