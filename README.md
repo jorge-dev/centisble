@@ -264,7 +264,7 @@ For a detailed development plan, refer to the [Specs.md](./Specs.md) file.
 ### Phase 5: Deployment and Monitoring
 
 - [ ] CI/CD Pipeline
-  - [ ] GitHub Actions setup
+  - [X] GitHub Actions setup
   - [ ] Docker registry integration
 - [ ] Cloud Deployment
   - [ ] Cloud provider setup
