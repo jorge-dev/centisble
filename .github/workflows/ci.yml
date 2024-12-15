@@ -23,10 +23,23 @@ jobs:
         with:
           go-version: "1.23.x" # Adjust to your required Go version
 
+      - name: Restore cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build  # Go build cache
+            ~/go/pkg/mod       # Go modules cache
+          key: ${{ runner.os }}-go-${{ hashFiles('**/*.go', 'go.mod', 'go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: go mod download
 
       - name: Export environment variables
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           echo "APP_ENV=${{ env.APP_ENV }}" >> $GITHUB_ENV
           echo "RUN_MIGRATION=${{ env.RUN_MIGRATION }}" >> $GITHUB_ENV
@@ -39,6 +52,7 @@ jobs:
           echo "CENTSIBLE_DB_SCHEMA=${{ env.CENTSIBLE_DB_SCHEMA }}" >> $GITHUB_ENV
 
       - name: Build application
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           GIT_COMMIT=$(git rev-parse HEAD)
@@ -47,7 +61,13 @@ jobs:
           go build -o main -ldflags="-X 'github.com/jorge-dev/centsible/internal/version.buildDate=${BUILD_DATE}' -X 'github.com/jorge-dev/centsible/internal/version.gitCommit=${GIT_COMMIT}' -X 'github.com/jorge-dev/centsible/internal/version.gitVersion=${VERSION}'" ./cmd/api/main.go
 
       - name: Format code
+        if: steps.cache.outputs.cache-hit != 'true'
         run: make format
 
       - name: Run tests
+        if: steps.cache.outputs.cache-hit != 'true'
         run: go test -v ./...
+
+      - name: Build skipped
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: echo "No changes in Go files. Build steps are skipped due to cache hit."
