@@ -6,10 +6,7 @@
 - [ ] :bug: Bug fix (non-breaking change which fixes an issue)
 - [ ] :sparkles: New feature (non-breaking change which adds functionality)
 - [ ] :boom: Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] :memo: Documentation update
-- [ ] :test_tube: Test update
 - [ ] :recycle: Refactoring
-- [ ] :arrows_counterclockwise: CI/CD changes
 - [ ] :rewind: Revert
 
 ## Risk Assessment

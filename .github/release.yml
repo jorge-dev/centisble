@@ -1,0 +1,32 @@
+changelog:
+    exclude:
+        labels:
+            - ci
+    categories:
+        - title: Breaking Changes 🛠
+          labels:
+              - breaking-change
+        - title: Fixes 🐛
+          labels:
+              - fix-bug
+              - revert
+        - title: Enhancements 🚀
+          labels:
+              - enhancement
+        - title: Code Quality 📝
+          labels:
+              - refactor
+        - title: Testing Updates 🧪
+          labels:
+              - test-update
+        - title: Documentation 📚
+          labels:
+              - documentation
+        - title: Risk Assessment 🎯
+          labels:
+              - risk:green
+              - risk:yellow
+              - risk:red
+        - title: Other Changes 📋
+          labels:
+              - "*"
