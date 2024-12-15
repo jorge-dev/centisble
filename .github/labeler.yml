@@ -1,0 +1,39 @@
+cmd-pkg:
+  - changed-files:
+      any-glob-to-any-file: "cmd/**"
+
+config-pkg:
+  - changed-files:
+      any-glob-to-any-file: "internal/config/**"
+
+database-pkg:
+  - changed-files:
+      any-glob-to-any-file: "internal/database/**"
+
+repository-pkg:
+  - changed-files:
+      any-glob-to-any-file: "internal/repository/**"
+
+documentation:
+  - changed-files:
+      any-glob-to-any-file: "*.md"
+
+handlers-pkg:
+  - changed-files:
+      any-glob-to-any-file: "server/handlers/**"
+
+middleware-pkg:
+  - changed-files:
+      any-glob-to-any-file: "server/middleware/**"
+
+infrastructure:
+  - changed-files:
+      any-glob-to-any-file: ["Dockerfile", "docker-compose.yml"]
+
+api:
+  - changed-files:
+      any-glob-to-any-file: ["openApi.yaml", "server/routes.go"]
+
+tests:
+  - changed-files:
+      any-glob-to-any-file: "**/*_test.go"

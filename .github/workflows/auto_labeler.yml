@@ -1,0 +1,113 @@
+name: PR Auto Labeler
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+jobs:
+  labeler:
+    if: ${{ github.event.action == 'opened' || github.event.action == 'synchronize' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Run Labeler
+        uses: actions/labeler@v5
+        with:
+          sync-labels: true
+
+  content_based_labeling:
+    if: ${{ github.event.action != 'synchronize' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Extract PR Body
+        id: parse-types
+        run: |
+          EVENT_JSON=$(cat $GITHUB_EVENT_PATH)
+          BODY=$(echo "$EVENT_JSON" | jq -r '.pull_request.body // ""')
+
+          # Extract the type from the PR body
+          TYPE_SECTION=$(echo "$BODY" | awk '/## Type of Change\?/ {flag=1; next} /^## / {flag=0} flag')
+
+          # Extract selected type emojis
+          SELECTED_TYPE_EMOJIS=$(echo "$TYPE_SECTION" | grep -iE '^- \[x\]' | sed -E 's/^- \[x\] :([^:]+):.*/:\1:/')
+
+          # Extract the risk level from the PR body
+          RISK_SECTION=$(echo "$BODY" | awk '/## Risk Assessment/ {flag=1; next} /^## / {flag=0} flag')
+
+          # Extract selected risk emojis
+          SELECTED_RISK_EMOJI=$(echo "$RISK_SECTION" | grep -iE '^- \[x\]' | sed -E 's/^- \[x\] :([^:]+):.*/:\1:/')
+
+          # Combine selected type and risk emojis
+          ALL_SELECTED_EMOJIS=$(echo -e "$SELECTED_TYPE_EMOJIS\n$SELECTED_RISK_EMOJI" | tr '\n' ',' | sed 's/,$//')
+
+          # Set the selected emojis as an environment variable
+          echo "selected_emojis=$ALL_SELECTED_EMOJIS" >> $GITHUB_ENV
+
+      # Update Labels Based on Emojis
+      - name: Update Labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SELECTED_EMOJIS: ${{ env.selected_emojis }}
+        run: |
+          echo "Selected Emojis: $SELECTED_EMOJIS"
+          # Map emojis to labels
+          declare -A LABEL_MAP
+          LABEL_MAP[":sparkles:"]="enhancement"
+          LABEL_MAP[":bug:"]="fix-bug"
+          LABEL_MAP[":boom:"]="breaking-change"
+          LABEL_MAP[":recycle:"]="refactor"
+          LABEL_MAP[":rewind:"]="revert"
+          LABEL_MAP[":green_circle:"]="risk:green"
+          LABEL_MAP[":yellow_circle:"]="risk:yellow"
+          LABEL_MAP[":red_circle:"]="risk:red"
+
+          PR_NUMBER=${{ github.event.pull_request.number }}
+
+          # Gather selected labels based on emojis
+          SELECTED_LABELS=""
+          for EMOJI in $(echo "$SELECTED_EMOJIS" | tr ',' '\n'); do
+            LABEL=${LABEL_MAP["$EMOJI"]}
+            if [ -n "$LABEL" ]; then
+              SELECTED_LABELS+="$LABEL,"
+            else
+              echo "No label mapping found for emoji: $EMOJI"
+            fi
+          done
+
+          # Convert selected labels to comma-separated format
+          SELECTED_LABELS=$(echo "$SELECTED_LABELS" | sed 's/,$//')
+
+          # Define all possible labels
+          ALL_LABELS=("enhancement" "fix-bug" "breaking-change" "refactor" "revert" "risk:green" "risk:yellow" "risk:red")
+
+          # Remove labels not in the selected list
+          REMOVE_LABELS=""
+          for LABEL in "${ALL_LABELS[@]}"; do
+            if ! echo "$SELECTED_LABELS" | grep -q "$LABEL"; then
+              REMOVE_LABELS+="$LABEL,"
+            fi
+          done
+
+          # Convert remove labels to comma-separated format
+          REMOVE_LABELS=$(echo "$REMOVE_LABELS" | sed 's/,$//')
+
+          # Bulk update labels
+          echo "Adding labels: $SELECTED_LABELS"
+          echo "Removing labels: $REMOVE_LABELS"
+          if [ -n "$SELECTED_LABELS" ]; then
+            gh issue edit "$PR_NUMBER" --add-label "$SELECTED_LABELS"
+          fi
+          if [ -n "$REMOVE_LABELS" ]; then
+            gh issue edit "$PR_NUMBER" --remove-label "$REMOVE_LABELS"
+          fi
