@@ -1,43 +1,43 @@
 cmd-pkg:
   - changed-files:
-      any-glob-to-any-file: "cmd/**"
+      - any-glob-to-any-file: cmd/**
 
 config-pkg:
   - changed-files:
-      any-glob-to-any-file: "internal/config/**"
+      - any-glob-to-any-file: internal/config/**
 
 database-pkg:
   - changed-files:
-      any-glob-to-any-file: "internal/database/**"
+      - any-glob-to-any-file: internal/database/**
 
 repository-pkg:
   - changed-files:
-      any-glob-to-any-file: "internal/repository/**"
+      - any-glob-to-any-file: internal/repository/**
 
 documentation:
   - changed-files:
-      any-glob-to-any-file: "*.md"
+      - any-glob-to-any-file: "*.md"
 
 handlers-pkg:
   - changed-files:
-      any-glob-to-any-file: "server/handlers/**"
+      - any-glob-to-any-file: server/handlers/**
 
 middleware-pkg:
   - changed-files:
-      any-glob-to-any-file: "server/middleware/**"
+      - any-glob-to-any-file: server/middleware/**
 
 infrastructure:
   - changed-files:
-      any-glob-to-any-file: ["Dockerfile", "docker-compose.yml"]
+      - any-glob-to-any-file: ["Dockerfile", "docker-compose.yml"]
 
 ci:
   - changed-files:
-      any-glob-to-any-file: ".github/**"
+      - any-glob-to-any-file: .github/**
 
 api:
   - changed-files:
-      any-glob-to-any-file: ["openApi.yaml", "server/routes.go"]
+      - any-glob-to-any-file: ["openApi.yaml", "server/routes.go"]
 
 tests:
   - changed-files:
-      any-glob-to-any-file: "**/*_test.go"
+      - any-glob-to-any-file: "**/*_test.go"
