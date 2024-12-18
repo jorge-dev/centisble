@@ -10,8 +10,10 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jorge-dev/centsible/internal/auth"
 	"github.com/jorge-dev/centsible/internal/repository"
+	"github.com/jorge-dev/centsible/internal/version"
 	"github.com/jorge-dev/centsible/server/handlers"
 	customMiddleware "github.com/jorge-dev/centsible/server/middleware"
+
 	"golang.org/x/time/rate"
 )
 
@@ -128,8 +130,18 @@ func (s *Server) RegisterRoutes(conn *pgx.Conn, jwtManager auth.JWTManager, env 
 }
 
 func (s *Server) liveCheck(w http.ResponseWriter, r *http.Request) {
+	version := version.Get()
+	type liveResponse struct {
+		Status  string `json:"status"`
+		Version string `json:"version"`
+		Message string `json:"message"`
+	}
 
-	liveCheckResponse := map[string]string{"status": "ok", "version": "0.0.1", "message": "Service is running"}
+	liveCheckResponse := liveResponse{
+		Status:  "ok",
+		Version: version.GitVersion,
+		Message: "Service is running",
+	}
 
 	if err := writeJSON(w, http.StatusOK, liveCheckResponse); err != nil {
 		log.Printf("Error writing JSON: %v", err)
