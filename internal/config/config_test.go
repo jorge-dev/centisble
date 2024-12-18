@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"os"
 	"testing"
 )
@@ -136,4 +137,50 @@ func TestLoadEnvWithDefault(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestPrintBannerFromFile(t *testing.T) {
+	cleanup := setupTestEnv()
+	defer cleanup()
+
+	// Set test environment variables
+	testEnv := map[string]string{
+		"PORT":                  "9090",
+		"APP_ENV":               "test",
+		"CENTSIBLE_DB_HOST":     "testhost",
+		"CENTSIBLE_DB_PORT":     "5432",
+		"CENTSIBLE_DB_DATABASE": "testdb",
+		"CENTSIBLE_DB_USERNAME": "testuser",
+		"CENTSIBLE_DB_PASSWORD": "testpass",
+		"CENTSIBLE_DB_SCHEMA":   "public",
+		"RUN_MIGRATION":         "true",
+		"JWT_SECRET":            "test-secret",
+	}
+
+	for key, value := range testEnv {
+		os.Setenv(key, value)
+	}
+
+	config := Get()
+	// Redirect os.Stdout to capture the output
+	oldStdout := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	// Call the function to test
+	config.PrintBannerFromFile()
+
+	// Restore os.Stdout and read the output
+	w.Close()
+	os.Stdout = oldStdout
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+	output := buf.String()
+
+	// Check if the output is not empty
+	if len(output) == 0 {
+		t.Errorf("Expected banner output, got empty string")
+	}
+
+	// ...additional checks...
 }

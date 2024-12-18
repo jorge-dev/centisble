@@ -84,7 +84,7 @@ func New(ctx context.Context) Service {
 func runMigrations(connectionString string) error {
 	source, err := iofs.New(migrations, "migrations")
 	if err != nil {
-		log.Printf("error creating migration source: %v", err)
+		log.Printf("Failed to create migration source: %v", err)
 		return fmt.Errorf("error creating migration source: %v", err)
 	}
 
