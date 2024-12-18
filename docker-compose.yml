@@ -2,7 +2,7 @@ name: centsible
 
 services:
   app:
-    image: jorgedev/centsible:dev-latest
+    image: jorgedev/centsible-dev:latest
     restart: unless-stopped
     container_name: centsible
     ports:

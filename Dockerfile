@@ -35,8 +35,6 @@ WORKDIR /app
 
 # Copy the statically linked binary and necessary files from the build stage
 COPY --from=build /app/main /app/main
-COPY --from=build /app/internal/config/banner.txt /app/internal/config/banner.txt
-COPY --from=build /app/internal/database/migrations /app/internal/database/migrations
 
 # Expose the application port
 EXPOSE 8080
