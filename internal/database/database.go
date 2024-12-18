@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"embed"
 	"fmt"
 	"log"
 	"time"
@@ -9,10 +10,14 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/jackc/pgx/v5"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/jorge-dev/centsible/internal/config"
 )
+
+//go:embed migrations/*.sql
+var migrations embed.FS
 
 // Service represents a service that interacts with a database.
 type Service interface {
@@ -77,10 +82,16 @@ func New(ctx context.Context) Service {
 
 // Add this helper function
 func runMigrations(connectionString string) error {
+	source, err := iofs.New(migrations, "migrations")
+	if err != nil {
+		log.Printf("error creating migration source: %v", err)
+		return fmt.Errorf("error creating migration source: %v", err)
+	}
 
 	log.Println("Applying migrations...")
-	migration, err := migrate.New(
-		"file://internal/database/migrations", // Update this line
+	migration, err := migrate.NewWithSourceInstance(
+		"iofs",
+		source,
 		connectionString)
 	if err != nil {
 		return fmt.Errorf("error creating migration: %v", err)
