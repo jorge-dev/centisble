@@ -36,7 +36,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/centsible:${{ github.event.release.tag_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/centsible
             ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker images
