@@ -1,8 +1,16 @@
+# Use build arguments for target OS and architecture
+ARG TARGETOS
+ARG TARGETARCH
+
 # Build Stage
 FROM golang:1.23-alpine AS build
 
+# Declare build arguments in this stage
+ARG TARGETOS
+ARG TARGETARCH
+
 # Set necessary environment variables for static linking
-ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+ENV CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH
 
 # Create and set working directory
 WORKDIR /app
@@ -27,7 +35,6 @@ WORKDIR /app
 
 # Copy the statically linked binary and necessary files from the build stage
 COPY --from=build /app/main /app/main
-COPY --from=build /app/internal/config/banner.txt /app/internal/config/banner.txt
 
 # Expose the application port
 EXPOSE 8080

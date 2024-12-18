@@ -1,6 +1,6 @@
 # Simple Makefile for a Go project
-DOCKER_IMAGE_NAME := jorgedev/centisble
-DOCKER_TAG := dev-latest
+DOCKER_IMAGE_NAME := jorgedev/centsible-dev
+DOCKER_TAG := latest
 
 .PHONY: help
 help:
@@ -73,10 +73,8 @@ watch: ## Watch the application for changes
             fi; \
         fi
 
-docker-build:
-	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) .
-
 docker-push:
-	docker push $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
+	docker buildx build --platform linux/amd64,linux/arm64 \
+	-t $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) --push .
 
-.PHONY: help all build run test clean watch docker-run docker-down itest docker-build docker-push
+.PHONY: help all build run test clean watch docker-run docker-down itest docker-push
