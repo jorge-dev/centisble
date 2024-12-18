@@ -19,6 +19,7 @@ services:
       CENTSIBLE_DB_USERNAME: ${CENTSIBLE_DB_USERNAME}
       CENTSIBLE_DB_PASSWORD: ${CENTSIBLE_DB_PASSWORD}
       CENTSIBLE_DB_SCHEMA: ${CENTSIBLE_DB_SCHEMA}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       psql_centsible:
         condition: service_healthy
@@ -27,7 +28,7 @@ services:
 
   psql_centsible:
     container_name: psql_centsible
-    image: postgres:latest
+    image: postgres:17.2-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${CENTSIBLE_DB_DATABASE}
