@@ -1,6 +1,7 @@
 package config
 
 import (
+	_ "embed"
 	"log"
 	"os"
 	"runtime"
@@ -38,6 +39,9 @@ var (
 	config *Config
 	once   sync.Once
 )
+
+//go:embed banner.txt
+var banner string
 
 // Reset is used for testing to reset the singleton instance
 func ResetConfig() {
@@ -123,7 +127,8 @@ type BannerData struct {
 
 // PrintBannerFromFile reads and prints an ASCII banner from a file with colors
 func (c *Config) PrintBannerFromFile() {
-	bannerTemplate, err := template.ParseFiles("./internal/config/banner.txt")
+
+	bannerTemplate, err := template.New("banner").Parse(banner)
 	if err != nil {
 		log.Fatalf("Failed to parse banner template: %v", err)
 	}
