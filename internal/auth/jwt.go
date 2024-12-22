@@ -2,6 +2,7 @@ package auth
 
 import (
 	"fmt"
+	"log/slog"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -59,6 +60,7 @@ func (m *JWTManager) GenerateTokenPair(userID, email, roleID string) (*TokenPair
 	// Generate refresh token with longer expiration
 	refreshToken, err := m.generateRefreshToken(userID, email, roleID)
 	if err != nil {
+		slog.Debug("Error generating refresh token", "error", err)
 		return nil, err
 	}
 
