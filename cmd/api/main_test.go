@@ -14,7 +14,6 @@ import (
 )
 
 // TODO: Refactor this code to make the db mock better ad more reusable
-// MockDB implements database.Service interface for testing
 type MockDB struct {
 	closed bool
 	mu     sync.Mutex
@@ -41,8 +40,6 @@ func (m *MockDB) Health() map[string]string {
 		"message": "Mock DB is healthy",
 	}
 }
-
-// Add other required database.Service interface methods with mock implementations
 
 func setupTestEnv(t *testing.T) func() {
 	// Store original env values
