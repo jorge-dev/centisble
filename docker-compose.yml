@@ -8,8 +8,8 @@ services:
     ports:
       - ${PORT}:${PORT}
     environment:
-      APP_ENV: ${APP_ENV}
-      PORT: ${PORT}
+      APP_ENV: ${APP_ENV:local}
+      PORT: ${PORT:-8989}
       CENTSIBLE_DB_HOST: ${CENTSIBLE_DB_HOST}
       CENTSIBLE_DB_PORT: ${CENTSIBLE_DB_PORT}
       CENTSIBLE_DB_DATABASE: ${CENTSIBLE_DB_DATABASE}
@@ -18,6 +18,7 @@ services:
       CENTSIBLE_DB_SCHEMA: ${CENTSIBLE_DB_SCHEMA}
       RUN_MIGRATION: ${RUN_MIGRATION:-false}
       JWT_SECRET: ${JWT_SECRET}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
     depends_on:
       psql_centsible:
         condition: service_healthy
