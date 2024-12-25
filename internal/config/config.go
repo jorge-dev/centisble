@@ -3,9 +3,11 @@ package config
 import (
 	_ "embed"
 	"log"
+	"log/slog"
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
 	"sync"
 	"text/template"
 	"time"
@@ -19,6 +21,7 @@ type Config struct {
 	AppEnv   string
 	Database DatabaseConfig
 	JWT      JWTConfig
+	Logging  LoggingConfig
 }
 
 type DatabaseConfig struct {
@@ -33,6 +36,10 @@ type DatabaseConfig struct {
 
 type JWTConfig struct {
 	Secret string
+}
+
+type LoggingConfig struct {
+	Level string
 }
 
 var (
@@ -78,6 +85,9 @@ func Get() *Config {
 			JWT: JWTConfig{
 				Secret: requireEnv("JWT_SECRET"),
 			},
+			Logging: LoggingConfig{
+				Level: loadEnvWithDefault("LOG_LEVEL", "info"),
+			},
 		}
 	})
 	return config
@@ -108,6 +118,21 @@ func loadEnvWithDefault(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+func ParseLogLevel(level string) slog.Level {
+	switch strings.ToLower(level) {
+	case "debug":
+		return slog.LevelDebug
+	case "info":
+		return slog.LevelInfo
+	case "warn":
+		return slog.LevelWarn
+	case "error":
+		return slog.LevelError
+	default:
+		return slog.LevelInfo
+	}
 }
 
 // BannerData holds information for the banner template
@@ -141,12 +166,13 @@ func (c *Config) PrintBannerFromFile() {
 		Reset:              Reset,
 		ApplicationTitle:   "Centsible",
 		ApplicationVersion: versionInfo.GitVersion,
-		CompileDate:        time.Now().UTC().Format(time.RFC1123),
-		GitCommit:          versionInfo.GitCommit,
-		GoVersion:          versionInfo.GoVersion,
-		OS:                 runtime.GOOS,
-		Arch:               runtime.GOARCH,
-		Version:            versionInfo.GitVersion,
+
+		CompileDate: time.Now().UTC().Format(time.RFC1123),
+		GitCommit:   versionInfo.GitCommit,
+		GoVersion:   versionInfo.GoVersion,
+		OS:          runtime.GOOS,
+		Arch:        runtime.GOARCH,
+		Version:     versionInfo.GitVersion,
 	}
 
 	err = bannerTemplate.Execute(os.Stdout, data)

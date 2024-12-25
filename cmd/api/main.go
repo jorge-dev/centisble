@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -10,57 +10,63 @@ import (
 
 	"github.com/jorge-dev/centsible/internal/config"
 	"github.com/jorge-dev/centsible/internal/database"
+	"github.com/jorge-dev/centsible/internal/logger"
 	"github.com/jorge-dev/centsible/server"
 )
 
 func gracefulShutdown(ctx context.Context, apiServer *http.Server, dbService database.Service) {
 	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
-
 	defer stop()
 
-	<-ctx.Done() // Listen for the interrupt signal
+	<-ctx.Done()
 
-	log.Println("Shutting down gracefully, press Ctrl+C again to force")
+	slog.Info("Shutting down gracefully, press Ctrl+C again to force")
 
-	// Set a timeout to allow ongoing requests to finish within 5 seconds
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	// Close the database connection
 	if err := dbService.Close(timeoutCtx); err != nil {
-		log.Printf("Error closing database connection: %v", err)
+		slog.Error("Error closing database connection", "error", err)
 	} else {
-		log.Println("Database connection closed successfully")
+		slog.Info("Database connection closed successfully")
 	}
 
 	if err := apiServer.Shutdown(timeoutCtx); err != nil {
-		log.Printf("Server forced to shutdown with error: %v", err)
+		slog.Error("Server forced to shutdown", "error", err)
 	} else {
-		log.Println("Server exited cleanly.")
+		slog.Info("Server exited cleanly")
 	}
 }
 
 func main() {
+	cfg := logger.LogConfig{
+		Level:      config.ParseLogLevel(config.Get().Logging.Level),
+		JSONOutput: config.Get().AppEnv == "prod",
+	}
+	logger.InitLogger(cfg)
+
 	ctx := context.Background()
+
 	config.Get().PrintBannerFromFile()
+
 	httpServer, serverImpl := server.NewServer(ctx)
 
 	if httpServer == nil || serverImpl == nil {
-		log.Fatal("Server configuration is invalid")
+		slog.Error("Server configuration is invalid")
 	}
 
-	// Run graceful shutdown in a separate goroutine
 	go func() {
 		gracefulShutdown(ctx, httpServer, serverImpl.GetDB())
 
 	}()
 
-	log.Printf("Server is configured to listen on %s", httpServer.Addr)
+	slog.Info("Server is configured to listen on", slog.String("address", httpServer.Addr))
 
 	// Start the server
 	if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatalf("HTTP server error: %s", err)
+		slog.Error("HTTP server error:", slog.String("errorMsg", err.Error()))
+
 	}
 
-	log.Println("Graceful shutdown complete.")
+	slog.Info("Graceful shutdown complete.")
 }
